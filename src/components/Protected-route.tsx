@@ -3,7 +3,7 @@
 import { useAuth } from "@/hooks/use-auth";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { LoadingFullPage, LoadingSpinner, LoadingDots } from "./Loading";
 
 interface ProtectedRouteProps {
@@ -12,7 +12,7 @@ interface ProtectedRouteProps {
   requiredRole?: "user" | "admin"; // Optionnel : restriction spécifique
 }
 
-export default function ProtectedRoute({
+function ProtectedRouteContent({
   children,
   fallback = <LoadingDots />,
   requiredRole,
@@ -78,4 +78,12 @@ export default function ProtectedRoute({
   }
 
   return <>{children}</>;
+}
+
+export default function ProtectedRoute(props: ProtectedRouteProps) {
+  return (
+    <Suspense fallback={props.fallback || <LoadingDots />}>
+      <ProtectedRouteContent {...props} />
+    </Suspense>
+  );
 }
