@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
+import { LoadingFullPage } from "@/components/Loading";
 
 interface LoginFormData {
   email: string;
@@ -14,7 +15,7 @@ interface LoginFormData {
   rememberMe: boolean;
 }
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/user/dashboard";
 
@@ -45,23 +46,23 @@ export default function LoginPage() {
     }
   };
 
-  const refreshtoken = async () => {
-    try {
-      const response = await axios.post(
-        "https://letransporteur-production.up.railway.app/api/v1/auth/refresh",
-        {},
-        {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MTI5NWUxLTY3MzktNDc4OS04NzE3LTYxZTk5OGNjOTM5OSIsImlhdCI6MTc2MjYwMTYzMCwiZXhwIjoxNzYzMjA2NDMwfQ.McS6jtgp5J55oEQ2tQfFslhO4-QhC4W41R4okgYQ8AU",
-          },
-        }
-      );
-      console.log(response.data);
-    } catch (error: any) {
-      console.log("refresh failed:", error.response.data);
-    }
-  };
+  // const refreshtoken = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       "https://letransporteur-production.up.railway.app/api/v1/auth/refresh",
+  //       {},
+  //       {
+  //         headers: {
+  //           Authorization:
+  //             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MTI5NWUxLTY3MzktNDc4OS04NzE3LTYxZTk5OGNjOTM5OSIsImlhdCI6MTc2MjYwMTYzMCwiZXhwIjoxNzYzMjA2NDMwfQ.McS6jtgp5J55oEQ2tQfFslhO4-QhC4W41R4okgYQ8AU",
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data);
+  //   } catch (error: any) {
+  //     console.log("refresh failed:", error.response.data);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -198,5 +199,13 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoadingFullPage />}>
+      <LoginContent />
+    </Suspense>
   );
 }

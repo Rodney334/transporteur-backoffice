@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { GenderType } from "@/type/enum";
+import { LoadingFullPage } from "@/components/Loading";
 
 interface RegisterFormData {
   name: string;
@@ -17,7 +18,7 @@ interface RegisterFormData {
   genderrole: GenderType;
 }
 
-export default function RegisterPage() {
+function RegisterContent() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/dashboard";
   const [showPassword, setShowPassword] = useState(false);
@@ -245,5 +246,13 @@ export default function RegisterPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<LoadingFullPage />}>
+      <RegisterContent />
+    </Suspense>
   );
 }
