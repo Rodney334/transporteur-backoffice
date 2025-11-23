@@ -321,6 +321,20 @@ export default function AdminPage() {
     };
   }, [selectedCommand]);
 
+  // Données pour les sections d'information
+  const destinataireData: ContactCourseInterface | null = useMemo(() => {
+    if (!selectedCommand) return null;
+
+    return {
+      nom: selectedCommand.deliveryAddress.name,
+      telephone: selectedCommand.deliveryAddress.phone,
+      ville: selectedCommand.deliveryAddress.city,
+      quartier: selectedCommand.deliveryAddress.district,
+      rue: selectedCommand.deliveryAddress.street,
+      pays: selectedCommand.deliveryAddress.country,
+    };
+  }, [selectedCommand]);
+
   const detailsData: DetailCourseInterface | null = useMemo(() => {
     if (!selectedCommand) return null;
 
@@ -475,6 +489,10 @@ export default function AdminPage() {
                   </h3>
                   <div className="grid grid-cols-2 lg:grid-cols-2 gap-4">
                     <InfoSection title="Contact Envoyeur" data={contactData} />
+                    <InfoSection
+                      title="Contact Destinataire"
+                      data={destinataireData}
+                    />
                     <InfoColisSection
                       title="Details Colis"
                       data={detailsData}
