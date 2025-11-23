@@ -175,7 +175,7 @@ export default function HistoriquePage() {
   const shouldShowPriceForm = useMemo(() => {
     if (activeTab !== "En cours") return false;
     if (!negotiation) return true; // Si pas de négociation, on affiche le formulaire
-    if (!negotiation.proposedByCourier) return false;
+    if (!negotiation.proposedByCourier) return true;
     return negotiation.proposedByCourier !== negotiation.confirmedByClient; // On n'affiche pas le formulaire si confirmedByClient a une valeur
   }, [activeTab, negotiation]);
 
