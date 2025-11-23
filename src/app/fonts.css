@@ -1,0 +1,454 @@
+/* styles/fonts.css */
+
+/* styles/fonts.css - VERSION CORRIGÉE */
+
+/* Chemins corrigés - partent directement de public */
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Black.ttf") format("truetype");
+  font-weight: 900; /* Black = 900 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Black-Italic.ttf") format("truetype");
+  font-weight: 900;
+  font-style: italic; /* Italic = italic */
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Black-Oblique.ttf") format("truetype");
+  font-weight: 900;
+  font-style: oblique; /* Oblique = oblique */
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-ExtraBold.ttf") format("truetype");
+  font-weight: 800; /* ExtraBold = 800 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-ExtraBold-Italic.ttf")
+    format("truetype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-ExtraBold-Oblique.ttf")
+    format("truetype");
+  font-weight: 800;
+  font-style: oblique;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Bold.ttf") format("truetype");
+  font-weight: 700; /* Bold = 700 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Bold-Italic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Bold-Oblique.ttf") format("truetype");
+  font-weight: 700;
+  font-style: oblique;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-DemiBold.ttf") format("truetype");
+  font-weight: 600; /* DemiBold = 600 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-DemiBold-Italic.ttf")
+    format("truetype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-DemiBold-Oblique.ttf")
+    format("truetype");
+  font-weight: 600;
+  font-style: oblique;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Medium.ttf") format("truetype");
+  font-weight: 500; /* Medium = 500 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Medium-Italic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Medium-Oblique.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: oblique;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Regular.ttf") format("truetype");
+  font-weight: 400; /* Regular = 400 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Oblique.ttf") format("truetype");
+  font-weight: 400;
+  font-style: oblique;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Light.ttf") format("truetype");
+  font-weight: 300; /* Light = 300 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Light-Italic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Light-Oblique.ttf") format("truetype");
+  font-weight: 300;
+  font-style: oblique;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-ExtraLight.ttf") format("truetype");
+  font-weight: 200; /* ExtraLight = 200 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-ExtraLight-Italic.ttf")
+    format("truetype");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-ExtraLight-Oblique.ttf")
+    format("truetype");
+  font-weight: 200;
+  font-style: oblique;
+  font-display: swap;
+}
+
+/* Polices variables - optionnelles */
+@font-face {
+  font-family: "SFT Ritam Sans Variable";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Variable-Italic.ttf")
+    format("truetype");
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans Variable";
+  src: url("/polices/SFT-Ritam-Sans-TRIAL-Variable-Rm-Obl.ttf")
+    format("truetype");
+  font-style: oblique;
+  font-display: swap;
+}
+
+/* @font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Black-Italic.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Black-Oblique.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Black.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Bold-Italic.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Bold-Oblique.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Bold.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-DemiBold-Italic.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-DemiBold-Oblique.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-DemiBold.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-ExtraBold-Italic.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-ExtraBold-Oblique.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-ExtraBold.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-ExtraLight-Italic.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-ExtraLight-Oblique.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-ExtraLight.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Italic.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Light-Italic.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Light-Oblique.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Light.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Medium-Italic.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Medium-Oblique.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Medium.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Oblique.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Regular.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Variable-Italic.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFT Ritam Sans";
+  src: url("../../public/assets/polices/SFT-Ritam-Sans-TRIAL-Variable-Rm-Obl.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+} */

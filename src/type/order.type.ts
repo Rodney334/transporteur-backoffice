@@ -1,29 +1,13 @@
-import { ArticleType, DeliveryType, ServiceType, TransportMode } from "./enum";
-
-// export interface CreateOrderData {
-//   serviceType: "courrier" | "colis" | "transport";
-//   description: string;
-//   weight: number;
-//   pickupAddress: {
-//     name: string;
-//     phone: string;
-//     country: string;
-//     city: string;
-//     district: string;
-//     street: string;
-//   };
-//   deliveryAddress: {
-//     name: string;
-//     phone: string;
-//     country: string;
-//     city: string;
-//     district: string;
-//     street: string;
-//   };
-//   deliveryType: "express" | "standard";
-//   zone: string;
-//   estimatedPrice: number;
-// }
+import {
+  ArticleType,
+  DeliveryType,
+  NegotiationStatus,
+  OrderStatus,
+  PaymentMethod,
+  ServiceType,
+  TransportMode,
+} from "./enum";
+import { User } from "./user.type";
 
 export interface OrderResponse {
   _id: string;
@@ -60,4 +44,38 @@ export interface CreateOrderInterface {
   articleType: ArticleType;
   zone?: string;
   estimatedPrice?: number;
+}
+
+export interface Order {
+  id: string;
+  serviceType: string;
+  description: string;
+  weight: number;
+  pickupAddress: AddressInterface;
+  deliveryAddress: AddressInterface;
+  deliveryType: string;
+  zone: string;
+  estimatedPrice: number | null;
+  isArchived: boolean;
+  status: OrderStatus;
+  createdBy: User;
+  transportMode: string;
+  articleType: string;
+  assignedTo: string;
+  isAutoAssigned: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Negotiation {
+  id: string;
+  order: Order;
+  proposedByCourier: number | null;
+  confirmedByClient: number | null;
+  status: NegotiationStatus;
+  paymentMethod: PaymentMethod | null;
+  adminOverride: boolean;
+  updatedBy: User;
+  createdAt: string;
+  updatedAt: string;
 }

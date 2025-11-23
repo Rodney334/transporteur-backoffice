@@ -23,9 +23,11 @@ interface DashboardLayoutProps {
 import { logoLight, logoDark } from "@/files";
 import Image from "next/image";
 import ProtectedRoute from "@/components/Protected-route";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
+  const { logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -91,8 +93,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       `}
         >
           {/* Header Sidebar avec bouton fermer */}
-          <div className="px-6 flex items-center justify-between">
-            <div className="flex items-center gap-2">
+          <div className="p-6 flex items-center justify-between">
+            <div className="flex items-center">
               <Image src={logoDark} alt="logo" />
             </div>
             <button
@@ -127,7 +129,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
           {/* Déconnexion */}
           <div className="p-4">
-            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-gray-400 hover:bg-gray-900 hover:text-white transition-colors">
+            <button
+              onClick={() => logout()}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-gray-400 hover:bg-gray-900 hover:text-white transition-colors"
+            >
               <LogOut className="w-5 h-5" />
               <span className="text-sm font-medium">Se déconnecter</span>
             </button>

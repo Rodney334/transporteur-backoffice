@@ -22,7 +22,7 @@ export enum OrderStatus {
   ECHEC = "echec",
 }
 
-const STATUS_FLOW: OrderStatus[] = [
+export const STATUS_FLOW: OrderStatus[] = [
   OrderStatus.EN_ATTENTE,
   OrderStatus.ASSIGNEE,
   OrderStatus.EN_DISCUSSION,
@@ -44,6 +44,12 @@ export enum PaymentMethod {
   MOBILE_MONEY = "mobile_money",
   CARD = "card",
 }
+
+export const PAYMENT_METHOD_FLOW: PaymentMethod[] = [
+  PaymentMethod.CARD,
+  PaymentMethod.CASH,
+  PaymentMethod.MOBILE_MONEY,
+];
 
 export enum PaymentStatus {
   PENDING = "pending",

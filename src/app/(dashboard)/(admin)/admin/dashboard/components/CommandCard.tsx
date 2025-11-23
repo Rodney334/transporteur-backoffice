@@ -1,16 +1,26 @@
+// components/CommandCard.tsx
+import { memo } from "react";
+import { FormattedOrder } from "@/type/command-card.type";
+
 interface CommandCardProps {
-  command: any;
-  onReject: (command: any) => void;
-  onAccept: (command: any) => void;
-  onViewDetails: (command: any) => void;
+  activeTab: string;
+  command: FormattedOrder;
+  onReject: (command: FormattedOrder) => void;
+  onAccept: (command: FormattedOrder) => void;
+  onViewDetails: (command: FormattedOrder) => void;
+  isProcessingAccept?: boolean;
+  isProcessingReject?: boolean;
 }
 
-export const CommandCard = ({
+export const CommandCard = memo(function CommandCard({
+  activeTab,
   command,
   onReject,
   onAccept,
   onViewDetails,
-}: CommandCardProps) => {
+  isProcessingAccept = false,
+  isProcessingReject = false,
+}: CommandCardProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       {/* Header */}
@@ -56,19 +66,33 @@ export const CommandCard = ({
 
       {/* Actions */}
       <div className="flex gap-3">
-        <button
-          onClick={() => onReject(command)}
-          className="flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg hover:bg-[#E63F15] transition-colors"
-        >
-          Rejeter
-        </button>
-        <button
-          onClick={() => onAccept(command)}
-          className="flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg hover:bg-[#E63F15] transition-colors"
-        >
-          Accepter
-        </button>
+        {activeTab === "En cours" && (
+          <button
+            onClick={() => onReject(command)}
+            disabled={isProcessingReject}
+            className={`flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
+              isProcessingReject
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-[#E63F15]"
+            }`}
+          >
+            {isProcessingReject ? "Traitement..." : "Rejeter"}
+          </button>
+        )}
+        {activeTab === "Nouvelles" && (
+          <button
+            onClick={() => onAccept(command)}
+            disabled={isProcessingAccept}
+            className={`flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
+              isProcessingAccept
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-[#E63F15]"
+            }`}
+          >
+            {isProcessingAccept ? "Traitement..." : "Accepter"}
+          </button>
+        )}
       </div>
     </div>
   );
-};
+});
