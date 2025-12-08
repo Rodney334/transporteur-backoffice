@@ -1,3 +1,5 @@
+import { Order } from "./order.type";
+
 // types/command-card.type.ts
 export interface FormattedOrder {
   id: string;
@@ -5,7 +7,7 @@ export interface FormattedOrder {
   date: string;
   departure: string;
   arrival: string;
-  originalData: any; // Garder les données originales pour les callbacks
+  originalData: Order; // Garder les données originales pour les callbacks
 }
 
 export interface CommandCardProps {

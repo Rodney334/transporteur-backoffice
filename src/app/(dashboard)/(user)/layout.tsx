@@ -50,12 +50,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: ShieldUser,
       current: pathname === "/user/dashboard/tracking",
     },
-    {
-      name: "Message",
-      href: "/user/dashboard/message",
-      icon: MessageSquareMore,
-      current: pathname === "/user/dashboard/message",
-    },
+    // {
+    //   name: "Message",
+    //   href: "/user/dashboard/message",
+    //   icon: MessageSquareMore,
+    //   current: pathname === "/user/dashboard/message",
+    // },
     {
       name: "Paramètres",
       href: "/user/dashboard/settings",

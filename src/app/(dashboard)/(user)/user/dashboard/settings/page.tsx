@@ -11,8 +11,8 @@ export default function SettingsPage() {
     "Mes informations",
     "Profile",
     "Mot de passe",
-    "Email",
-    "Notification",
+    // "Email",
+    // "Notification",
   ];
 
   return (
@@ -129,7 +129,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Photo */}
-          <div className="py-6 border-t border-gray-200">
+          {/* <div className="py-6 border-t border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 mb-1">
@@ -157,10 +157,10 @@ export default function SettingsPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Réseaux Sociaux */}
-          <div className="py-6 border-t border-gray-200">
+          {/* <div className="py-6 border-t border-gray-200">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">
               Réseaux Sociaux
             </h3>
@@ -180,7 +180,7 @@ export default function SettingsPage() {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 // lib/services/order-service.ts
 import { api } from "@/lib/api/axios";
+import { OrderStatus } from "@/type/enum";
 import { CreateOrderInterface, Negotiation, Order } from "@/type/order.type";
 
 export const orderService = {
@@ -33,6 +34,13 @@ export const orderService = {
 
   async rejectOrder(orderId: string) {
     const response = await api.patch(`/order/${orderId}/reject`, {});
+    return response.data;
+  },
+
+  async endOrder(orderId: string) {
+    const response = await api.patch(`/order/${orderId}/status`, {
+      status: OrderStatus.LIVREE,
+    });
     return response.data;
   },
 

@@ -53,57 +53,57 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // Si erreur 401 et pas déjà retenté
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      // Si déjà en train de rafraîchir, mettre en file d'attente
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            return api(originalRequest);
-          })
-          .catch((err) => Promise.reject(err));
-      }
+    // if (error.response?.status === 401 && !originalRequest._retry) {
+    //   // Si déjà en train de rafraîchir, mettre en file d'attente
+    //   if (isRefreshing) {
+    //     return new Promise((resolve, reject) => {
+    //       failedQueue.push({ resolve, reject });
+    //     })
+    //       .then((token) => {
+    //         originalRequest.headers.Authorization = `Bearer ${token}`;
+    //         return api(originalRequest);
+    //       })
+    //       .catch((err) => Promise.reject(err));
+    //   }
 
-      originalRequest._retry = true;
-      isRefreshing = true;
+    //   originalRequest._retry = true;
+    //   isRefreshing = true;
 
-      try {
-        const refreshToken = useAuthStore.getState().refreshToken;
+    //   try {
+    //     const refreshToken = useAuthStore.getState().refreshToken;
 
-        if (!refreshToken) {
-          throw new Error("Aucun refresh token disponible");
-        }
+    //     if (!refreshToken) {
+    //       throw new Error("Aucun refresh token disponible");
+    //     }
 
-        // Appel au endpoint de refresh
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-          await authService.refreshTokens(refreshToken);
+    //     // Appel au endpoint de refresh
+    //     const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+    //       await authService.refreshTokens(refreshToken);
 
-        // Mettre à jour le store avec les nouveaux tokens
-        useAuthStore.getState().setTokens(newAccessToken, newRefreshToken);
+    //     // Mettre à jour le store avec les nouveaux tokens
+    //     useAuthStore.getState().setTokens(newAccessToken, newRefreshToken);
 
-        // Traiter la file d'attente avec le nouveau token
-        processQueue(null, newAccessToken);
+    //     // Traiter la file d'attente avec le nouveau token
+    //     processQueue(null, newAccessToken);
 
-        // Retenter la requête originale avec le nouveau token
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(originalRequest);
-      } catch (refreshError) {
-        // En cas d'erreur de refresh, déconnecter l'utilisateur
-        processQueue(refreshError, null);
-        useAuthStore.getState().logout();
+    //     // Retenter la requête originale avec le nouveau token
+    //     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+    //     return api(originalRequest);
+    //   } catch (refreshError) {
+    //     // En cas d'erreur de refresh, déconnecter l'utilisateur
+    //     processQueue(refreshError, null);
+    //     useAuthStore.getState().logout();
 
-        // Rediriger vers la page de login si on est côté client
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
-        }
+    //     // Rediriger vers la page de login si on est côté client
+    //     if (typeof window !== "undefined") {
+    //       window.location.href = "/login";
+    //     }
 
-        return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
-      }
-    }
+    //     return Promise.reject(refreshError);
+    //   } finally {
+    //     isRefreshing = false;
+    //   }
+    // }
 
     // Gestion d'autres erreurs
     if (error.response?.status === 401) {

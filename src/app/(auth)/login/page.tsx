@@ -8,6 +8,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { LoadingFullPage } from "@/components/Loading";
+import { GrantedRole } from "@/type/enum";
+import { useAuthStore } from "@/lib/stores/auth-store";
 
 interface LoginFormData {
   email: string;
@@ -22,6 +24,7 @@ function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, isLoading, error, clearError } = useAuth();
+  const { setError } = useAuthStore();
   const router = useRouter();
 
   const {
@@ -38,8 +41,18 @@ function LoginContent() {
     clearError();
 
     try {
-      await login(data.email, data.password);
-      router.push(redirect);
+      const response = await login(data.email, data.password);
+      if (response.role === GrantedRole.Client) {
+        router.push("/user/dashboard");
+      } else if (
+        response.role === GrantedRole.Admin ||
+        response.role === GrantedRole.Livreur ||
+        response.role === GrantedRole.Operateur
+      ) {
+        router.push("/admin/dashboard");
+      } else {
+        setError("Erreur d'authentification. Réessayez plus tard.");
+      }
       // router.push("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
