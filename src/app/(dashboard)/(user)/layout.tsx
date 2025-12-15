@@ -20,14 +20,15 @@ import {
 interface DashboardLayoutProps {
   children: ReactNode;
 }
-import { logoLight, logoDark } from "@/files";
+import { logoLight, logoDark, userIcone } from "@/files";
 import Image from "next/image";
 import { useAuth } from "@/hooks/use-auth";
 import ProtectedRoute from "@/components/Protected-route";
+import Link from "next/link";
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -44,12 +45,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: BookOpen,
       current: pathname === "/user/dashboard/history",
     },
-    {
-      name: "Tracking",
-      href: "/user/dashboard/tracking",
-      icon: ShieldUser,
-      current: pathname === "/user/dashboard/tracking",
-    },
+    // {
+    //   name: "Tracking",
+    //   href: "/user/dashboard/tracking",
+    //   icon: ShieldUser,
+    //   current: pathname === "/user/dashboard/tracking",
+    // },
     // {
     //   name: "Message",
     //   href: "/user/dashboard/message",
@@ -78,7 +79,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Overlay pour mobile */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/20 bg-opacity-50 z-40 lg:hidden"
             onClick={closeSidebar}
           />
         )}
@@ -154,7 +155,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </button>
                 <div>
                   <h2 className="text-lg font-semibold text-gray-900">
-                    Bienvenu John Doe
+                    Bienvenu {user ? user.name : "Anonyme"}
                   </h2>
                 </div>
               </div>
@@ -190,11 +191,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <Bell width={25} height={25} color={"#9D1D01B2"} />
                 </button>
                 <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
-                    alt="User avatar"
-                    className="w-full h-full object-cover"
-                  />
+                  <Link href={`/user/dashboard/settings`}>
+                    <Image
+                      // src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
+                      src={userIcone}
+                      alt="User avatar"
+                      className="w-full h-full object-cover"
+                    />
+                  </Link>
                 </div>
               </div>
             </div>

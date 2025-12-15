@@ -2,12 +2,12 @@ import { api } from "@/lib/api/axios";
 import { User } from "@/lib/stores/auth-store";
 import { GenderType, GrantedRole } from "@/type/enum";
 
-interface LoginData {
+export interface LoginData {
   email: string;
   password: string;
 }
 
-interface RegisterData {
+export interface RegisterData {
   name: string;
   email: string;
   password: string;

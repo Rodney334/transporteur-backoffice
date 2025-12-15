@@ -8,15 +8,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { GenderType } from "@/type/enum";
 import { LoadingFullPage } from "@/components/Loading";
-
-interface RegisterFormData {
-  name: string;
-  email: string;
-  password: string;
-  phoneNumber: string;
-  countryCode: string;
-  genderrole: GenderType;
-}
+import { RegisterData } from "@/lib/services/auth-service";
 
 function RegisterContent() {
   const searchParams = useSearchParams();
@@ -30,14 +22,14 @@ function RegisterContent() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormData>({
+  } = useForm<RegisterData>({
     defaultValues: {
       countryCode: "BJ",
       genderrole: GenderType.Man,
     },
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (data: RegisterData) => {
     clearError();
 
     try {

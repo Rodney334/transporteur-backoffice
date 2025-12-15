@@ -23,7 +23,6 @@ export const orderService = {
 
   async getLivreurOrder(userId: string): Promise<Order[]> {
     const response = await api.get(`/order/user/${userId}`);
-    console.log("get user order : ", response.data);
     return response.data;
   },
 
@@ -61,7 +60,6 @@ export const orderService = {
 
   async getOrderNegociationPrice(orderId: string): Promise<Negotiation> {
     const response = await api.get(`/negotiation/${orderId}`);
-    console.log("negociation :", response.data);
     return response.data;
   },
 };

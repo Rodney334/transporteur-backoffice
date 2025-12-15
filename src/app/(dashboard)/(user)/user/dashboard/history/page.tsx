@@ -11,7 +11,7 @@ export default function HistoriquePage() {
 
   return (
     <OrdersManager
-      userRole={GrantedRole.Client} // Ou le rôle approprié pour le client
+      userRole={GrantedRole.Client}
       tabs={["En cours", "Terminées"]}
       defaultTab="En cours"
       cardComponent={DeliveryCard}
@@ -19,7 +19,6 @@ export default function HistoriquePage() {
       formatOrder={clientConfig.formatOrder}
       filterOrders={clientConfig.filterOrders}
       getEmptyMessage={clientConfig.getEmptyMessage}
-      onValidatePrice={clientConfig.onValidatePrice}
       headerTitle="Mes Commandes"
       showHeaderCounter={true}
     />
