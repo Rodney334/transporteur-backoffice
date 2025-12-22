@@ -2,7 +2,7 @@ import { OrderStatus } from "@/type/enum";
 import {
   ContactCourseInterface,
   DetailCourseInterface,
-} from "@/app/(dashboard)/components/OrdersManager/OrdersManager.types";
+} from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager.types";
 
 interface InfoSectionProps {
   title: string;

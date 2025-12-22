@@ -11,7 +11,7 @@ export const orderService = {
 
   async getOrder(): Promise<Order[]> {
     const response = await api.get("/order/orders");
-    console.log("get order : ", response.data);
+    // console.log("get order : ", response.data);
     return response.data;
   },
 

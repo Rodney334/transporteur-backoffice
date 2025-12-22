@@ -1,6 +1,6 @@
 // components/DeliveryCard.tsx - VERSION MISE À JOUR
 import { Package } from "lucide-react";
-import { DeliveryCardProps } from "@/app/(dashboard)/components/OrdersManager/OrdersManager.types";
+import { DeliveryCardProps } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager.types";
 import { OrderStatus } from "@/type/enum";
 
 export const DeliveryCard = ({ item, onViewDetails }: DeliveryCardProps) => (

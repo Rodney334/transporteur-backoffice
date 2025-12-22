@@ -1,6 +1,6 @@
 // components/CommandCard.tsx - VERSION MISE À JOUR
 import { memo } from "react";
-import { CommandCardProps } from "@/app/(dashboard)/components/OrdersManager/OrdersManager.types";
+import { CommandCardProps } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager.types";
 import { OrderStatus } from "@/type/enum";
 
 export const CommandCard = memo(function CommandCard({

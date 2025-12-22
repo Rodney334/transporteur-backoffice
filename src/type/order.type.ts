@@ -56,6 +56,7 @@ export interface Order {
   deliveryType: string;
   zone: string;
   estimatedPrice: number | null;
+  finalPrice: number | null;
   isArchived: boolean;
   status: OrderStatus;
   createdBy: User;

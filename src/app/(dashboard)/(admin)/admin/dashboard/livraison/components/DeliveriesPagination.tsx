@@ -1,4 +1,4 @@
-// app/(dashboard)/utilisateur/components/UsersPagination.tsx
+// app/(dashboard)/utilisateur/components/DeliveriesPagination.tsx
 import {
   ChevronLeft,
   ChevronRight,
@@ -6,7 +6,7 @@ import {
   ChevronsRight,
 } from "lucide-react";
 
-interface UsersPaginationProps {
+interface DeliveriesPaginationProps {
   currentPage: number;
   totalPages: number;
   totalItems: number;
@@ -17,7 +17,7 @@ interface UsersPaginationProps {
   endIndex: number;
 }
 
-export default function UsersPagination({
+export default function DeliveriesPagination({
   currentPage,
   totalPages,
   totalItems,
@@ -26,7 +26,7 @@ export default function UsersPagination({
   onItemsPerPageChange,
   startIndex,
   endIndex,
-}: UsersPaginationProps) {
+}: DeliveriesPaginationProps) {
   const pageNumbers = [];
   const maxPagesToShow = 5;
 
