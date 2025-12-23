@@ -34,8 +34,8 @@ function RegisterContent() {
 
     try {
       await registerUser(data);
-      router.push(redirect);
-      // router.push("/dashboard");
+      // router.push(redirect);
+      router.push("/user/dashboard");
     } catch (error) {
       console.error("Registration failed:", error);
     }
