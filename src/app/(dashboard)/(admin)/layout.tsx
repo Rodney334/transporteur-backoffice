@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   ListOrdered,
+  OctagonAlert,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -57,6 +58,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       href: "/admin/dashboard/utilisateur",
       icon: ShieldUser,
       current: pathname === "/admin/dashboard/utilisateur",
+    },
+    {
+      name: "Litige",
+      href: "/admin/dashboard/litige",
+      icon: OctagonAlert,
+      current: pathname === "/admin/dashboard/litige",
     },
     {
       name: "Revenus",

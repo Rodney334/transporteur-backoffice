@@ -43,6 +43,14 @@ export const orderService = {
     return response.data;
   },
 
+  async assignOrder(orderId: string, livreurId: string, auto: boolean = true) {
+    const response = await api.patch(`/order/${orderId}/assign`, {
+      livreurId,
+      auto,
+    });
+    return response.data;
+  },
+
   async validatePrice(orderId: string, amount: number) {
     const response = await api.patch(`/negotiation/${orderId}/propose`, {
       amount,

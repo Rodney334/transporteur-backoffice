@@ -1,5 +1,5 @@
 // hooks/use-users-management.ts
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { toast } from "react-toastify";
 import { useUsersStore } from "@/lib/stores/users-store";
 import { userService } from "@/lib/services/user-service";
@@ -120,12 +120,27 @@ export const useUsersManagement = () => {
     return genders[gender] || gender;
   }, []);
 
+  const getLivreurs = useCallback(async (): Promise<User[]> => {
+    try {
+      const allUsers = await userService.getAllUsers();
+      return allUsers.filter((user) => user.role === GrantedRole.Livreur);
+    } catch (error: any) {
+      console.error("Erreur chargement livreurs:", error);
+      return [];
+    }
+  }, []);
+
+  const livreurs = useMemo(() => {
+    return users.filter((user) => user.role === GrantedRole.Livreur);
+  }, [users]);
+
   return {
     // State
     users,
     isLoadingUsers,
     selectedUser,
     isAdmin,
+    livreurs,
 
     // Actions
     loadUsers,
@@ -134,5 +149,6 @@ export const useUsersManagement = () => {
     promoteUser,
     getRoleLabel,
     getGenderLabel,
+    getLivreurs,
   };
 };

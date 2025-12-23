@@ -37,6 +37,12 @@ export default function CommandePage() {
               </span>
             )}
           </h1>
+          {(user?.role === GrantedRole.Admin ||
+            user?.role === GrantedRole.Operateur) && (
+            <div className="text-sm text-gray-500">
+              Vous pouvez assigner des commandes aux livreurs
+            </div>
+          )}
         </div>
       }
     />

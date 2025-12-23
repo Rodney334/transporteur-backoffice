@@ -51,10 +51,13 @@ export interface CommandCardProps {
   onAccept?: (item: any) => void;
   onReject?: (item: any) => void;
   onEnd?: (item: any) => void;
+  onAssign?: (item: any) => void;
   isProcessingAccept?: boolean;
   isProcessingReject?: boolean;
   isProcessingEnd?: boolean;
+  isProcessingAssign?: boolean;
   activeTab: string;
+  userRole?: GrantedRole;
 }
 
 export interface DeliveryCardProps {

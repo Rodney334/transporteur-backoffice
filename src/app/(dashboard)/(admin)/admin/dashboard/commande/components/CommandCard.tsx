@@ -1,19 +1,31 @@
 // components/CommandCard.tsx - VERSION MISE À JOUR
 import { memo } from "react";
 import { CommandCardProps } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager.types";
-import { OrderStatus } from "@/type/enum";
+import { GrantedRole, OrderStatus } from "@/type/enum";
 
 export const CommandCard = memo(function CommandCard({
   activeTab,
   item,
-  onReject,
+  // onReject,
   onAccept,
   onEnd,
+  onAssign,
   onViewDetails,
   isProcessingAccept = false,
-  isProcessingReject = false,
+  // isProcessingReject = false,
   isProcessingEnd = false,
+  isProcessingAssign = false,
+  userRole,
 }: CommandCardProps) {
+  // Vérifier si l'utilisateur peut assigner (Admin ou Opérateur)
+  const canAssign =
+    userRole === GrantedRole.Admin || userRole === GrantedRole.Operateur;
+
+  // Vérifier si la commande est en attente et peut être assignée
+  const isPendingAndAssignable =
+    activeTab === "Nouvelles" &&
+    item.originalData.status === OrderStatus.EN_ATTENTE;
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       {/* Header */}
@@ -104,6 +116,20 @@ export const CommandCard = memo(function CommandCard({
               {isProcessingEnd ? "Traitement..." : "Terminer"}
             </button>
           )}
+
+        {canAssign && isPendingAndAssignable && onAssign && (
+          <button
+            onClick={() => onAssign(item)}
+            disabled={isProcessingAssign}
+            className={`flex-1 py-2.5 px-4 bg-[#131313] text-white text-sm font-medium rounded-lg transition-colors ${
+              isProcessingAssign
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-[#333333]"
+            }`}
+          >
+            {isProcessingAssign ? "Traitement..." : "Assigner"}
+          </button>
+        )}
 
         {/* {onReject && (
           <button
