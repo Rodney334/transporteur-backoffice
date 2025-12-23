@@ -48,7 +48,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       current: pathname === "/admin/dashboard/commande",
     },
     {
-      name: "Livraison",
+      name: "Livraisons",
       href: "/admin/dashboard/livraison",
       icon: BookOpen,
       current: pathname === "/admin/dashboard/livraison",
@@ -60,16 +60,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       current: pathname === "/admin/dashboard/utilisateur",
     },
     {
-      name: "Litige",
+      name: "Litiges",
       href: "/admin/dashboard/litige",
       icon: OctagonAlert,
       current: pathname === "/admin/dashboard/litige",
     },
     {
-      name: "Revenus",
-      href: "/admin/dashboard/revenu",
+      name: "Reports",
+      href: "/admin/dashboard/report",
       icon: MessageSquareMore,
-      current: pathname === "/admin/dashboard/revenu",
+      current: pathname === "/admin/dashboard/report",
     },
     {
       name: "Paramètres",
