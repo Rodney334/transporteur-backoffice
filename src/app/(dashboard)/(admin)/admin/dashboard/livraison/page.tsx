@@ -9,6 +9,8 @@ import DeliveryTable from "./components/DeliveryTable";
 import DeliveriesPagination from "./components/DeliveriesPagination";
 import DeliveryDetailsModal from "./components/DeliveryDetailsModal";
 import DeliveryColumnVisibilityToggle from "./components/DeliveryColumnVisibilityToggle";
+import ProtectedRoute from "@/components/Protected-route";
+import { GrantedRole } from "@/type/enum";
 
 // Définition des colonnes avec leur visibilité par défaut
 const defaultVisibleColumns = {
@@ -129,115 +131,117 @@ export default function LivraisonPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* En-tête avec statistiques */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Livraisons terminées
-          </h1>
-          <p className="text-gray-500 mt-2">
-            Historique des livraisons complétées avec succès
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={loadDeliveries}
-            disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-[#FD481A] text-white rounded-lg hover:bg-[#E63F15] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <RefreshCw
-              className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
-            />
-            {isLoading ? "Chargement..." : "Actualiser"}
-          </button>
-
-          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
-            <PackageCheck className="w-5 h-5 text-gray-600" />
-            <span className="font-medium text-gray-900">
-              {deliveries.length}
-            </span>
-            <span className="text-gray-500">livraisons</span>
+    <ProtectedRoute allowedRoles={[GrantedRole.Admin, GrantedRole.Operateur]}>
+      <div className="space-y-6">
+        {/* En-tête avec statistiques */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Livraisons terminées
+            </h1>
+            <p className="text-gray-500 mt-2">
+              Historique des livraisons complétées avec succès
+            </p>
           </div>
 
-          <button
-            onClick={() => setShowColumnToggle(!showColumnToggle)}
-            className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <Columns className="w-4 h-4" />
-            Colonnes
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={loadDeliveries}
+              disabled={isLoading}
+              className="flex items-center gap-2 px-4 py-2 bg-[#FD481A] text-white rounded-lg hover:bg-[#E63F15] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <RefreshCw
+                className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
+              />
+              {isLoading ? "Chargement..." : "Actualiser"}
+            </button>
+
+            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
+              <PackageCheck className="w-5 h-5 text-gray-600" />
+              <span className="font-medium text-gray-900">
+                {deliveries.length}
+              </span>
+              <span className="text-gray-500">livraisons</span>
+            </div>
+
+            <button
+              onClick={() => setShowColumnToggle(!showColumnToggle)}
+              className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Columns className="w-4 h-4" />
+              Colonnes
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Toggle des colonnes visibles */}
-      {showColumnToggle && (
-        <DeliveryColumnVisibilityToggle
-          visibleColumns={visibleColumns}
-          onToggleColumn={handleToggleColumn}
-          onReset={() => setVisibleColumns(defaultVisibleColumns)}
-        />
-      )}
+        {/* Toggle des colonnes visibles */}
+        {showColumnToggle && (
+          <DeliveryColumnVisibilityToggle
+            visibleColumns={visibleColumns}
+            onToggleColumn={handleToggleColumn}
+            onReset={() => setVisibleColumns(defaultVisibleColumns)}
+          />
+        )}
 
-      {/* Barre de recherche et filtres */}
-      <DeliverySearchFilters
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        deliveryTypeFilter={deliveryTypeFilter}
-        onDeliveryTypeFilterChange={setDeliveryTypeFilter}
-        transportModeFilter={transportModeFilter}
-        onTransportModeFilterChange={setTransportModeFilter}
-        itemsPerPage={itemsPerPage}
-        onItemsPerPageChange={setItemsPerPage}
-        totalItems={totalItems}
-        filteredItems={filteredDeliveries.length}
-        deliveryTypes={deliveryTypes}
-        transportModes={transportModes}
-      />
-
-      {/* Pagination */}
-      {totalItems > 0 && (
-        <DeliveriesPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={totalItems}
+        {/* Barre de recherche et filtres */}
+        <DeliverySearchFilters
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          deliveryTypeFilter={deliveryTypeFilter}
+          onDeliveryTypeFilterChange={setDeliveryTypeFilter}
+          transportModeFilter={transportModeFilter}
+          onTransportModeFilterChange={setTransportModeFilter}
           itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
           onItemsPerPageChange={setItemsPerPage}
-          startIndex={startIndex + 1}
-          endIndex={Math.min(endIndex, totalItems)}
-        />
-      )}
-
-      {/* Tableau/Cartes des livraisons */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        <DeliveryTable
-          deliveries={paginatedDeliveries}
-          isLoading={isLoading}
-          visibleColumns={visibleColumns}
-          formatAddress={formatAddress}
-          formatPrice={formatPrice}
-          formatDate={formatDate}
-        />
-      </div>
-
-      {/* Pagination */}
-      {totalItems > 0 && (
-        <DeliveriesPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
           totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
-          onItemsPerPageChange={setItemsPerPage}
-          startIndex={startIndex + 1}
-          endIndex={Math.min(endIndex, totalItems)}
+          filteredItems={filteredDeliveries.length}
+          deliveryTypes={deliveryTypes}
+          transportModes={transportModes}
         />
-      )}
 
-      {/* Modal de détails */}
-      <DeliveryDetailsModal />
-    </div>
+        {/* Pagination */}
+        {totalItems > 0 && (
+          <DeliveriesPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            startIndex={startIndex + 1}
+            endIndex={Math.min(endIndex, totalItems)}
+          />
+        )}
+
+        {/* Tableau/Cartes des livraisons */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <DeliveryTable
+            deliveries={paginatedDeliveries}
+            isLoading={isLoading}
+            visibleColumns={visibleColumns}
+            formatAddress={formatAddress}
+            formatPrice={formatPrice}
+            formatDate={formatDate}
+          />
+        </div>
+
+        {/* Pagination */}
+        {totalItems > 0 && (
+          <DeliveriesPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            startIndex={startIndex + 1}
+            endIndex={Math.min(endIndex, totalItems)}
+          />
+        )}
+
+        {/* Modal de détails */}
+        <DeliveryDetailsModal />
+      </div>
+    </ProtectedRoute>
   );
 }

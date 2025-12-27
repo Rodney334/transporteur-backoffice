@@ -11,6 +11,7 @@ import UsersPagination from "./components/UsersPagination";
 import RoleChangeModal from "./components/RoleChangeModal";
 import ColumnVisibilityToggle from "./components/ColumnVisibilityToggle";
 import { GrantedRole } from "@/type/enum";
+import ProtectedRoute from "@/components/Protected-route";
 
 // Définition des colonnes avec leur visibilité par défaut
 const defaultVisibleColumns = {
@@ -96,91 +97,102 @@ export default function UtilisateurPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* En-tête avec statistiques */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Gestion des utilisateurs
-          </h1>
-          <p className="text-gray-500 mt-2">
-            {isAdmin
-              ? "Interface d'administration - Vous pouvez modifier les rôles"
-              : "Consultez la liste des utilisateurs"}
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
-            <Users className="w-5 h-5 text-gray-600" />
-            <span className="font-medium text-gray-900">{users.length}</span>
-            <span className="text-gray-500">utilisateurs</span>
+    <ProtectedRoute
+      allowedRoles={[
+        GrantedRole.Admin,
+        GrantedRole.Operateur,
+        GrantedRole.Livreur,
+      ]}
+    >
+      <div className="space-y-6">
+        {/* En-tête avec statistiques */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Gestion des utilisateurs
+            </h1>
+            <p className="text-gray-500 mt-2">
+              {isAdmin
+                ? "Interface d'administration - Vous pouvez modifier les rôles"
+                : "Consultez la liste des utilisateurs"}
+            </p>
           </div>
 
-          <button
-            onClick={() => setShowColumnToggle(!showColumnToggle)}
-            className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <Columns className="w-4 h-4" />
-            Colonnes
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
+              <Users className="w-5 h-5 text-gray-600" />
+              <span className="font-medium text-gray-900">{users.length}</span>
+              <span className="text-gray-500">utilisateurs</span>
+            </div>
+
+            <button
+              onClick={() => setShowColumnToggle(!showColumnToggle)}
+              className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Columns className="w-4 h-4" />
+              Colonnes
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Toggle des colonnes visibles */}
-      {showColumnToggle && (
-        <ColumnVisibilityToggle
-          visibleColumns={visibleColumns}
-          onToggleColumn={(column) =>
-            setVisibleColumns((prev) => ({ ...prev, [column]: !prev[column] }))
-          }
-          onReset={() => setVisibleColumns(defaultVisibleColumns)}
-        />
-      )}
+        {/* Toggle des colonnes visibles */}
+        {showColumnToggle && (
+          <ColumnVisibilityToggle
+            visibleColumns={visibleColumns}
+            onToggleColumn={(column) =>
+              setVisibleColumns((prev) => ({
+                ...prev,
+                [column]: !prev[column],
+              }))
+            }
+            onReset={() => setVisibleColumns(defaultVisibleColumns)}
+          />
+        )}
 
-      {/* Barre de recherche et filtres */}
-      <UserSearchFilters
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        roleFilter={roleFilter}
-        onRoleFilterChange={setRoleFilter}
-        archivedFilter={archivedFilter}
-        onArchivedFilterChange={setArchivedFilter}
-        itemsPerPage={itemsPerPage}
-        onItemsPerPageChange={setItemsPerPage}
-        totalItems={totalItems}
-        filteredItems={filteredUsers.length}
-      />
-
-      {/* Tableau des utilisateurs */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        <UserTable
-          users={paginatedUsers}
-          isLoading={isLoadingUsers}
-          visibleColumns={visibleColumns}
-          isAdmin={isAdmin}
-          getRoleLabel={getRoleLabel}
-          getGenderLabel={getGenderLabel}
-          formatDate={formatDate}
-        />
-      </div>
-
-      {/* Pagination */}
-      {totalItems > 0 && (
-        <UsersPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={totalItems}
+        {/* Barre de recherche et filtres */}
+        <UserSearchFilters
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          roleFilter={roleFilter}
+          onRoleFilterChange={setRoleFilter}
+          archivedFilter={archivedFilter}
+          onArchivedFilterChange={setArchivedFilter}
           itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
           onItemsPerPageChange={setItemsPerPage}
-          startIndex={startIndex + 1}
-          endIndex={Math.min(endIndex, totalItems)}
+          totalItems={totalItems}
+          filteredItems={filteredUsers.length}
         />
-      )}
 
-      {/* Modal de changement de rôle (sera utilisé par UserTable) */}
-      <RoleChangeModal />
-    </div>
+        {/* Tableau des utilisateurs */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <UserTable
+            users={paginatedUsers}
+            isLoading={isLoadingUsers}
+            visibleColumns={visibleColumns}
+            isAdmin={isAdmin}
+            getRoleLabel={getRoleLabel}
+            getGenderLabel={getGenderLabel}
+            formatDate={formatDate}
+          />
+        </div>
+
+        {/* Pagination */}
+        {totalItems > 0 && (
+          <UsersPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            startIndex={startIndex + 1}
+            endIndex={Math.min(endIndex, totalItems)}
+          />
+        )}
+
+        {/* Modal de changement de rôle (sera utilisé par UserTable) */}
+        <RoleChangeModal />
+      </div>
+    </ProtectedRoute>
   );
 }

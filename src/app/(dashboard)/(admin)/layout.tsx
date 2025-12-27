@@ -1,7 +1,7 @@
-// admin dashboard layout
+// admin dashboard layout - VERSION AVEC FILTRAGE PAR RÔLE
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import {
   LayoutGrid,
@@ -17,6 +17,7 @@ import {
   X,
   ListOrdered,
   OctagonAlert,
+  Package,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -27,6 +28,7 @@ import Image from "next/image";
 import ProtectedRoute from "@/components/Protected-route";
 import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
+import { GrantedRole } from "@/type/enum";
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
@@ -34,50 +36,132 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const navigation = [
+  // Définir les menus selon le rôle de l'utilisateur
+  const allNavigationItems = [
     {
       name: "Dashboard",
-      href: "/admin/dashboard", //"/admin/dashboard",
+      href: "/admin/dashboard",
       icon: LayoutGrid,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur, GrantedRole.Livreur],
       current: pathname === "/admin/dashboard",
     },
     {
       name: "Commandes",
       href: "/admin/dashboard/commande",
       icon: ListOrdered,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur, GrantedRole.Livreur],
       current: pathname === "/admin/dashboard/commande",
     },
     {
       name: "Livraisons",
       href: "/admin/dashboard/livraison",
       icon: BookOpen,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur],
       current: pathname === "/admin/dashboard/livraison",
     },
     {
       name: "Utilisateurs",
       href: "/admin/dashboard/utilisateur",
       icon: ShieldUser,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur],
       current: pathname === "/admin/dashboard/utilisateur",
     },
     {
-      name: "Litiges",
+      name: "Négociations",
       href: "/admin/dashboard/litige",
       icon: OctagonAlert,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur],
       current: pathname === "/admin/dashboard/litige",
     },
     {
-      name: "Reports",
+      name: "Rapports",
       href: "/admin/dashboard/report",
       icon: MessageSquareMore,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur],
       current: pathname === "/admin/dashboard/report",
     },
     {
       name: "Paramètres",
       href: "/admin/dashboard/settings",
       icon: Settings,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur, GrantedRole.Livreur],
       current: pathname === "/admin/dashboard/settings",
     },
   ];
+
+  // Filtrer les menus selon le rôle de l'utilisateur
+  const navigation = useMemo(() => {
+    if (!user?.role) return [];
+
+    // Rôle livreur: seulement Commandes et Paramètres
+    if (user.role === GrantedRole.Livreur) {
+      return allNavigationItems.filter((item) =>
+        item.roles.includes(GrantedRole.Livreur)
+      );
+    }
+
+    // Rôles admin et opérateur: tous les menus autorisés pour leur rôle
+    return allNavigationItems.filter((item) =>
+      item.roles.includes(user.role as GrantedRole)
+    );
+  }, [user?.role, allNavigationItems]);
+
+  // Adapter le titre selon le rôle
+  const getUserGreeting = () => {
+    if (!user) return "Anonyme";
+
+    switch (user.role) {
+      case GrantedRole.Admin:
+        return `Administrateur ${user.name}`;
+      case GrantedRole.Operateur:
+        return `Opérateur ${user.name}`;
+      case GrantedRole.Livreur:
+        return `Livreur ${user.name}`;
+      default:
+        return user.name;
+    }
+  };
+
+  // Adapter l'avatar selon le rôle
+  const getRoleBadge = () => {
+    if (!user?.role) return null;
+
+    return (
+      <div className="flex items-center gap-2">
+        <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
+          <Link href={`/admin/dashboard/settings`}>
+            <Image
+              src={userIcone}
+              alt="User avatar"
+              className="w-full h-full object-cover"
+            />
+          </Link>
+        </div>
+        <div className="hidden lg:block">
+          <div className="text-sm font-medium text-gray-900">{user.name}</div>
+          <span
+            className={`text-xs px-2 py-0.5 rounded-full ${
+              user.role === GrantedRole.Admin
+                ? "bg-red-100 text-red-800"
+                : user.role === GrantedRole.Operateur
+                ? "bg-blue-100 text-blue-800"
+                : user.role === GrantedRole.Livreur
+                ? "bg-green-100 text-green-800"
+                : "bg-gray-100 text-gray-800"
+            }`}
+          >
+            {user.role === GrantedRole.Admin
+              ? "Admin"
+              : user.role === GrantedRole.Operateur
+              ? "Opérateur"
+              : user.role === GrantedRole.Livreur
+              ? "Livreur"
+              : "Unknown"}
+          </span>
+        </div>
+      </div>
+    );
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -88,7 +172,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   return (
-    <ProtectedRoute>
+    <ProtectedRoute
+      allowedRoles={[
+        GrantedRole.Admin,
+        GrantedRole.Operateur,
+        GrantedRole.Livreur,
+      ]}
+    >
       <div className="min-h-screen bg-gray-50">
         {/* Overlay pour mobile */}
         {sidebarOpen && (
@@ -109,8 +199,22 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         >
           {/* Header Sidebar avec bouton fermer */}
           <div className="p-6 flex items-center justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center gap-3">
               <Image src={logoDark} alt="logo" />
+              {/* {user?.role && (
+                <div className="text-xs">
+                  <div className="font-medium">{getUserGreeting()}</div>
+                  <div className="text-gray-400 capitalize">
+                    {user.role === GrantedRole.Admin
+                      ? "Administrateur"
+                      : user.role === GrantedRole.Operateur
+                      ? "Opérateur"
+                      : user.role === GrantedRole.Livreur
+                      ? "Livreur"
+                      : user.role}
+                  </div>
+                </div>
+              )} */}
             </div>
             <button
               onClick={closeSidebar}
@@ -120,7 +224,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </button>
           </div>
 
-          {/* Navigation */}
+          {/* Navigation filtrée par rôle */}
           <nav className="flex-1 px-4 py-6 space-y-1">
             {navigation.map((item) => {
               const Icon = item.icon;
@@ -141,6 +245,33 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               );
             })}
           </nav>
+
+          {/* Informations du rôle */}
+          <div className="p-2 border-t border-gray-800">
+            <div className="text-xs text-gray-400">Rôle actuel</div>
+            <div className="flex items-center gap-2">
+              <div
+                className={`w-3 h-3 rounded-full ${
+                  user?.role === GrantedRole.Admin
+                    ? "bg-red-500"
+                    : user?.role === GrantedRole.Operateur
+                    ? "bg-blue-500"
+                    : user?.role === GrantedRole.Livreur
+                    ? "bg-green-500"
+                    : "bg-gray-500"
+                }`}
+              ></div>
+              <span className="text-sm text-white capitalize">
+                {user?.role === GrantedRole.Admin
+                  ? "Administrateur"
+                  : user?.role === GrantedRole.Operateur
+                  ? "Opérateur"
+                  : user?.role === GrantedRole.Livreur
+                  ? "Livreur"
+                  : user?.role}
+              </span>
+            </div>
+          </div>
 
           {/* Déconnexion */}
           <div className="p-4">
@@ -169,8 +300,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </button>
                 <div>
                   <h2 className="text-lg font-semibold text-gray-900">
-                    Bienvenu {user ? user.name : "Anonyme"}
+                    {getUserGreeting()}
                   </h2>
+                  <p className="text-sm text-gray-500">
+                    {user?.role === GrantedRole.Livreur
+                      ? "Gérez vos commandes assignées"
+                      : "Tableau de bord d'administration"}
+                  </p>
                 </div>
               </div>
 
@@ -183,7 +319,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   />
                   <input
                     type="text"
-                    placeholder="Suivez votre ID....."
+                    placeholder={
+                      user?.role === GrantedRole.Livreur
+                        ? "Rechercher une commande..."
+                        : "Suivez votre ID....."
+                    }
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-12 pr-12 py-3 border text-[#FD481AB2] focus:text-gray-500 border-[#9D1D01B2] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481AB2] focus:border-transparent"
@@ -203,17 +343,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
                 <button className="relative p-2 hover:bg-gray-50 border border-[#9D1D01B2] rounded-full transition-colors">
                   <Bell width={25} height={25} color={"#9D1D01B2"} />
+                  {user?.role === GrantedRole.Livreur && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#FD481A] text-white text-xs rounded-full flex items-center justify-center">
+                      3
+                    </span>
+                  )}
                 </button>
-                <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
-                  <Link href={`/admin/dashboard/settings`}>
-                    <Image
-                      // src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
-                      src={userIcone}
-                      alt="User avatar"
-                      className="w-full h-full object-cover"
-                    />
-                  </Link>
-                </div>
+                {getRoleBadge()}
               </div>
             </div>
 
@@ -226,7 +362,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 />
                 <input
                   type="text"
-                  placeholder="Suivez votre ID....."
+                  placeholder={
+                    user?.role === GrantedRole.Livreur
+                      ? "Rechercher une commande..."
+                      : "Suivez votre ID....."
+                  }
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-12 pr-12 py-3 border text-[#FD481AB2] focus:text-gray-500 border-[#9D1D01B2] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481AB2] focus:border-transparent"
