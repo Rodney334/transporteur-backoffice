@@ -45,12 +45,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: BookOpen,
       current: pathname === "/user/dashboard/history",
     },
-    // {
-    //   name: "Tracking",
-    //   href: "/user/dashboard/tracking",
-    //   icon: ShieldUser,
-    //   current: pathname === "/user/dashboard/tracking",
-    // },
+    {
+      name: "Rapports",
+      href: "/user/dashboard/report",
+      icon: ShieldUser,
+      current: pathname === "/user/dashboard/report",
+    },
     // {
     //   name: "Message",
     //   href: "/user/dashboard/message",

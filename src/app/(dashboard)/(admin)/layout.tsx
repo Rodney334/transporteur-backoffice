@@ -18,6 +18,7 @@ import {
   ListOrdered,
   OctagonAlert,
   Package,
+  ClipboardPlus,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -44,6 +45,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: LayoutGrid,
       roles: [GrantedRole.Admin, GrantedRole.Operateur, GrantedRole.Livreur],
       current: pathname === "/admin/dashboard",
+    },
+    {
+      name: "Nouvelle commande",
+      href: "/admin/dashboard/commander",
+      icon: ClipboardPlus,
+      roles: [GrantedRole.Admin],
+      current: pathname === "/admin/dashboard/commander",
     },
     {
       name: "Commandes",
