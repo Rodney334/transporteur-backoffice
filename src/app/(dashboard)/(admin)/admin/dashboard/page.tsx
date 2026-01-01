@@ -1,20 +1,8 @@
 // app/(dashboard)/admin/dashboard/page.tsx
 "use client";
 
-import { useAuth } from "@/hooks/use-auth";
-import { OrdersManager } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager";
-import { CommandCard } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/CommandCard";
-import { getAdminConfig } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager.utils";
-import { GrantedRole } from "@/type/enum";
+import { Dashboard } from "./components/Dashboard";
 
-export default function AdminPage() {
-  const { user } = useAuth();
-  const adminConfig = getAdminConfig();
-
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Administration</h1>
-      <p>Interface d'administration réservée aux administrateurs.</p>
-    </div>
-  );
+export default function DashboardPage() {
+  return <Dashboard />;
 }

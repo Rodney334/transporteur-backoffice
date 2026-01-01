@@ -96,7 +96,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Header Sidebar avec bouton fermer */}
           <div className="p-6 flex items-center justify-between">
             <div className="flex items-center">
-              <Image src={logoDark} alt="logo" />
+              <Image src={logoDark} alt="logo" loading="eager" />
             </div>
             <button
               onClick={closeSidebar}
