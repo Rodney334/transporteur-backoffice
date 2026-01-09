@@ -10,6 +10,7 @@ import axios from "axios";
 import { LoadingFullPage } from "@/components/Loading";
 import { GrantedRole } from "@/type/enum";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import { toast } from "react-toastify";
 
 interface LoginFormData {
   email: string;
@@ -18,9 +19,6 @@ interface LoginFormData {
 }
 
 function LoginContent() {
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/user/dashboard";
-
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, isLoading, error, clearError } = useAuth();
@@ -42,6 +40,7 @@ function LoginContent() {
 
     try {
       const response = await login(data.email, data.password);
+      toast.success("Redirection en cours.", { autoClose: 5000 });
       if (response.role === GrantedRole.Client) {
         router.push("/user/dashboard");
       } else if (
@@ -55,36 +54,12 @@ function LoginContent() {
       }
       // router.push("/dashboard");
     } catch (error) {
-      console.error("Login failed:", error);
+      console.log("Login failed:", error);
     }
   };
 
-  // const refreshtoken = async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       "https://letransporteur-production.up.railway.app/api/v1/auth/refresh",
-  //       {},
-  //       {
-  //         headers: {
-  //           Authorization:
-  //             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MTI5NWUxLTY3MzktNDc4OS04NzE3LTYxZTk5OGNjOTM5OSIsImlhdCI6MTc2MjYwMTYzMCwiZXhwIjoxNzYzMjA2NDMwfQ.McS6jtgp5J55oEQ2tQfFslhO4-QhC4W41R4okgYQ8AU",
-  //         },
-  //       }
-  //     );
-  //     console.log(response.data);
-  //   } catch (error: any) {
-  //     console.log("refresh failed:", error.response.data);
-  //   }
-  // };
-
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      {/* <button
-        onClick={refreshtoken}
-        className="w-full bg-[#FD481A] text-white py-3.5 rounded-lg font-medium hover:bg-[#E63F15] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
-      >
-        Refresh token
-      </button> */}
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-3">

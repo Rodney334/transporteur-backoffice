@@ -144,9 +144,6 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Dimensions de l'article */}
-              {/* <DimensionData form={form} /> */}
-
               {/* Transport types */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 lg:gap-3">
                 {transportTypes.map((transport, index) => {
@@ -208,26 +205,11 @@ export default function DashboardPage() {
 
               <GeneralData form={form} />
 
-              {/* Checkbox */}
-              {/* <div className="flex items-center gap-2 mb-4 lg:mb-6">
-              <input
-                type="checkbox"
-                id="sameAddress"
-                checked={sameAddress}
-                onChange={(e) => setSameAddress(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-[#FD481A] focus:ring-[#FD481A]"
-              />
-              <label htmlFor="sameAddress" className="text-sm text-gray-700">
-                Mon adresse de livraison et de paiement sont identiques
-              </label>
-            </div> */}
-
               {/* Next button */}
               <div className="flex justify-end">
                 <button
                   type="button"
                   onClick={() => changeStep(2)}
-                  // disabled={!selectedTransportType || !selectedArticleType}
                   className="w-full sm:w-auto px-6 py-3 bg-[#FD481A] text-white font-medium rounded-lg hover:bg-[#E63F15] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed text-sm lg:text-base"
                 >
                   Suivant
@@ -238,7 +220,6 @@ export default function DashboardPage() {
 
           {/* Étape 2 - Dimensions et Paiement */}
           <div className={currentStep === 2 ? "block" : "hidden"}>
-            {/* <div className="grid grid-cols-1 xl:grid-cols-5 gap-4 lg:gap-6"> */}
             <div>
               {/* Colonne gauche - Lancer une course */}
               <div className="bg-white rounded-2xl xl:col-span-3 shadow-sm p-4 lg:p-6">
@@ -248,19 +229,6 @@ export default function DashboardPage() {
                   </h2>
                   <ArrowUpRight className="w-5 h-5 lg:w-6 lg:h-6 text-[#FD481A]" />
                 </div>
-
-                {/* Programmée */}
-                {/* <ProgramData form={form} /> */}
-
-                {/* Estimation */}
-                {/* <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-gray-50 rounded-lg">
-                <p className="text-base font-bold text-gray-900">
-                  Estimation Total: FCFA
-                </p>
-              </div> */}
-
-                {/* Moyen de Paiement */}
-                {/* <PaymentData form={form} /> */}
 
                 {/* Colonne droite - Informations Lieu */}
                 <div className="mb-4">

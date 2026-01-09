@@ -78,7 +78,7 @@ export const useUsersManagement = () => {
         closePromotionModal();
         return updatedUser;
       } catch (error: any) {
-        console.error("Erreur promotion utilisateur:", error);
+        console.log("Erreur promotion utilisateur:", error);
         const errorMessage =
           error.response?.data?.message || "Erreur lors du changement de rôle";
 
@@ -125,7 +125,7 @@ export const useUsersManagement = () => {
       const allUsers = await userService.getAllUsers();
       return allUsers.filter((user) => user.role === GrantedRole.Livreur);
     } catch (error: any) {
-      console.error("Erreur chargement livreurs:", error);
+      console.log("Erreur chargement livreurs:", error);
       return [];
     }
   }, []);

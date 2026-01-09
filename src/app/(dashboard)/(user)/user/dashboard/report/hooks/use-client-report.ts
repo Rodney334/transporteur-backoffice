@@ -55,7 +55,7 @@ export const useClientReport = () => {
         closeButton: true,
       });
     } catch (error: any) {
-      console.error("Erreur chargement rapport:", error);
+      console.log("Erreur chargement rapport:", error);
       const errorMessage =
         error.response?.data?.message ||
         "Erreur lors du chargement de votre rapport";

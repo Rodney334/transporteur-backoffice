@@ -13,16 +13,14 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   isArchived: boolean;
-  refreshToken: string | null;
 }
 
 interface AuthState {
   accessToken: string | null;
-  refreshToken: string | null;
   user: User | null;
   isLoading: boolean;
   error: string | null;
-  setTokens: (accessToken: string, refreshToken: string) => void;
+  setTokens: (accessToken: string) => void;
   setUser: (user: User) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
@@ -75,14 +73,12 @@ export const useAuthStore = create<AuthState>()(
       isLivreur: false,
       isOperateur: false,
 
-      setTokens: (accessToken: string, refreshToken: string) => {
+      setTokens: (accessToken: string) => {
         // Mettre à jour les cookies
         cookieHelper.setToken("auth-token", accessToken, 86400);
-        cookieHelper.setToken("refresh-token", refreshToken, 604800);
 
         set({
           accessToken,
-          refreshToken,
           error: null,
           isLoading: false, // ← CHANGEMENT ICI : passer à false après auth
           isAdmin: get().user?.role === GrantedRole.Admin,
@@ -94,7 +90,7 @@ export const useAuthStore = create<AuthState>()(
 
       setUser: (user: User) => {
         const currentState = get();
-        const hasTokens = currentState.accessToken && currentState.refreshToken;
+        const hasTokens = currentState.accessToken;
 
         set({
           user,
@@ -106,27 +102,16 @@ export const useAuthStore = create<AuthState>()(
           isOperateur: user.role === GrantedRole.Operateur,
         });
 
-        if (
-          hasTokens &&
-          currentState.accessToken &&
-          currentState.refreshToken
-        ) {
+        if (hasTokens && currentState.accessToken) {
           cookieHelper.setToken("auth-token", currentState.accessToken, 86400);
-          cookieHelper.setToken(
-            "refresh-token",
-            currentState.refreshToken,
-            604800
-          );
         }
       },
 
       logout: () => {
         cookieHelper.removeToken("auth-token");
-        cookieHelper.removeToken("refresh-token");
 
         set({
           accessToken: null,
-          refreshToken: null,
           user: null,
           error: null,
           isLoading: false, // ← CHANGEMENT ICI : false après logout
@@ -147,7 +132,6 @@ export const useAuthStore = create<AuthState>()(
       name: "auth-storage",
       partialize: (state) => ({
         accessToken: state.accessToken,
-        refreshToken: state.refreshToken,
         user: state.user,
       }),
       // Optionnel : recréer l'état de loading après rehydratation

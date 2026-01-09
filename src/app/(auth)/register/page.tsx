@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { GenderType } from "@/type/enum";
 import { LoadingFullPage } from "@/components/Loading";
 import { RegisterData } from "@/lib/services/auth-service";
+import { toast } from "react-toastify";
 
 function RegisterContent() {
   const searchParams = useSearchParams();
@@ -35,9 +36,10 @@ function RegisterContent() {
     try {
       await registerUser(data);
       // router.push(redirect);
+      toast.success("Redirection en cours.", { autoClose: 3000 });
       router.push("/user/dashboard");
     } catch (error) {
-      console.error("Registration failed:", error);
+      console.log("Registration failed:", error);
     }
   };
 

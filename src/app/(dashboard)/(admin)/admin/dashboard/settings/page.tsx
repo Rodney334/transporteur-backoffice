@@ -6,6 +6,7 @@ import { Mail, Phone, Globe, User, Lock, Calendar } from "lucide-react";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { GenderType } from "@/type/enum";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import { SimpleNotificationToggle } from "@/components/SimpleNotificationToggle";
 
 // Liste des codes pays (vous pouvez l'étendre)
 const COUNTRY_CODES = [
@@ -47,7 +48,12 @@ export default function SettingsPage() {
     watch,
   } = passwordForm;
 
-  const tabs = ["Mes informations", "Profil", "Mot de passe"];
+  const tabs = [
+    "Mes informations",
+    "Profil",
+    "Mot de passe",
+    "Notifications web",
+  ];
 
   // Formatage de la date de création
   const formatDate = (dateString: string) => {
@@ -502,6 +508,20 @@ export default function SettingsPage() {
                 </div>
               </div>
             </form>
+          </div>
+        )}
+
+        {/* Onglet Notifications web */}
+        {activeTab === "Notifications web" && (
+          <div className="flex items-center justify-between p-4 border rounded-lg">
+            <div>
+              <h3 className="font-medium">Notifications Web</h3>
+              <p className="text-sm text-gray-500">
+                Recevez des notifications même quand l'application n'est pas
+                ouverte
+              </p>
+            </div>
+            <SimpleNotificationToggle />
           </div>
         )}
       </div>

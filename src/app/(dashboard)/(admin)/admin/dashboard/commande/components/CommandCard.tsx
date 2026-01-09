@@ -54,9 +54,9 @@ export const CommandCard = memo(function CommandCard({
         </div>
         <button
           onClick={() => onViewDetails(item)}
-          className="text-sm font-medium text-gray-900 hover:text-[#FD481A] transition-colors"
+          className="text-sm font-medium text-gray-50 bg-[#FD481A] px-2 py-1 rounded hover:opacity-80 transition-colors"
         >
-          Voir Plus de Details
+          Prix et Details
         </button>
       </div>
 

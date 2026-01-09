@@ -1,0 +1,14 @@
+description obligatoire -- ok
+
+bouton pour le voir détail -- ok
+
+Correction du texte pour le montant au niveau du client
+
+Lors de la création d'une commande que les entrées soient sauvegardées quand le formulaire
+n'est pas envoyé même si on recharge la page
+
+Laisser une note sur une commande déjà créé
+
+Client doit pouvoir donner son avis par rapport au livreur et la livraison
+
+Quand un admin

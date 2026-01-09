@@ -1,6 +1,7 @@
 import { api } from "@/lib/api/axios";
 import { User } from "@/lib/stores/auth-store";
 import { GenderType, GrantedRole } from "@/type/enum";
+import axios from "axios";
 
 export interface LoginData {
   email: string;
@@ -41,7 +42,6 @@ interface RegisterResponse {
 // NOUVEAU : Interface pour la réponse du refresh
 interface RefreshTokenResponse {
   accessToken: string;
-  refreshToken: string;
 }
 
 export const authService = {
@@ -68,8 +68,12 @@ export const authService = {
   },
 
   // NOUVEAU : Rafraîchissement des tokens
-  async refreshTokens(refreshToken: string): Promise<RefreshTokenResponse> {
-    const response = await api.post<RefreshTokenResponse>("/auth/refresh", {});
+  async refreshTokens(): Promise<RefreshTokenResponse> {
+    console.log("call refresh token");
+    const response = await axios.post<RefreshTokenResponse>(
+      "https://letransporteur-production.up.railway.app/api/v1/auth/refresh",
+      {}
+    );
     console.log(response.data);
     return response.data;
   },

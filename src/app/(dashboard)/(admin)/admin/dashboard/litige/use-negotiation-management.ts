@@ -65,7 +65,7 @@ export const useNegotiationManagement = () => {
               client = negotiation.order.createdBy;
             }
           } catch (error) {
-            console.error("Erreur chargement utilisateurs:", error);
+            console.log("Erreur chargement utilisateurs:", error);
           }
 
           return {
@@ -86,7 +86,7 @@ export const useNegotiationManagement = () => {
         closeButton: true,
       });
     } catch (error: any) {
-      console.error("Erreur chargement négociations:", error);
+      console.log("Erreur chargement négociations:", error);
       const errorMessage =
         error.response?.data?.message ||
         "Erreur lors du chargement des litiges";
@@ -185,7 +185,7 @@ export const useNegotiationManagement = () => {
         setShowResolveModal(false);
         return true;
       } catch (error: any) {
-        console.error("Erreur résolution litige:", error);
+        console.log("Erreur résolution litige:", error);
         const errorMessage =
           error.response?.data?.message ||
           "Erreur lors de la résolution du litige";

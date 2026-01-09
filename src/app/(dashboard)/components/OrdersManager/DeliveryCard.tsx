@@ -5,10 +5,18 @@ import { OrderStatus } from "@/type/enum";
 
 export const DeliveryCard = ({ item, onViewDetails }: DeliveryCardProps) => (
   <div
-    className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:opacity-80 transition-opacity"
-    onClick={() => onViewDetails(item)}
+    className="bg-white rounded-xl p-4 shadow-sm border border-gray-100"
+    // onClick={() => onViewDetails(item)}
   >
-    <div className="text-xs font-semibold text-gray-600 mb-3">{item.id}</div>
+    <div className="flex justify-between text-xs font-semibold text-gray-600 mb-3">
+      <span>{item.id}</span>
+      <button
+        onClick={() => onViewDetails(item)}
+        className="text-sm font-medium text-gray-50 bg-[#FD481A] px-2 py-1 rounded cursor-pointer hover:opacity-80 transition-opacity"
+      >
+        Prix et Details
+      </button>
+    </div>
 
     <div className="flex items-center justify-between mb-3">
       <span className="text-sm font-medium text-gray-900">{item.from}</span>
@@ -49,6 +57,14 @@ export const DeliveryCard = ({ item, onViewDetails }: DeliveryCardProps) => (
               ? "En attente"
               : item.originalData.status === OrderStatus.ECHEC
               ? "Echouée"
+              : item.originalData.status === OrderStatus.EN_LIVRAISON
+              ? "En livraison"
+              : item.originalData.status === OrderStatus.EN_DISCUSSION
+              ? "En discussion"
+              : item.originalData.status === OrderStatus.PRIX_VALIDE
+              ? "Prix validé"
+              : item.originalData.status === OrderStatus.ASSIGNEE
+              ? "Acceptée"
               : "En cours"}
           </span>
         </div>

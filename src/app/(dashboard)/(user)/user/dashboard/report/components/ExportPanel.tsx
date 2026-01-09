@@ -72,7 +72,7 @@ export const ExportPanel = ({
 
       onExportComplete?.();
     } catch (error: any) {
-      console.error(`Erreur lors de l'export ${format}:`, error);
+      console.log(`Erreur lors de l'export ${format}:`, error);
 
       let errorMessage = `Erreur lors de l'export ${format.toUpperCase()}`;
       if (error.message?.includes("Failed to execute 'createObjectURL'")) {
@@ -378,7 +378,7 @@ export const ExportPanel = ({
 
 //       onExportComplete?.();
 //     } catch (error) {
-//       console.error("Erreur lors de l'export:", error);
+//       console.log("Erreur lors de l'export:", error);
 //       toast.update(toastId, {
 //         render: "Erreur lors de l'export",
 //         type: "error",

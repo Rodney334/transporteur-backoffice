@@ -77,7 +77,7 @@ export const useReportManagement = () => {
           closeButton: true,
         });
       } catch (error: any) {
-        console.error("Erreur chargement rapports:", error);
+        console.log("Erreur chargement rapports:", error);
         const errorMessage =
           error.response?.data?.message ||
           `Erreur lors du chargement des rapports ${periodType}`;

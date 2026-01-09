@@ -134,7 +134,7 @@ export const OrdersManager = ({
       );
       setNegotiation(negotiationData);
     } catch (err) {
-      console.error("Error fetching negotiation:", err);
+      console.log("Error fetching negotiation:", err);
     } finally {
       setLoadingNegotiation(false);
     }
@@ -167,7 +167,7 @@ export const OrdersManager = ({
         toast.success("Commande acceptée avec succès !");
         setActiveTab("En cours");
       } catch (err: any) {
-        console.error("Error accepting order:", err);
+        console.log("Error accepting order:", err);
         toast.error(
           err.response?.data?.message || "Erreur lors de l'acceptation"
         );
@@ -185,7 +185,7 @@ export const OrdersManager = ({
         await rejectOrder(command.originalData.id);
         toast.success("Commande rejetée avec succès !");
       } catch (err: any) {
-        console.error("Error rejecting order:", err);
+        console.log("Error rejecting order:", err);
         toast.error(err.response?.data?.message || "Erreur lors du rejet");
       } finally {
         setProcessingAction(null);
@@ -202,7 +202,7 @@ export const OrdersManager = ({
         toast.success("Commande terminée avec succès !");
         setActiveTab("Terminées");
       } catch (err: any) {
-        console.error("Error ending order:", err);
+        console.log("Error ending order:", err);
         toast.error(
           err.response?.data?.message || "Erreur lors de la finalisation"
         );
@@ -249,7 +249,7 @@ export const OrdersManager = ({
       await fetchNegotiation(selectedCommand.id);
       reset();
     } catch (err: any) {
-      console.error("Error validating price:", err);
+      console.log("Error validating price:", err);
       toast.error(
         err.response?.data?.message || "Erreur lors de la validation"
       );
@@ -502,7 +502,7 @@ export const OrdersManager = ({
                       {negotiation?.proposedByCourier && (
                         <div className="flex justify-between items-center py-3 px-4 bg-blue-50 rounded-xl border border-blue-200">
                           <span className="text-sm font-medium text-blue-700">
-                            Prix proposé :
+                            Prix livreur :
                           </span>
                           <span className="text-sm font-bold text-blue-800">
                             {negotiation.proposedByCourier} FCFA
@@ -514,7 +514,7 @@ export const OrdersManager = ({
                       {negotiation?.confirmedByClient && (
                         <div className="flex justify-between items-center py-3 px-4 bg-green-50 rounded-xl border border-green-200">
                           <span className="text-sm font-medium text-green-700">
-                            Prix confirmé :
+                            Prix client :
                           </span>
                           <span className="text-sm font-bold text-green-800">
                             {negotiation.confirmedByClient} FCFA
@@ -580,9 +580,7 @@ export const OrdersManager = ({
                             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                           />
                         </svg>
-                        {userRole === "client"
-                          ? "Accepter un prix"
-                          : "Proposer un prix"}
+                        {userRole === "client" ? "Prix client" : "Prix livreur"}
                       </button>
                     </div>
                   ) : (
@@ -608,7 +606,7 @@ export const OrdersManager = ({
                               className="block text-sm font-medium text-gray-700"
                             >
                               Prix (
-                              {userRole === "client" ? "Accepté" : "Proposé"})
+                              {userRole === "client" ? "client" : "livreur"})
                               (FCFA)
                             </label>
                             <input

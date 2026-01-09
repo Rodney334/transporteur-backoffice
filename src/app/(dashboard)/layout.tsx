@@ -1,5 +1,6 @@
 // app/layout.tsx
-import ToastProvider from "@/components/ToastProvider";
+import AuthProvider from "@/components/Auth-provider";
+import { WebSocketProvider } from "@/components/WebSocketProvider";
 
 export default function RootLayout({
   children,
@@ -8,8 +9,11 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <ToastProvider />
-      {children}
+      {/* <AuthProvider>
+        <WebSocketProvider>{children}</WebSocketProvider>
+      </AuthProvider> */}
+      <WebSocketProvider>{children}</WebSocketProvider>
+      {/* {children} */}
     </>
   );
 }

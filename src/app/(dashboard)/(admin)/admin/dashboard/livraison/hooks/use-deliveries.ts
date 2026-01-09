@@ -22,7 +22,7 @@ export const useDeliveries = () => {
     try {
       await fetchOrders(user._id, user.role);
     } catch (error: any) {
-      console.error("Erreur chargement livraisons:", error);
+      console.log("Erreur chargement livraisons:", error);
       toast.error("Erreur lors du chargement des livraisons", {
         position: "top-left",
       });

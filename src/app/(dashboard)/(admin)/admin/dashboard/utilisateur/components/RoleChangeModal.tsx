@@ -86,7 +86,7 @@ export default function RoleChangeModal() {
       // Fermer le modal après succès
       setSelectedUser(null);
     } catch (error: any) {
-      console.error("Erreur changement de rôle:", error);
+      console.log("Erreur changement de rôle:", error);
       const errorMessage =
         error.response?.data?.message || "Erreur lors du changement de rôle";
 

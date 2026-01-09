@@ -6,7 +6,6 @@ import { useCallback } from "react";
 export const useAuth = () => {
   const {
     accessToken,
-    refreshToken,
     user,
     isLoading,
     error,
@@ -45,7 +44,7 @@ export const useAuth = () => {
       const { accessToken: newAccessToken, user: newUser } =
         await authService.login({ email, password });
       console.log({ newUser });
-      setTokens(newAccessToken, newUser.refreshToken || "");
+      setTokens(newAccessToken);
       setUser(newUser);
       return newUser;
     } catch (error: any) {
@@ -78,7 +77,7 @@ export const useAuth = () => {
           password: userData.password,
         });
 
-      setTokens(newAccessToken, newUser.refreshToken || "");
+      setTokens(newAccessToken);
       setUser(newUser);
       return newUser;
     } catch (error: any) {
@@ -111,19 +110,19 @@ export const useAuth = () => {
 
   // NOUVEAU : Fonction pour rafraîchir manuellement les tokens
   const refreshAuth = async (): Promise<boolean> => {
-    if (!refreshToken) {
-      logout();
-      return false;
-    }
+    // if (!refreshToken) {
+    //   logout();
+    //   return false;
+    // }
 
-    console.log({ refreshToken });
+    // console.log({ refreshToken });
 
     setLoading(true);
     try {
-      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-        await authService.refreshTokens(refreshToken);
+      const { accessToken: newAccessToken } = await authService.refreshTokens();
 
-      setTokens(newAccessToken, newRefreshToken);
+      console.log({ newAccessToken });
+      setTokens(newAccessToken);
       return true;
     } catch (error: any) {
       const errorMessage = handleAuthError(error);
@@ -138,7 +137,6 @@ export const useAuth = () => {
   return {
     // State
     accessToken,
-    refreshToken,
     user,
     isLoading,
     error,
@@ -148,7 +146,7 @@ export const useAuth = () => {
     login,
     register,
     logout: () => {
-      authService.logout().catch(console.error);
+      authService.logout().catch(console.log);
       logout();
     },
     checkAuth,

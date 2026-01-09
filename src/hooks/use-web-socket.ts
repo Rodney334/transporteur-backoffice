@@ -30,7 +30,7 @@ export const useWebSocket = () => {
           callback(data.payload);
         }
       } catch (error) {
-        console.error("Erreur parsing message:", error);
+        console.log("Erreur parsing message:", error);
       }
     };
 

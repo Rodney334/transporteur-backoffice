@@ -52,7 +52,7 @@ export const ExportPanel = ({
         autoClose: 3000,
       });
     } catch (error: any) {
-      console.error(`Erreur lors de l'export ${format}:`, error);
+      console.log(`Erreur lors de l'export ${format}:`, error);
 
       toast.update(toastId, {
         render: "Erreur lors de l'export",

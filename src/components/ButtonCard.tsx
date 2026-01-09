@@ -12,6 +12,7 @@ export interface ButtonCardProps {
   label: string;
   id: string;
   selected: string;
+  disabled?: boolean;
   setSelected: (value: SetStateAction<string>) => void;
 }
 
@@ -20,11 +21,12 @@ export const ButtonCard = ({
   label,
   id,
   selected,
+  disabled = false,
   setSelected,
 }: ButtonCardProps) => {
   return (
     <span
-      onClick={() => setSelected(id)}
+      onClick={() => !disabled && setSelected(id)}
       className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 sm:py-3 rounded-lg transition-all shadow-lg border border-white text-xs sm:text-sm ${
         selected === id
           ? "bg-[#FD481A] text-white border-[#FD481A]"

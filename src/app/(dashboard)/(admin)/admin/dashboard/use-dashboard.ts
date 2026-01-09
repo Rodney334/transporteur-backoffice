@@ -21,7 +21,7 @@ export const useDashboard = () => {
       setLastUpdated(new Date());
     } catch (error) {
       toast.error("Erreur lors du chargement des commandes");
-      console.error(error);
+      console.log(error);
     }
   }, [fetchOrders]);
 
@@ -55,7 +55,7 @@ export const useDashboard = () => {
 
       setStats(calculatedStats);
     } catch (error) {
-      console.error("Erreur calcul statistiques:", error);
+      console.log("Erreur calcul statistiques:", error);
       toast.error("Erreur lors du calcul des statistiques");
     } finally {
       setIsCalculating(false);

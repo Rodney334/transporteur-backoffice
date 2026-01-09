@@ -1,5 +1,5 @@
 // hooks/use-order-form.ts
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { orderService } from "@/lib/services/order-service";
 import { AddressInterface, CreateOrderInterface } from "@/type/order.type";
@@ -11,6 +11,7 @@ import {
   ServiceType,
   TransportMode,
 } from "@/type/enum";
+import { useOrderStore } from "@/lib/stores/order-store";
 
 // Interface alignée sur l'API
 export interface OrderFormData {
@@ -41,11 +42,47 @@ export interface OrderFormData {
   deliveryStreet: string;
 }
 
+// Clé pour le localStorage
+const LOCAL_STORAGE_KEY = "order-form-data";
+
+// Fonction pour sauvegarder dans le localStorage
+const saveToLocalStorage = (data: Partial<OrderFormData>) => {
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.warn("Failed to save form data to localStorage:", error);
+  }
+};
+
+// Fonction pour charger depuis le localStorage
+const loadFromLocalStorage = (): Partial<OrderFormData> | null => {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch (error) {
+    console.warn("Failed to load form data from localStorage:", error);
+    return null;
+  }
+};
+
+// Fonction pour effacer le localStorage
+const clearLocalStorage = () => {
+  try {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+  } catch (error) {
+    console.warn("Failed to clear form data from localStorage:", error);
+  }
+};
+
 export const useOrderForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sameAddress, setSameAddress] = useState(false);
   const router = useRouter();
+
+  const savedData = loadFromLocalStorage();
 
   const form = useForm<OrderFormData>({
     defaultValues: {
@@ -69,8 +106,40 @@ export const useOrderForm = () => {
       deliveryCity: "",
       deliveryDistrict: "",
       deliveryStreet: "",
+      ...savedData, // Fusionner avec les données sauvegardées
     },
+    // defaultValues: {
+    //   transportMode: TransportMode.MOTO,
+    //   articleType: ArticleType.COLIS,
+    //   serviceType: ServiceType.COLIS,
+    //   deliveryType: DeliveryType.STANDARD,
+    //   description: "Une description",
+    //   weight: 0.5,
+    //   zone: "",
+    //   estimatedPrice: 0,
+    //   pickupName: "CC",
+    //   pickupPhone: "+229 0197406310",
+    //   pickupCountry: "Bénin",
+    //   pickupCity: "Cotonou",
+    //   pickupDistrict: "1er arrondissement",
+    //   pickupStreet: "Etoile rouge",
+    //   deliveryName: "L",
+    //   deliveryPhone: "+229 0197406310",
+    //   deliveryCountry: "Bénin",
+    //   deliveryCity: "Abomey-Calavi",
+    //   deliveryDistrict: "Akassato",
+    //   deliveryStreet: "Carrefour Kérékou",
+    // },
   });
+
+  // Sauvegarder automatiquement à chaque changement de valeur
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      saveToLocalStorage(value);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   const calculateEstimatedPrice = (
     serviceType: string,
@@ -138,13 +207,16 @@ export const useOrderForm = () => {
         closeButton: true,
       });
 
+      // Effacer le localStorage après soumission réussie
+      clearLocalStorage();
+
       // Réinitialiser et rediriger
       form.reset();
       setTimeout(() => {
         router.push("/user/dashboard/history");
       }, 2000);
     } catch (error: any) {
-      console.error("Erreur création commande:", error);
+      console.log("Erreur création commande:", error);
 
       const errorMessage =
         error.response?.data?.message || "Une erreur est survenue";
@@ -161,6 +233,12 @@ export const useOrderForm = () => {
     }
   };
 
+  // Fonction pour effacer manuellement les données sauvegardées
+  const clearSavedData = () => {
+    clearLocalStorage();
+    form.reset();
+  };
+
   return {
     form,
     currentStep,
@@ -170,5 +248,6 @@ export const useOrderForm = () => {
     isSubmitting,
     onSubmit: form.handleSubmit(onSubmit),
     calculateEstimatedPrice,
+    clearSavedData,
   };
 };

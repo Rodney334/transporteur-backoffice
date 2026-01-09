@@ -26,7 +26,7 @@ export const useOrderAssignment = () => {
       );
       setLivreurs(livreursList);
     } catch (error: any) {
-      console.error("Erreur chargement livreurs:", error);
+      console.log("Erreur chargement livreurs:", error);
       toast.error(
         error.response?.data?.message ||
           "Erreur lors du chargement des livreurs",
@@ -86,7 +86,7 @@ export const useOrderAssignment = () => {
         closeAssignmentModal();
         return true;
       } catch (error: any) {
-        console.error("Erreur assignation commande:", error);
+        console.log("Erreur assignation commande:", error);
         const errorMessage =
           error.response?.data?.message ||
           "Erreur lors de l'assignation de la commande";

@@ -136,7 +136,11 @@ export const RecentOrders = ({ orders }: RecentOrdersProps) => {
                   <p className="text-xs text-gray-500">Montant</p>
                   <p className="text-sm font-bold text-green-700">
                     {order.finalPrice
-                      ? `${format(order.finalPrice, "fr-FR")} FCFA`
+                      ? `${Intl.NumberFormat("fr-FR", {
+                          style: "currency",
+                          currency: "XOF",
+                          minimumFractionDigits: 0,
+                        }).format(order.finalPrice)} FCFA`
                       : "À négocier"}
                   </p>
                 </div>
