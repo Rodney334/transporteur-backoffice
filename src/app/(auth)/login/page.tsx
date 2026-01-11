@@ -45,10 +45,11 @@ function LoginContent() {
         router.push("/user/dashboard");
       } else if (
         response.role === GrantedRole.Admin ||
-        response.role === GrantedRole.Livreur ||
         response.role === GrantedRole.Operateur
       ) {
         router.push("/admin/dashboard");
+      } else if (response.role === GrantedRole.Livreur) {
+        router.push("/admin/dashboard/rapport");
       } else {
         setError("Erreur d'authentification. Réessayez plus tard.");
       }

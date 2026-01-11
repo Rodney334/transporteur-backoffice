@@ -97,10 +97,17 @@ export default function DashboardPage() {
                 <ArrowUpRight className="w-5 h-5 lg:w-6 lg:h-6 text-[#FD481A]" />
               </div>
 
+              <div className={`mb-5`}>
+                <span>
+                  Obligatoire ( <strong className={`text-red-600`}>*</strong> )
+                </span>
+              </div>
+
               {/* Destination buttons */}
               <div className="flex flex-col gap-3 mb-4 lg:mb-6">
                 <h3 className="text-sm font-semibold text-gray-700">
-                  Types de livraison
+                  Types de livraison{" "}
+                  <strong className={`text-red-600`}>*</strong>
                 </h3>
                 <div className="flex flex-wrap gap-2 mb-4 lg:mb-6">
                   <ButtonCard
@@ -127,7 +134,7 @@ export default function DashboardPage() {
               {/* Types d'article */}
               <div className="mb-4 lg:mb-6">
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                  Types d'article
+                  Types d'article <strong className={`text-red-600`}>*</strong>
                 </h3>
                 <div className="flex flex-wrap gap-2 mb-4 lg:mb-6">
                   {articleTypes.map((type, index) => (
@@ -166,12 +173,13 @@ export default function DashboardPage() {
 
             <div className="bg-white rounded-2xl shadow-sm mb-4 p-4 lg:p-6">
               <h2 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 lg:mb-6">
-                Information sur le colis
+                Information sur le colis{" "}
+                <strong className={`text-red-600`}>**</strong>
               </h2>
               <div className={`flex flex-col mb-4 lg:mb-6`}>
                 <label htmlFor="weight">
                   Poids en kg (faites une estimation même si vous n'êtes pas
-                  sûr)
+                  sûr) <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
                   id="weight"
@@ -183,7 +191,9 @@ export default function DashboardPage() {
               </div>
 
               <div className={`flex flex-col mb-4 lg:mb-6`}>
-                <label htmlFor="description">Description</label>
+                <label htmlFor="description">
+                  Description <strong className={`text-red-600`}>*</strong>{" "}
+                </label>
                 <textarea
                   name="description"
                   id="description"
@@ -200,7 +210,8 @@ export default function DashboardPage() {
             {/* Information de la course */}
             <div className="bg-white rounded-2xl shadow-sm p-4 lg:p-6">
               <h2 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 lg:mb-6">
-                Information de la course
+                Information de la course{" "}
+                <strong className={`text-red-600`}>**</strong>
               </h2>
 
               <GeneralData form={form} />

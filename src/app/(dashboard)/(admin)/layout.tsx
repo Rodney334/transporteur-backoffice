@@ -43,8 +43,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       name: "Dashboard",
       href: "/admin/dashboard",
       icon: LayoutGrid,
-      roles: [GrantedRole.Admin, GrantedRole.Operateur, GrantedRole.Livreur],
+      roles: [GrantedRole.Admin, GrantedRole.Operateur],
       current: pathname === "/admin/dashboard",
+    },
+    {
+      name: "Dashboard",
+      href: "/admin/dashboard/rapport",
+      icon: ShieldUser,
+      roles: [GrantedRole.Livreur],
+      current: pathname === "/admin/dashboard/rapport",
     },
     {
       name: "Nouvelle commande",

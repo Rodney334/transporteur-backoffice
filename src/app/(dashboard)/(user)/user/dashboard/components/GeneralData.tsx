@@ -25,7 +25,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
             <div className="mt-2 lg:mt-3">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Nom et prénom
+                  Nom et prénom <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
                   type="text"
@@ -41,7 +41,8 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
             </div>
             <div className="mt-2 lg:mt-3">
               <label className="block text-xs text-gray-600 mb-1">
-                Téléphone (indicatif + numéro : +229 0197979797)
+                Téléphone (indicatif + numéro : +229 0197979797){" "}
+                <strong className={`text-red-600`}>*</strong>
               </label>
               <div className="flex gap-2">
                 {/* <select className="w-20 px-2 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]">
@@ -66,7 +67,9 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
             </h4>
             <div className="space-y-2 lg:space-y-3">
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Pays</label>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Pays <strong className={`text-red-600`}>*</strong>{" "}
+                </label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
@@ -80,7 +83,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
               <div>
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">
-                    Ville
+                    Ville <strong className={`text-red-600`}>*</strong>
                   </label>
                   <input
                     type="text"
@@ -95,7 +98,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Commune / Arrondissement
+                  Quartier <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
                   type="text"
@@ -109,7 +112,8 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Informations supplémentaires (Monument célèbre)
+                  Informations supplémentaires (Monument célèbre){" "}
+                  <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
                   type="text"
@@ -144,7 +148,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
             <div className="mt-2 lg:mt-3">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Nom et prénom
+                  Nom et prénom <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
                   type="text"
@@ -159,7 +163,8 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
             </div>
             <div className="mt-2 lg:mt-3">
               <label className="block text-xs text-gray-600 mb-1">
-                Téléphone (indicatif + numéro : +229 0197979797)
+                Téléphone (indicatif + numéro : +229 0197979797){" "}
+                <strong className={`text-red-600`}>*</strong>
               </label>
               <div className="flex gap-2">
                 {/* <select className="w-20 px-2 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]">
@@ -184,7 +189,9 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
             </h4>
             <div className="space-y-2 lg:space-y-3">
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Pays</label>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Pays <strong className={`text-red-600`}>*</strong>{" "}
+                </label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
@@ -198,7 +205,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
               <div>
                 <div>
                   <label className="block text-xs text-gray-600 mb-1">
-                    Ville
+                    Ville <strong className={`text-red-600`}>*</strong>
                   </label>
                   <input
                     type="text"
@@ -213,7 +220,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Commune / Arrondissement
+                  Quartier <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
                   type="text"
@@ -227,7 +234,8 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Informations supplémentaires (Monument célèbre)
+                  Informations supplémentaires (Monument célèbre){" "}
+                  <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
                   type="text"
