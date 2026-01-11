@@ -46,8 +46,8 @@ export const exportToPDF = async (
       ["Total des Courses", report.totalCourses.toString()],
       ["Total", formatAmount(report.totalAmount)],
       ["Taux de Réussite", `${stats.successRate}%`],
-      ["Ville Favorite", report.favoriteCity],
-      ["Route Préférée", report.favoriteRoute],
+      ["Ville Favorite", report.bestCity],
+      ["Route Préférée", report.bestRoute],
     ];
 
     autoTable(doc, {

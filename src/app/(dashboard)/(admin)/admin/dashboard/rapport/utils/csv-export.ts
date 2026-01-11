@@ -123,9 +123,9 @@ export const exportToCSV = async (
             : 0
         ),
       },
-      { METRIQUE: "VILLE_FAVORITE", VALEUR: report.favoriteCity || "N/A" },
+      { METRIQUE: "VILLE_FAVORITE", VALEUR: report.bestCity || "N/A" },
       { METRIQUE: "VILLE_A_AMELIORER", VALEUR: report.worstCity || "N/A" },
-      { METRIQUE: "ROUTE_PREFEREE", VALEUR: report.favoriteRoute || "N/A" },
+      { METRIQUE: "ROUTE_PREFEREE", VALEUR: report.bestRoute || "N/A" },
     ];
 
     csvParts.push("# === STATISTIQUES PRINCIPALES ===");
@@ -306,113 +306,3 @@ export const exportToCSV = async (
     downloadFile();
   }
 };
-
-// // utils/csv-export.ts
-// import { createObjectCsvWriter } from "csv-writer";
-// import { format, parseISO } from "date-fns";
-// import { fr } from "date-fns/locale";
-// import { formatAmount } from "./report-transformer";
-// import { ClientReport } from "../types/types";
-
-// export const exportToCSV = async (
-//   report: ClientReport,
-//   options: {
-//     includeCourses: boolean;
-//     includeStats: boolean;
-//     includeCharts: boolean;
-//   }
-// ) => {
-//   const dateStr = format(new Date(), "yyyy-MM-dd");
-
-//   if (options.includeCourses) {
-//     // Export des courses
-//     const coursesWriter = createObjectCsvWriter({
-//       path: `courses-${dateStr}.csv`,
-//       header: [
-//         { id: "date", title: "DATE" },
-//         { id: "orderId", title: "ID_COMMANDE" },
-//         { id: "fromCity", title: "VILLE_DEPART" },
-//         { id: "toCity", title: "VILLE_ARRIVEE" },
-//         { id: "amount", title: "MONTANT_FCFA" },
-//         { id: "status", title: "STATUT" },
-//         { id: "courierId", title: "ID_LIVREUR" },
-//         { id: "isSuccess", title: "SUCCES" },
-//         { id: "isFailed", title: "ECHEC" },
-//       ],
-//       fieldDelimiter: ";",
-//       encoding: "utf8",
-//     });
-
-//     const coursesData = report.courses.map((course) => ({
-//       date: format(parseISO(course.date), "dd/MM/yyyy HH:mm", { locale: fr }),
-//       orderId: course.orderId,
-//       fromCity: course.fromCity,
-//       toCity: course.toCity,
-//       amount: course.amount,
-//       status: getStatusLabel(course.status),
-//       courierId: course.courierId,
-//       isSuccess: course.isSuccess ? "OUI" : "NON",
-//       isFailed: course.isFailed ? "OUI" : "NON",
-//     }));
-
-//     await coursesWriter.writeRecords(coursesData);
-//   }
-
-//   if (options.includeStats) {
-//     // Export des statistiques
-//     const statsWriter = createObjectCsvWriter({
-//       path: `statistiques-${dateStr}.csv`,
-//       header: [
-//         { id: "metric", title: "METRIQUE" },
-//         { id: "value", title: "VALEUR" },
-//       ],
-//       fieldDelimiter: ";",
-//       encoding: "utf8",
-//     });
-
-//     const statsData = [
-//       { metric: "TOTAL_COURSES", value: report.totalCourses.toString() },
-//       { metric: "TOTAL_REVENU", value: formatAmount(report.totalAmount) },
-//       { metric: "VILLE_FAVORITE", value: report.favoriteCity },
-//       { metric: "VILLE_A_AMELIORER", value: report.worstCity },
-//       { metric: "ROUTE_PREFEREE", value: report.favoriteRoute },
-//     ];
-
-//     // Ajouter les données périodiques
-//     report.perDay.forEach((item, index) => {
-//       statsData.push({
-//         metric: `REVENU_JOUR_${item.date}`,
-//         value: formatAmount(item.total),
-//       });
-//     });
-
-//     report.perWeek.forEach((item, index) => {
-//       statsData.push({
-//         metric: `REVENU_SEMAINE_${item.week}`,
-//         value: formatAmount(item.total),
-//       });
-//     });
-
-//     report.perMonth.forEach((item, index) => {
-//       statsData.push({
-//         metric: `REVENU_MOIS_${item.month}`,
-//         value: formatAmount(item.total),
-//       });
-//     });
-
-//     await statsWriter.writeRecords(statsData);
-//   }
-// };
-
-// const getStatusLabel = (status: string): string => {
-//   const labels: Record<string, string> = {
-//     livree: "Livrée",
-//     en_livraison: "En livraison",
-//     prix_valide: "Prix validé",
-//     assignee: "Assignée",
-//     echec: "Échec",
-//     en_attente: "En attente",
-//     en_discussion_tarifaire: "En discussion",
-//   };
-//   return labels[status] || status;
-// };
