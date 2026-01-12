@@ -47,8 +47,8 @@ export const CityMetricsCard = ({
     },
     {
       title: "Route Préférée",
-      value: bestRoute.split("→")[0]?.trim() || "N/A",
-      description: bestRoute.split("→")[1]?.trim() || "",
+      value: bestRoute?.split("→")[0]?.trim() || "N/A",
+      description: bestRoute?.split("→")[1]?.trim() || "",
       icon: <Route className="w-5 h-5 text-purple-600" />,
       color: "bg-purple-100",
       trend: "neutral",

@@ -82,9 +82,9 @@ export const transformReportData = (report: ClientReport) => {
   ]);
 
   const cityStats: CityStats = {
-    bestCity: report.bestCity,
-    worstCity: report.worstCity,
-    bestRoute: report.bestRoute,
+    bestCity: report?.bestCity,
+    worstCity: report?.worstCity,
+    bestRoute: report?.bestRoute,
     mostFrequentFromCity:
       Object.entries(cityFrequency.from).sort((a, b) => b[1] - a[1])[0]?.[0] ||
       "-",
