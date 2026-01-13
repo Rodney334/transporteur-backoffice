@@ -25,6 +25,7 @@ import Image from "next/image";
 import { useAuth } from "@/hooks/use-auth";
 import ProtectedRoute from "@/components/Protected-route";
 import Link from "next/link";
+import { NotificationDropdown } from "@/components/NotificationDropdown";
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
@@ -187,9 +188,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <Search width={20} height={20} color={"#9D1D01B2"} />
                 </button>
 
-                <button className="relative p-2 hover:bg-gray-50 border border-[#9D1D01B2] rounded-full transition-colors">
+                {/* <button className="relative p-2 hover:bg-gray-50 border border-[#9D1D01B2] rounded-full transition-colors">
                   <Bell width={25} height={25} color={"#9D1D01B2"} />
-                </button>
+                </button> */}
+                <NotificationDropdown />
                 <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                   <Link href={`/user/dashboard/settings`}>
                     <Image

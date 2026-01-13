@@ -11,6 +11,9 @@ import {
   Calendar,
   Weight,
   Info,
+  Phone,
+  Mail,
+  UserCircle,
 } from "lucide-react";
 import { useDeliveries } from "../hooks/use-deliveries";
 import { JSX } from "react";
@@ -19,6 +22,7 @@ import { useDeliveriesStore } from "../stores/deliveries-store";
 export default function DeliveryDetailsModal() {
   const { selectedDelivery } = useDeliveriesStore();
   const {
+    deliverers,
     // selectedDelivery,
     closeDetailsModal,
     formatAddress,
@@ -29,6 +33,12 @@ export default function DeliveryDetailsModal() {
   console.log("DeliveryDetailsModal - selectedDelivery:", selectedDelivery);
 
   if (!selectedDelivery) return null;
+
+  const deliverer =
+    selectedDelivery.assignedTo &&
+    typeof selectedDelivery.assignedTo === "string"
+      ? deliverers[selectedDelivery.assignedTo]
+      : null;
 
   // Fonction pour formater un objet en sections lisibles
   const formatObject = (obj: any, depth = 0): JSX.Element => {
@@ -154,8 +164,8 @@ export default function DeliveryDetailsModal() {
               </div>
             </div>
 
-            {/* Section 2: Informations client et livreur */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Section 2: Informations client, livreur et livraison */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Client */}
               <div className="bg-blue-50 rounded-lg p-4">
                 <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
@@ -167,6 +177,7 @@ export default function DeliveryDetailsModal() {
                   <div className="space-y-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
+                        <UserCircle className="w-3 h-3 inline mr-1" />
                         Nom complet
                       </label>
                       <div className="text-sm font-medium text-gray-900">
@@ -176,6 +187,7 @@ export default function DeliveryDetailsModal() {
                     {selectedDelivery.createdBy.email && (
                       <div>
                         <label className="block text-xs font-medium text-gray-500 mb-1">
+                          <Mail className="w-3 h-3 inline mr-1" />
                           Email
                         </label>
                         <div className="text-sm text-gray-700">
@@ -186,6 +198,7 @@ export default function DeliveryDetailsModal() {
                     {selectedDelivery.createdBy.phoneNumber && (
                       <div>
                         <label className="block text-xs font-medium text-gray-500 mb-1">
+                          <Phone className="w-3 h-3 inline mr-1" />
                           Téléphone
                         </label>
                         <div className="text-sm text-gray-700">
@@ -201,11 +214,73 @@ export default function DeliveryDetailsModal() {
                 )}
               </div>
 
-              {/* Livreur */}
-              <div className="bg-green-50 rounded-lg p-4">
+              {/* Livreur - NOUVELLE SECTION */}
+              <div className="bg-purple-50 rounded-lg p-4">
                 <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <Truck className="w-5 h-5" />
-                  Informations livraison
+                  Informations livreur
+                </h4>
+                {deliverer ? (
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">
+                        <UserCircle className="w-3 h-3 inline mr-1" />
+                        Nom complet
+                      </label>
+                      <div className="text-sm font-medium text-gray-900">
+                        {deliverer.name || "Non spécifié"}
+                      </div>
+                    </div>
+                    {deliverer.email && (
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1">
+                          <Mail className="w-3 h-3 inline mr-1" />
+                          Email
+                        </label>
+                        <div className="text-sm text-gray-700">
+                          {deliverer.email}
+                        </div>
+                      </div>
+                    )}
+                    {deliverer.phoneNumber && (
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1">
+                          <Phone className="w-3 h-3 inline mr-1" />
+                          Téléphone
+                        </label>
+                        <div className="text-sm text-gray-700">
+                          {deliverer.phoneNumber}
+                        </div>
+                      </div>
+                    )}
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">
+                        Rôle
+                      </label>
+                      <div className="text-sm text-gray-700">
+                        {deliverer.role || "livreur"}
+                      </div>
+                    </div>
+                  </div>
+                ) : selectedDelivery.assignedTo ? (
+                  <div className="text-sm text-gray-500">
+                    <p>Livreur assigné (ID: {selectedDelivery.assignedTo})</p>
+                    <p className="text-xs mt-1">
+                      Chargement des informations...
+                    </p>
+                  </div>
+                ) : (
+                  <div className="text-sm text-gray-500">
+                    Aucun livreur assigné
+                  </div>
+                )}
+              </div>
+
+              {/* Informations de livraison */}
+              <div className="bg-green-50 rounded-lg p-4">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <Package className="w-5 h-5" />
+                  Détails livraison
                 </h4>
                 <div className="space-y-3">
                   <div>
@@ -227,12 +302,9 @@ export default function DeliveryDetailsModal() {
                   {selectedDelivery.assignedTo && (
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        Assigné à
+                        ID Livreur
                       </label>
-                      <div className="text-sm text-gray-700">
-                        {/* {typeof selectedDelivery.assignedTo === 'object' 
-                          ? selectedDelivery.assignedTo.name 
-                          : selectedDelivery.assignedTo} */}
+                      <div className="text-xs font-mono text-gray-500 bg-gray-100 p-1 rounded">
                         {selectedDelivery.assignedTo}
                       </div>
                     </div>

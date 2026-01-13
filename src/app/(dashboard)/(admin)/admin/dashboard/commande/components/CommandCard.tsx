@@ -1,7 +1,11 @@
 // components/CommandCard.tsx - VERSION MISE À JOUR
-import { memo } from "react";
+import { memo, useState } from "react";
 import { CommandCardProps } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager.types";
-import { GrantedRole, OrderStatus } from "@/type/enum";
+import { GrantedRole, OrderStatus, PaymentStatus } from "@/type/enum";
+import { toast } from "react-toastify";
+import { Payment } from "@/type/order.type";
+import { paymentService } from "@/lib/services/payment-service";
+import { useOrderStore } from "@/lib/stores/order-store";
 
 export const CommandCard = memo(function CommandCard({
   activeTab,
@@ -17,6 +21,7 @@ export const CommandCard = memo(function CommandCard({
   isProcessingAssign = false,
   userRole,
 }: CommandCardProps) {
+  const { fetchOrders } = useOrderStore();
   // Vérifier si l'utilisateur peut assigner (Admin ou Opérateur)
   const canAssign =
     userRole === GrantedRole.Admin || userRole === GrantedRole.Operateur;
@@ -25,6 +30,39 @@ export const CommandCard = memo(function CommandCard({
   const isPendingAndAssignable =
     activeTab === "Nouvelles" &&
     item.originalData.status === OrderStatus.EN_ATTENTE;
+
+  const [paidLoading, setPaidLoading] = useState(false);
+  const handlePaid = async (data?: Payment) => {
+    if (!data) {
+      alert("Pas de paiement disponible.");
+      return;
+    }
+    setPaidLoading(true);
+    const toastId = toast.loading("Chargement");
+    try {
+      const response = await paymentService.markAsPaid(data.id);
+      console.log("response : ", response);
+      toast.update(toastId, {
+        render: "Paiement avec succès !",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+        closeButton: true,
+      });
+      fetchOrders();
+    } catch (error) {
+      console.log("error: ", error);
+      toast.update(toastId, {
+        render: "L'opération a échoué.",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        closeButton: true,
+      });
+    } finally {
+      setPaidLoading(false);
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -52,12 +90,39 @@ export const CommandCard = memo(function CommandCard({
             </span>
           </div>
         </div>
-        <button
-          onClick={() => onViewDetails(item)}
-          className="text-sm font-medium text-gray-50 bg-[#FD481A] px-2 py-1 rounded hover:opacity-80 transition-colors"
-        >
-          Prix et Details
-        </button>
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={() => onViewDetails(item)}
+            className="text-sm font-medium text-gray-50 bg-[#FD481A] px-2 py-1 rounded hover:opacity-80 transition-colors"
+          >
+            Prix et Details
+          </button>
+          {(item.originalData.status === OrderStatus.EN_LIVRAISON ||
+            item.originalData.status === OrderStatus.LIVREE) &&
+            item.originalData.payments &&
+            item.originalData.payments?.length > 0 &&
+            item.originalData.payments[item.originalData.payments?.length - 1]
+              .status === PaymentStatus.PENDING && (
+              <button
+                onClick={() => {
+                  handlePaid(
+                    item.originalData.payments &&
+                      item.originalData.payments?.length > 0
+                      ? item.originalData.payments[
+                          item.originalData.payments?.length - 1
+                        ]
+                      : undefined
+                  );
+                }}
+                className={`${
+                  paidLoading && "animate-pulse"
+                } text-sm font-medium text-gray-50 bg-[#131313] px-2 py-1 rounded hover:opacity-80 transition-colors`}
+                disabled={paidLoading}
+              >
+                {paidLoading ? "Traitement..." : "Paiement reçu"}
+              </button>
+            )}
+        </div>
       </div>
 
       {/* Route */}

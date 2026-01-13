@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useAuthStore } from "./auth-store";
 import { showSimpleNotification } from "@/utils/web-notifications-simple";
+import { useNotificationStore } from "./notification-store";
 
 interface OrderStore {
   // État
@@ -256,6 +257,9 @@ export const useOrderStore = create<OrderStore>()(
         const authStore = useAuthStore.getState();
         const { user } = authStore;
 
+        const notifStore = useNotificationStore.getState();
+        const { fetchNotifications } = notifStore;
+
         // Rafraîchir les commandes
         const { fetchOrders } = get();
         if (user?._id && user?.role) {
@@ -263,6 +267,7 @@ export const useOrderStore = create<OrderStore>()(
         } else {
           fetchOrders();
         }
+        fetchNotifications();
       } catch (error) {
         console.log("Erreur parsing WebSocket message:", error);
       }

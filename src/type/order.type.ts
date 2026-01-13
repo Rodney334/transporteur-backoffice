@@ -4,11 +4,19 @@ import {
   NegotiationStatus,
   OrderStatus,
   PaymentMethod,
+  PaymentStatus,
   ServiceType,
   TransportMode,
 } from "./enum";
 import { User } from "./user.type";
 
+export interface Payment {
+  id: string;
+  amount: number;
+  method: PaymentMethod;
+  status: PaymentStatus;
+  createdAt: string;
+}
 export interface OrderResponse {
   _id: string;
   serviceType: string;
@@ -66,6 +74,7 @@ export interface Order {
   isAutoAssigned: boolean;
   createdAt: string;
   updatedAt: string;
+  payments?: Payment[];
 }
 
 export interface Negotiation {

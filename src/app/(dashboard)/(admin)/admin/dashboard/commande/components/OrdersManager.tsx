@@ -26,6 +26,7 @@ import {
 } from "./OrdersManager.types";
 import { useOrderAssignment } from "@/hooks/use-order-assignment";
 import { AssignOrderModal } from "./AssignOrderModal";
+import { InfoLivreurSection } from "@/components/InfoLivreurSection";
 
 export const OrdersManager = ({
   userRole,
@@ -34,7 +35,6 @@ export const OrdersManager = ({
   cardComponent: CardComponent,
   shouldShowPriceForm,
   formatOrder,
-  filterOrders,
   getEmptyMessage,
   headerTitle = "Commandes",
   showHeaderCounter = true,
@@ -533,6 +533,11 @@ export const OrdersManager = ({
                       )}
                     </div>
                   </div>
+                )}
+
+                {/* NOUVELLE SECTION : Informations du livreur */}
+                {selectedCommand && (
+                  <InfoLivreurSection assignedTo={selectedCommand.assignedTo} />
                 )}
 
                 {/* Sections Informations */}

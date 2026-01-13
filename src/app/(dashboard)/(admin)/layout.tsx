@@ -19,6 +19,7 @@ import {
   OctagonAlert,
   Package,
   ClipboardPlus,
+  BadgeDollarSign,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -30,6 +31,7 @@ import ProtectedRoute from "@/components/Protected-route";
 import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 import { GrantedRole } from "@/type/enum";
+import { NotificationDropdown } from "@/components/NotificationDropdown";
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
@@ -87,6 +89,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: OctagonAlert,
       roles: [GrantedRole.Admin, GrantedRole.Operateur],
       current: pathname === "/admin/dashboard/litige",
+    },
+
+    {
+      name: "Paiements",
+      href: "/admin/dashboard/paiement",
+      icon: BadgeDollarSign,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur],
+      current: pathname === "/admin/dashboard/paiement",
     },
     {
       name: "Rapports",
@@ -213,23 +223,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       `}
         >
           {/* Header Sidebar avec bouton fermer */}
-          <div className="p-6 flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="p-4 flex items-center justify-between">
+            <div className="flex items-center">
               <Image src={logoDark} alt="logo" loading="eager" />
-              {/* {user?.role && (
-                <div className="text-xs">
-                  <div className="font-medium">{getUserGreeting()}</div>
-                  <div className="text-gray-400 capitalize">
-                    {user.role === GrantedRole.Admin
-                      ? "Administrateur"
-                      : user.role === GrantedRole.Operateur
-                      ? "Opérateur"
-                      : user.role === GrantedRole.Livreur
-                      ? "Livreur"
-                      : user.role}
-                  </div>
-                </div>
-              )} */}
             </div>
             <button
               onClick={closeSidebar}
@@ -240,7 +236,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
 
           {/* Navigation filtrée par rôle */}
-          <nav className="flex-1 px-4 py-6 space-y-1">
+          <nav className="flex-1 px-4 space-y-1">
             {navigation.map((item) => {
               const Icon = item.icon;
               return (
@@ -262,7 +258,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </nav>
 
           {/* Informations du rôle */}
-          <div className="p-2 border-t border-gray-800">
+          <div className="pt-2 px-2 border-t border-gray-800">
             <div className="text-xs text-gray-400">Rôle actuel</div>
             <div className="flex items-center gap-2">
               <div
@@ -289,7 +285,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
 
           {/* Déconnexion */}
-          <div className="p-4">
+          <div className="px-4">
             <button
               onClick={() => logout()}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-gray-400 hover:bg-gray-900 hover:text-white transition-colors"
@@ -356,14 +352,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <Search width={20} height={20} color={"#9D1D01B2"} />
                 </button>
 
-                <button className="relative p-2 hover:bg-gray-50 border border-[#9D1D01B2] rounded-full transition-colors">
+                {/* <button className="relative p-2 hover:bg-gray-50 border border-[#9D1D01B2] rounded-full transition-colors">
                   <Bell width={25} height={25} color={"#9D1D01B2"} />
                   {user?.role === GrantedRole.Livreur && (
                     <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#FD481A] text-white text-xs rounded-full flex items-center justify-center">
                       3
                     </span>
                   )}
-                </button>
+                </button> */}
+                <NotificationDropdown />
                 {getRoleBadge()}
               </div>
             </div>
