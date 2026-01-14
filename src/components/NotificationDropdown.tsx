@@ -110,7 +110,7 @@ export const NotificationDropdown = () => {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+        <div className="absolute right-0 mt-2 lg:w-96 w-72 max-h-[75vh] bg-white rounded-lg shadow-xl border border-gray-200 z-50">
           {/* En-tête */}
           <div className="flex items-center justify-between p-4 border-b">
             <h3 className="font-semibold text-gray-800">Notifications</h3>
@@ -136,7 +136,7 @@ export const NotificationDropdown = () => {
           </div>
 
           {/* Contenu du dropdown */}
-          <div className="max-h-[75vh] overflow-y-auto">
+          <div className="max-h-[50vh] overflow-y-auto">
             {error ? (
               <div className="p-6 text-center">
                 <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-3" />
