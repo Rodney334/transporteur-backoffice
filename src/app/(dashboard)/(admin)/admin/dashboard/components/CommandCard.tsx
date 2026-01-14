@@ -38,7 +38,7 @@ export const CommandCard = memo(function CommandCard({
         </div>
         <button
           onClick={() => onViewDetails(command)}
-          className="text-sm font-medium text-gray-900 hover:text-[#FD481A] transition-colors"
+          className="cursor-pointer text-sm font-medium text-gray-900 hover:text-[#FD481A] transition-colors"
         >
           Voir Plus de Details
         </button>
@@ -89,7 +89,7 @@ export const CommandCard = memo(function CommandCard({
             <button
               onClick={() => onEnd(command)}
               disabled={isProcessingEnd}
-              className={`flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
+              className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
                 isProcessingEnd
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-[#E63F15]"
@@ -102,7 +102,7 @@ export const CommandCard = memo(function CommandCard({
           <button
             onClick={() => onAccept(command)}
             disabled={isProcessingAccept}
-            className={`flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
+            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
               isProcessingAccept
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:bg-[#E63F15]"

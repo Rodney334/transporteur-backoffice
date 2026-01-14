@@ -65,7 +65,7 @@ export const AssignOrderModal = ({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-50 rounded-xl transition-colors duration-200"
+              className="cursor-pointer p-2 hover:bg-gray-50 rounded-xl transition-colors duration-200"
             >
               <X className="w-6 h-6 text-gray-400 hover:text-[#FD481A]" />
             </button>
@@ -118,7 +118,7 @@ export const AssignOrderModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-3 text-[#131313] font-medium bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200"
+              className="cursor-pointer flex-1 px-4 py-3 text-[#131313] font-medium bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200"
               disabled={isAssigning}
             >
               Annuler
@@ -126,7 +126,7 @@ export const AssignOrderModal = ({
             <button
               type="submit"
               disabled={!selectedLivreur || isAssigning || isLoadingLivreurs}
-              className="flex-1 px-4 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="cursor-pointer flex-1 px-4 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isAssigning ? (
                 <>

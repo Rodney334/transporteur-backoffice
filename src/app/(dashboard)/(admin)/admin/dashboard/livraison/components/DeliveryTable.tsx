@@ -234,7 +234,7 @@ export default function DeliveryTable({
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button
                     onClick={() => openDetailsModal(delivery)}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                    className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                   >
                     <Package className="w-4 h-4" />
                     Détails
@@ -363,7 +363,7 @@ export default function DeliveryTable({
                 <div className="pt-4 border-t border-gray-200">
                   <button
                     onClick={() => openDetailsModal(delivery)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                    className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                   >
                     <Package className="w-4 h-4" />
                     Voir tous les détails
@@ -377,7 +377,7 @@ export default function DeliveryTable({
               <div className="border-t border-gray-200 p-4">
                 <button
                   onClick={() => openDetailsModal(delivery)}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                  className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                 >
                   <Package className="w-4 h-4" />
                   Détails complets

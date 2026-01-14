@@ -39,7 +39,7 @@ export const NotificationBanner = () => {
         </div>
         <button
           onClick={() => setIsVisible(false)}
-          className="text-gray-400 hover:text-gray-600"
+          className="cursor-pointer text-gray-400 hover:text-gray-600"
         >
           <X className="w-4 h-4" />
         </button>
@@ -53,7 +53,7 @@ export const NotificationBanner = () => {
         <SimpleNotificationToggle />
         <button
           onClick={() => setIsVisible(false)}
-          className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900"
+          className="cursor-pointer px-3 py-1 text-sm text-gray-600 hover:text-gray-900"
         >
           Plus tard
         </button>

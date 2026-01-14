@@ -120,7 +120,7 @@ export const CoursesTable = ({
           {onExport && (
             <button
               onClick={onExport}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
             >
               <Download className="w-4 h-4" />
               Exporter
@@ -135,7 +135,7 @@ export const CoursesTable = ({
           <button
             key={filter.value}
             onClick={() => onFilterChange(filter.value)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeFilter === filter.value
                 ? "bg-[#FD481A] text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -158,7 +158,7 @@ export const CoursesTable = ({
                     setSortColumn("date");
                     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
                   }}
-                  className="ml-2 inline-flex items-center"
+                  className="cursor-pointer ml-2 inline-flex items-center"
                 >
                   <SortIcon column="date" />
                 </button>
@@ -173,7 +173,7 @@ export const CoursesTable = ({
                     setSortColumn("amount");
                     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
                   }}
-                  className="ml-2 inline-flex items-center"
+                  className="cursor-pointer ml-2 inline-flex items-center"
                 >
                   <SortIcon column="amount" />
                 </button>
@@ -243,7 +243,7 @@ export const CoursesTable = ({
                           expandedRow === course.orderId ? null : course.orderId
                         )
                       }
-                      className="text-[#FD481A] hover:text-[#E63F15] text-sm font-medium"
+                      className="cursor-pointer text-[#FD481A] hover:text-[#E63F15] text-sm font-medium"
                     >
                       {expandedRow === course.orderId ? "Masquer" : "Détails"}
                     </button>
@@ -329,7 +329,7 @@ export const CoursesTable = ({
           {searchTerm && (
             <button
               onClick={() => setSearchTerm("")}
-              className="text-[#FD481A] hover:text-[#E63F15] text-sm"
+              className="cursor-pointer text-[#FD481A] hover:text-[#E63F15] text-sm"
             >
               Réinitialiser la recherche
             </button>
@@ -342,10 +342,10 @@ export const CoursesTable = ({
             {filteredCourses.length} courses
           </div>
           <div className="flex gap-2">
-            <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+            <button className="cursor-pointer px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
               Précédent
             </button>
-            <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+            <button className="cursor-pointer px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
               Suivant
             </button>
           </div>

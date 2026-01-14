@@ -57,7 +57,7 @@ export default function LitigePage() {
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={loadNegotiations}
-            className="px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors flex items-center gap-2 mx-auto"
+            className="cursor-pointer px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors flex items-center gap-2 mx-auto"
           >
             <RefreshCw className="w-5 h-5" />
             Réessayer

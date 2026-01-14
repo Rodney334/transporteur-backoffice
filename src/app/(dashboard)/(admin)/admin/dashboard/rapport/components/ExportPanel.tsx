@@ -216,7 +216,7 @@ export const ExportPanel = ({
           <button
             onClick={() => handleExport("pdf")}
             disabled={isExporting !== null}
-            className="w-full flex items-center justify-between p-4 bg-linear-to-r from-[#FD481A]/10 to-[#FD481A]/5 border-2 border-[#FD481A]/20 rounded-xl hover:border-[#FD481A]/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="cursor-pointer w-full flex items-center justify-between p-4 bg-linear-to-r from-[#FD481A]/10 to-[#FD481A]/5 border-2 border-[#FD481A]/20 rounded-xl hover:border-[#FD481A]/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-[#FD481A] rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -236,7 +236,7 @@ export const ExportPanel = ({
           <button
             onClick={() => handleExport("csv")}
             disabled={isExporting !== null}
-            className="w-full flex items-center justify-between p-4 bg-linear-to-r from-gray-50 to-gray-100 border-2 border-gray-200 rounded-xl hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="cursor-pointer w-full flex items-center justify-between p-4 bg-linear-to-r from-gray-50 to-gray-100 border-2 border-gray-200 rounded-xl hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">

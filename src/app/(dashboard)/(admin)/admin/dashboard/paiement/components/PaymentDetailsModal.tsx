@@ -53,7 +53,7 @@ export default function PaymentDetailsModal() {
             </div>
             <button
               onClick={closeDetailsModal}
-              className="text-gray-400 hover:text-gray-500 transition-colors"
+              className="cursor-pointer text-gray-400 hover:text-gray-500 transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -385,7 +385,7 @@ export default function PaymentDetailsModal() {
         <div className="p-6 border-t border-gray-200 shrink-0">
           <button
             onClick={closeDetailsModal}
-            className="w-full px-4 py-3 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            className="cursor-pointer w-full px-4 py-3 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
           >
             Fermer
           </button>

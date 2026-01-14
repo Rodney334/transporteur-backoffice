@@ -94,7 +94,7 @@ export const ResolveConflictModal = ({
             <button
               onClick={onClose}
               disabled={isResolving}
-              className="p-2 hover:bg-gray-50 rounded-xl transition-colors duration-200 disabled:opacity-50"
+              className="cursor-pointer p-2 hover:bg-gray-50 rounded-xl transition-colors duration-200 disabled:opacity-50"
             >
               <X className="w-6 h-6 text-gray-400 hover:text-[#FD481A]" />
             </button>
@@ -156,7 +156,7 @@ export const ResolveConflictModal = ({
                   <button
                     type="button"
                     onClick={() => setAmount(suggestPrice("middle").toString())}
-                    className="flex-1 px-3 py-2 bg-blue-50 text-blue-700 text-sm font-medium rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
+                    className="cursor-pointer flex-1 px-3 py-2 bg-blue-50 text-blue-700 text-sm font-medium rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
                   >
                     Milieu ({suggestPrice("middle")} FCFA)
                   </button>
@@ -165,14 +165,14 @@ export const ResolveConflictModal = ({
                     onClick={() =>
                       setAmount(suggestPrice("proposed").toString())
                     }
-                    className="flex-1 px-3 py-2 bg-blue-50 text-blue-700 text-sm font-medium rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
+                    className="cursor-pointer flex-1 px-3 py-2 bg-blue-50 text-blue-700 text-sm font-medium rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
                   >
                     Livreur ({suggestPrice("proposed")} FCFA)
                   </button>
                   <button
                     type="button"
                     onClick={() => setAmount(suggestPrice("client").toString())}
-                    className="flex-1 px-3 py-2 bg-blue-50 text-blue-700 text-sm font-medium rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
+                    className="cursor-pointer flex-1 px-3 py-2 bg-blue-50 text-blue-700 text-sm font-medium rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
                   >
                     Client ({suggestPrice("client")} FCFA)
                   </button>
@@ -237,14 +237,14 @@ export const ResolveConflictModal = ({
                 type="button"
                 onClick={onClose}
                 disabled={isResolving}
-                className="flex-1 px-4 py-3 text-[#131313] font-medium bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200 disabled:opacity-50"
+                className="cursor-pointer flex-1 px-4 py-3 text-[#131313] font-medium bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200 disabled:opacity-50"
               >
                 Annuler
               </button>
               <button
                 type="submit"
                 disabled={isResolving || !amount.trim()}
-                className="flex-1 px-4 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="cursor-pointer flex-1 px-4 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isResolving ? (
                   <>

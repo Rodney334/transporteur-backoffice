@@ -238,7 +238,7 @@ export default function UserTable({
                     {user.role !== GrantedRole.Admin && (
                       <button
                         onClick={() => openPromotionModal(user)}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                        className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                         title="Changer le rôle"
                       >
                         <Shield className="w-4 h-4" />
@@ -383,7 +383,7 @@ export default function UserTable({
                     <div className="pt-4 border-t border-gray-200">
                       <button
                         onClick={() => openPromotionModal(user)}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                        className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                       >
                         <Shield className="w-4 h-4" />
                         Modifier le rôle de cet utilisateur
@@ -401,7 +401,7 @@ export default function UserTable({
                 <div className="border-t border-gray-200 p-4">
                   <button
                     onClick={() => openPromotionModal(user)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                    className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                   >
                     <Shield className="w-4 h-4" />
                     Modifier rôle

@@ -125,7 +125,7 @@ export default function RoleChangeModal() {
             </div>
             <button
               onClick={handleClose}
-              className="text-gray-400 hover:text-gray-500 transition-colors"
+              className="cursor-pointer text-gray-400 hover:text-gray-500 transition-colors"
               disabled={isSubmitting}
             >
               <X className="w-6 h-6" />
@@ -180,7 +180,7 @@ export default function RoleChangeModal() {
                     key={option.value}
                     type="button"
                     onClick={() => setSelectedRole(option.value)}
-                    className={`w-full flex items-center justify-between p-4 rounded-lg border transition-all ${
+                    className={`cursor-pointer w-full flex items-center justify-between p-4 rounded-lg border transition-all ${
                       selectedRole === option.value
                         ? "border-[#FD481A] bg-orange-50"
                         : "border-gray-300 hover:border-gray-400"
@@ -242,7 +242,7 @@ export default function RoleChangeModal() {
               type="button"
               onClick={handleClose}
               disabled={isSubmitting}
-              className="flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
+              className="cursor-pointer flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
             >
               Annuler
             </button>
@@ -250,7 +250,7 @@ export default function RoleChangeModal() {
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting || selectedRole === selectedUser.role}
-              className="flex-1 px-4 py-3 text-sm font-medium text-white bg-[#FD481A] hover:bg-[#E63F15] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="cursor-pointer flex-1 px-4 py-3 text-sm font-medium text-white bg-[#FD481A] hover:bg-[#E63F15] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">

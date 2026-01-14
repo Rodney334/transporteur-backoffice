@@ -81,7 +81,7 @@ export default function TrackingPage() {
         </div>
 
         {/* Button */}
-        <button className="w-full py-3.5 bg-[#FD481A] text-white font-medium rounded-lg hover:bg-[#E63F15] transition-colors">
+        <button className="cursor-pointer w-full py-3.5 bg-[#FD481A] text-white font-medium rounded-lg hover:bg-[#E63F15] transition-colors">
           Confirmation terminée
         </button>
       </div>

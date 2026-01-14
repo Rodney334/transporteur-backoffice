@@ -40,7 +40,7 @@ export default function ConfirmDeleteModal({
             <button
               onClick={onClose}
               disabled={isLoading}
-              className="text-gray-400 hover:text-gray-500 transition-colors disabled:opacity-50"
+              className="cursor-pointer text-gray-400 hover:text-gray-500 transition-colors disabled:opacity-50"
             >
               <X className="w-6 h-6" />
             </button>
@@ -81,14 +81,14 @@ export default function ConfirmDeleteModal({
             <button
               onClick={onClose}
               disabled={isLoading}
-              className="flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
+              className="cursor-pointer flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
             >
               Annuler
             </button>
             <button
               onClick={onConfirm}
               disabled={isLoading}
-              className="flex-1 px-4 py-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="cursor-pointer flex-1 px-4 py-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>

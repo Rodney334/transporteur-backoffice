@@ -334,7 +334,7 @@ export const OrdersManager = ({
         <div className="text-red-500 text-lg text-center">{error}</div>
         <button
           onClick={handleRetry}
-          className="flex items-center gap-2 px-4 py-2 bg-[#FD481A] text-white rounded-lg hover:bg-[#E63F15] transition-colors"
+          className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-[#FD481A] text-white rounded-lg hover:bg-[#E63F15] transition-colors"
         >
           <RefreshCw className="w-4 h-4" />
           Rafraîchir la page
@@ -373,7 +373,7 @@ export const OrdersManager = ({
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`pb-3 text-sm font-medium transition-colors relative ${
+                    className={`cursor-pointer pb-3 text-sm font-medium transition-colors relative ${
                       activeTab === tab
                         ? "text-gray-900"
                         : "text-gray-500 hover:text-gray-700"
@@ -469,7 +469,7 @@ export const OrdersManager = ({
                 </div>
                 <button
                   onClick={handleCloseModal}
-                  className="p-2 hover:bg-gray-50 rounded-xl transition-colors duration-200"
+                  className="cursor-pointer p-2 hover:bg-gray-50 rounded-xl transition-colors duration-200"
                 >
                   <X className="w-6 h-6 text-gray-400 hover:text-gray-600" />
                 </button>
@@ -570,7 +570,7 @@ export const OrdersManager = ({
                     <div className="flex justify-center">
                       <button
                         onClick={() => setShowPriceForm(true)}
-                        className="px-3 py-2 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+                        className="cursor-pointer px-3 py-2 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
                       >
                         <svg
                           className="w-5 h-5"
@@ -697,7 +697,7 @@ export const OrdersManager = ({
                               isSubmitting ||
                               loadingNegotiation
                             }
-                            className="px-8 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed disabled:shadow-none min-w-32 flex items-center justify-center gap-2"
+                            className="cursor-pointer px-8 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed disabled:shadow-none min-w-32 flex items-center justify-center gap-2"
                           >
                             {validatingPrice ? (
                               <>
@@ -773,14 +773,14 @@ export const OrdersManager = ({
               <div className="flex gap-3 p-6 border-t border-gray-100">
                 <button
                   onClick={() => setShowConfirmationModal(false)}
-                  className="flex-1 px-4 py-3 text-gray-700 font-medium bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200"
+                  className="cursor-pointer flex-1 px-4 py-3 text-gray-700 font-medium bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200"
                 >
                   Annuler
                 </button>
                 <button
                   onClick={handleConfirmPrice}
                   disabled={validatingPrice}
-                  className="flex-1 px-4 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed"
+                  className="cursor-pointer flex-1 px-4 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed"
                 >
                   {validatingPrice ? (
                     <div className="flex items-center justify-center gap-2">

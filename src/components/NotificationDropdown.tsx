@@ -97,7 +97,7 @@ export const NotificationDropdown = () => {
       {/* Bouton de notification */}
       <button
         onClick={handleOpenDropdown}
-        className="relative p-2 hover:bg-gray-50 border border-[#9D1D01B2] rounded-full transition-colors"
+        className="cursor-pointer relative p-2 hover:bg-gray-50 border border-[#9D1D01B2] rounded-full transition-colors"
         aria-label="Notifications"
       >
         <Bell width={25} height={25} color={"#9D1D01B2"} />
@@ -118,7 +118,7 @@ export const NotificationDropdown = () => {
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
-                  className="flex items-center text-sm text-[#9D1D01] hover:text-[#7a1601] transition-colors"
+                  className="cursor-pointer flex items-center text-sm text-[#9D1D01] hover:text-[#7a1601] transition-colors"
                   disabled={isLoading}
                 >
                   <Check size={16} className="mr-1" />
@@ -127,7 +127,7 @@ export const NotificationDropdown = () => {
               )}
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-gray-100 rounded transition-colors"
+                className="cursor-pointer p-1 hover:bg-gray-100 rounded transition-colors"
                 aria-label="Fermer"
               >
                 <X size={18} />
@@ -143,7 +143,7 @@ export const NotificationDropdown = () => {
                 <p className="text-red-600 mb-4">{error}</p>
                 <button
                   onClick={handleRetry}
-                  className="px-4 py-2 bg-[#9D1D01] text-white rounded hover:bg-[#7a1601] transition-colors disabled:opacity-50"
+                  className="cursor-pointer px-4 py-2 bg-[#9D1D01] text-white rounded hover:bg-[#7a1601] transition-colors disabled:opacity-50"
                   disabled={isLoading}
                 >
                   {isLoading ? "Chargement..." : "Réessayer"}

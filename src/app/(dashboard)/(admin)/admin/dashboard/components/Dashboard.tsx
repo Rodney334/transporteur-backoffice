@@ -39,7 +39,7 @@ export const Dashboard = () => {
           </p>
           <button
             onClick={refreshData}
-            className="px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
+            className="cursor-pointer px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
           >
             Actualiser
           </button>
@@ -81,12 +81,15 @@ export const Dashboard = () => {
         <AdvancedMetrics stats={stats} />
 
         {/* Grille des sections inférieures */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 mb-8">
           {/* Dernières commandes */}
-          <div className="lg:col-span-2">
+          <div>
             <RecentOrders orders={stats.recentOrders} />
           </div>
+        </div>
 
+        {/* Grille des tops performers */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Top clients par commandes */}
           <div>
             <TopClients
@@ -95,10 +98,7 @@ export const Dashboard = () => {
               metric="orders"
             />
           </div>
-        </div>
 
-        {/* Grille des tops performers */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Top clients par revenus */}
           <div>
             <TopClients

@@ -59,7 +59,7 @@ export const ReportHeader = ({
             <button
               onClick={onExport}
               disabled={isLoading}
-              className="flex items-center gap-2 px-4 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="cursor-pointer flex items-center gap-2 px-4 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download className="w-5 h-5" />
               Exporter
@@ -76,7 +76,7 @@ export const ReportHeader = ({
               key={option.value}
               onClick={() => onPeriodChange(option.value as any)}
               disabled={isLoading}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+              className={`cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                 selectedPeriod === option.value
                   ? "bg-[#FD481A] text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"

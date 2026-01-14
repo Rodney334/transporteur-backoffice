@@ -156,7 +156,7 @@ export const ExportPanel = ({
           <button
             onClick={() => handleExport("pdf")}
             disabled={isExporting !== null}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="cursor-pointer w-full flex items-center justify-center gap-3 px-4 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <FileText className="w-5 h-5" />
             Exporter en PDF
@@ -165,7 +165,7 @@ export const ExportPanel = ({
           <button
             onClick={() => handleExport("csv")}
             disabled={isExporting !== null}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="cursor-pointer w-full flex items-center justify-center gap-3 px-4 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <FileSpreadsheet className="w-5 h-5" />
             Exporter en CSV

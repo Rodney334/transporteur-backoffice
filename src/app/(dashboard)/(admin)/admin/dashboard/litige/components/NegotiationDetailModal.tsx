@@ -95,7 +95,7 @@ export const NegotiationDetailModal = ({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-50 rounded-xl transition-colors duration-200"
+              className="cursor-pointer p-2 hover:bg-gray-50 rounded-xl transition-colors duration-200"
             >
               <X className="w-6 h-6 text-gray-400 hover:text-[#FD481A]" />
             </button>
@@ -369,7 +369,7 @@ export const NegotiationDetailModal = ({
           <div className="flex justify-end">
             <button
               onClick={onClose}
-              className="px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors duration-200"
+              className="cursor-pointer px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors duration-200"
             >
               Fermer
             </button>

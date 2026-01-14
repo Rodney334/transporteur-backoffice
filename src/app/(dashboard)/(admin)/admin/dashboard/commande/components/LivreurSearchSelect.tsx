@@ -98,7 +98,7 @@ export const LivreurSearchSelect = ({
                     <button
                       type="button"
                       onClick={() => handleSelect(livreur)}
-                      className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${
+                      className={`cursor-pointer w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${
                         selectedLivreur?._id === livreur._id
                           ? "bg-[#FD481A]/10 border-l-4 border-[#FD481A]"
                           : ""

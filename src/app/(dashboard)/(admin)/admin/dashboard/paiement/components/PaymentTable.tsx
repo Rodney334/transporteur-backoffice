@@ -244,14 +244,14 @@ export default function PaymentTable({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => openDetailsModal(payment)}
-                        className="px-3 py-1.5 text-xs font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                        className="cursor-pointer px-3 py-1.5 text-xs font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                       >
                         Détails
                       </button>
                       {payment.status === "pending" && (
                         <button
                           onClick={() => onMarkAsPaid(payment.id)}
-                          className="px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+                          className="cursor-pointer px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
                         >
                           Marquer payé
                         </button>
@@ -264,7 +264,7 @@ export default function PaymentTable({
                             payment.amount
                           )
                         }
-                        className="px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+                        className="cursor-pointer px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
                       >
                         Supprimer
                       </button>
@@ -388,7 +388,7 @@ export default function PaymentTable({
                   <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200">
                     <button
                       onClick={() => openDetailsModal(payment)}
-                      className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                      className="cursor-pointer flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                     >
                       <CreditCard className="w-4 h-4" />
                       Détails complets
@@ -396,7 +396,7 @@ export default function PaymentTable({
                     {payment.status === "pending" && (
                       <button
                         onClick={() => onMarkAsPaid(payment.id)}
-                        className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+                        className="cursor-pointer flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
                       >
                         Marquer payé
                       </button>
@@ -409,7 +409,7 @@ export default function PaymentTable({
                           payment.amount
                         )
                       }
-                      className="col-span-2 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+                      className="cursor-pointer col-span-2 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
                     >
                       Supprimer le paiement
                     </button>
@@ -423,7 +423,7 @@ export default function PaymentTable({
                   <div className="flex gap-2">
                     <button
                       onClick={() => openDetailsModal(payment)}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                      className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
                     >
                       <CreditCard className="w-4 h-4" />
                       Détails
@@ -431,7 +431,7 @@ export default function PaymentTable({
                     {payment.status === "pending" && (
                       <button
                         onClick={() => onMarkAsPaid(payment.id)}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+                        className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
                       >
                         Marquer payé
                       </button>

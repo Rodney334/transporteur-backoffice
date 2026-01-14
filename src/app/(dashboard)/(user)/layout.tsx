@@ -35,7 +35,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const navigation = [
     {
-      name: "Acceuil",
+      name: "Accueil",
       href: "/user/dashboard", //"/admin/dashboard",
       icon: LayoutGrid,
       current: pathname === "/user/dashboard",
@@ -101,7 +101,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
             <button
               onClick={closeSidebar}
-              className="lg:hidden p-2 hover:bg-gray-800 rounded-lg"
+              className="cursor-pointer lg:hidden p-2 hover:bg-gray-800 rounded-lg"
             >
               <X className="w-5 h-5" />
             </button>
@@ -133,7 +133,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="p-4">
             <button
               onClick={() => logout()}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-gray-400 hover:bg-gray-900 hover:text-white transition-colors"
+              className="cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-gray-400 hover:bg-gray-900 hover:text-white transition-colors"
             >
               <LogOut className="w-5 h-5" />
               <span className="text-sm font-medium">Se déconnecter</span>
@@ -150,13 +150,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <div className="flex items-center gap-4">
                 <button
                   onClick={toggleSidebar}
-                  className="p-2 hover:bg-gray-100 rounded-lg lg:hidden"
+                  className="cursor-pointer p-2 hover:bg-gray-100 rounded-lg lg:hidden"
                 >
                   <Menu className="w-6 h-6" />
                 </button>
                 <div>
                   <h2 className="text-lg font-semibold text-gray-900">
-                    Bienvenu {user ? user.name : "Anonyme"}
+                    Bienvenue {user ? user.name : "Anonyme"}
                   </h2>
                 </div>
               </div>
@@ -175,7 +175,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-12 pr-12 py-3 border text-[#FD481AB2] focus:text-gray-500 border-[#9D1D01B2] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481AB2] focus:border-transparent"
                   />
-                  <button className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-50 rounded">
+                  <button className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-50 rounded">
                     <FlipVertical width={25} height={25} color={"#9D1D01B2"} />
                   </button>
                 </div>
@@ -184,7 +184,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               {/* Right side icons */}
               <div className="flex items-center gap-4">
                 {/* Bouton recherche mobile */}
-                <button className="md:hidden p-2 hover:bg-gray-50 border border-[#9D1D01B2] rounded-full transition-colors">
+                <button className="cursor-pointer md:hidden p-2 hover:bg-gray-50 border border-[#9D1D01B2] rounded-full transition-colors">
                   <Search width={20} height={20} color={"#9D1D01B2"} />
                 </button>
 
@@ -219,7 +219,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-12 pr-12 py-3 border text-[#FD481AB2] focus:text-gray-500 border-[#9D1D01B2] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481AB2] focus:border-transparent"
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-50 rounded">
+                <button className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-50 rounded">
                   <FlipVertical width={25} height={25} color={"#9D1D01B2"} />
                 </button>
               </div>

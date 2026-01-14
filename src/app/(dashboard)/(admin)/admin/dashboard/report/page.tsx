@@ -63,7 +63,7 @@ export default function ReportPage() {
           </p>
           <button
             onClick={() => window.history.back()}
-            className="px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
+            className="cursor-pointer px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
           >
             Retour
           </button>
@@ -95,7 +95,7 @@ export default function ReportPage() {
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={() => fetchReports(selectedPeriod)}
-            className="px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
+            className="cursor-pointer px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
           >
             Réessayer
           </button>
@@ -150,7 +150,7 @@ export default function ReportPage() {
                     <button
                       key={index}
                       onClick={() => setActivePeriodIndex(index)}
-                      className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                      className={`cursor-pointer px-4 py-2 rounded-lg transition-all duration-200 ${
                         activePeriodIndex === index
                           ? "bg-[#FD481A] text-white"
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200"

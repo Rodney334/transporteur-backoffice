@@ -110,7 +110,7 @@ export default function SettingsPage() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`pb-3 text-sm font-medium transition-colors relative whitespace-nowrap ${
+            className={`cursor-pointer pb-3 text-sm font-medium transition-colors relative whitespace-nowrap ${
               activeTab === tab
                 ? "text-gray-900"
                 : "text-gray-500 hover:text-gray-700"
@@ -377,7 +377,7 @@ export default function SettingsPage() {
                   <button
                     type="submit"
                     disabled={isUpdatingProfile}
-                    className="px-6 py-3 text-sm font-medium text-white bg-[#FD481A] hover:bg-[#E63F15] transition-colors rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="cursor-pointer px-6 py-3 text-sm font-medium text-white bg-[#FD481A] hover:bg-[#E63F15] transition-colors rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isUpdatingProfile
                       ? "Mise à jour..."
@@ -499,7 +499,7 @@ export default function SettingsPage() {
                   <button
                     type="submit"
                     disabled={isChangingPassword}
-                    className="px-6 py-3 text-sm font-medium text-white bg-[#FD481A] hover:bg-[#E63F15] transition-colors rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="cursor-pointer px-6 py-3 text-sm font-medium text-white bg-[#FD481A] hover:bg-[#E63F15] transition-colors rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isChangingPassword
                       ? "Changement..."

@@ -140,7 +140,7 @@ export const NegotiationFilters = ({
             <button
               key={option.value}
               onClick={() => onStatusFilterChange(option.value as any)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+              className={`cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                 statusFilter === option.value
                   ? "bg-[#FD481A] text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"

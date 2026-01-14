@@ -74,7 +74,7 @@ export const RecentOrders = ({ orders }: RecentOrdersProps) => {
             </p>
           </div>
         </div>
-        <button className="text-sm text-[#FD481A] hover:text-[#E63F15] font-medium">
+        <button className="cursor-pointer text-sm text-[#FD481A] hover:text-[#E63F15] font-medium">
           Voir tout →
         </button>
       </div>

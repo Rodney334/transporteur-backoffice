@@ -185,7 +185,7 @@ function ProtectedRouteContent({
                   router.push("/login");
                 }
               }}
-              className="px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
+              className="cursor-pointer px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
             >
               Retour au tableau de bord
             </button>
@@ -236,7 +236,7 @@ function ProtectedRouteContent({
                     router.push("/login");
                   }
                 }}
-                className="px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
+                className="cursor-pointer px-6 py-3 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors"
               >
                 Retour au tableau de bord
               </button>

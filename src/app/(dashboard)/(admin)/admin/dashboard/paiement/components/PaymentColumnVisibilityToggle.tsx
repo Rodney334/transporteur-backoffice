@@ -51,7 +51,7 @@ export default function PaymentColumnVisibilityToggle({
         </h3>
         <button
           onClick={onReset}
-          className="text-sm text-[#FD481A] hover:text-[#E63F15] transition-colors"
+          className="cursor-pointer text-sm text-[#FD481A] hover:text-[#E63F15] transition-colors"
         >
           Réinitialiser
         </button>
@@ -62,7 +62,7 @@ export default function PaymentColumnVisibilityToggle({
           <button
             key={column}
             onClick={() => onToggleColumn(column)}
-            className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
+            className={`cursor-pointer flex items-center justify-between p-3 rounded-lg border transition-colors ${
               visibleColumns[column]
                 ? "border-[#FD481A] bg-orange-50"
                 : "border-gray-300 hover:border-gray-400"

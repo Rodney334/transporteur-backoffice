@@ -64,7 +64,7 @@ export const DashboardHeader = ({
           <button
             onClick={onRefresh}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <RefreshCw
               className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
@@ -87,7 +87,7 @@ export const DashboardHeader = ({
               key={option.value}
               onClick={() => handlePeriodChange(option.value as any)}
               disabled={isLoading}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+              className={`cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                 filters.period === option.value
                   ? "bg-[#FD481A] text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"

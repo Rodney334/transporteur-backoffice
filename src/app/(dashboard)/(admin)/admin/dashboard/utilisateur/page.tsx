@@ -127,7 +127,7 @@ export default function UtilisateurPage() {
 
             <button
               onClick={() => setShowColumnToggle(!showColumnToggle)}
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <Columns className="w-4 h-4" />
               Colonnes

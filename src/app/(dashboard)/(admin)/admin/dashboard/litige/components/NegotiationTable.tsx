@@ -214,7 +214,7 @@ export const NegotiationTable = ({
                     <div className="flex gap-2">
                       <button
                         onClick={() => onViewDetails(negotiation)}
-                        className="px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-lg hover:bg-gray-200 transition-colors"
+                        className="cursor-pointer px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-lg hover:bg-gray-200 transition-colors"
                       >
                         Détails
                       </button>
@@ -222,7 +222,7 @@ export const NegotiationTable = ({
                         negotiation.status === NegotiationStatus.EN_CONFLIT && (
                           <button
                             onClick={() => onResolve(negotiation)}
-                            className="px-3 py-1.5 bg-[#FD481A] text-white text-xs font-medium rounded-lg hover:bg-[#E63F15] transition-colors"
+                            className="cursor-pointer px-3 py-1.5 bg-[#FD481A] text-white text-xs font-medium rounded-lg hover:bg-[#E63F15] transition-colors"
                           >
                             Résoudre
                           </button>
@@ -254,7 +254,7 @@ export const NegotiationTable = ({
             <button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Précédent
             </button>
@@ -274,7 +274,7 @@ export const NegotiationTable = ({
                 <button
                   key={pageNum}
                   onClick={() => onPageChange(pageNum)}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  className={`cursor-pointer px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                     currentPage === pageNum
                       ? "bg-[#FD481A] text-white"
                       : "text-gray-700 bg-gray-100 hover:bg-gray-200"
@@ -287,7 +287,7 @@ export const NegotiationTable = ({
             <button
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Suivant
             </button>

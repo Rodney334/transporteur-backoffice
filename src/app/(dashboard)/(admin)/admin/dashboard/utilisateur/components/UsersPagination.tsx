@@ -58,7 +58,7 @@ export default function UsersPagination({
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+          className="cursor-pointer p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
         >
           <ChevronsLeft className="w-4 h-4" />
         </button>
@@ -67,7 +67,7 @@ export default function UsersPagination({
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+          className="cursor-pointer p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -78,7 +78,7 @@ export default function UsersPagination({
             <button
               key={number}
               onClick={() => onPageChange(number)}
-              className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
+              className={`cursor-pointer w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
                 currentPage === number
                   ? "bg-[#FD481A] text-white"
                   : "border border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -93,7 +93,7 @@ export default function UsersPagination({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+          className="cursor-pointer p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
@@ -102,7 +102,7 @@ export default function UsersPagination({
         <button
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage === totalPages}
-          className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+          className="cursor-pointer p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
         >
           <ChevronsRight className="w-4 h-4" />
         </button>

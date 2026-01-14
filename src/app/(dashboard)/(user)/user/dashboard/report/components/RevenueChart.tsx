@@ -106,7 +106,7 @@ export const RevenueChart = ({
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 period === p
                   ? "bg-[#FD481A] text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"

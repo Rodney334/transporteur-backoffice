@@ -93,7 +93,7 @@ export const CommandCard = memo(function CommandCard({
         <div className="flex justify-end gap-2">
           <button
             onClick={() => onViewDetails(item)}
-            className="text-sm font-medium text-gray-50 bg-[#FD481A] px-2 py-1 rounded hover:opacity-80 transition-colors"
+            className="cursor-pointer text-sm font-medium text-gray-50 bg-[#FD481A] px-2 py-1 rounded hover:opacity-80 transition-colors"
           >
             Prix et Details
           </button>
@@ -116,7 +116,7 @@ export const CommandCard = memo(function CommandCard({
                 }}
                 className={`${
                   paidLoading && "animate-pulse"
-                } text-sm font-medium text-gray-50 bg-[#131313] px-2 py-1 rounded hover:opacity-80 transition-colors`}
+                } cursor-pointer text-sm font-medium text-gray-50 bg-[#131313] px-2 py-1 rounded hover:opacity-80 transition-colors`}
                 disabled={paidLoading}
               >
                 {paidLoading ? "Traitement..." : "Paiement reçu"}
@@ -156,7 +156,7 @@ export const CommandCard = memo(function CommandCard({
           <button
             onClick={() => onAccept(item)}
             disabled={isProcessingAccept}
-            className={`flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
+            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
               isProcessingAccept
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:bg-[#E63F15]"
@@ -172,7 +172,7 @@ export const CommandCard = memo(function CommandCard({
             <button
               onClick={() => onEnd(item)}
               disabled={isProcessingEnd}
-              className={`flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
+              className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
                 isProcessingEnd
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-[#E63F15]"
@@ -186,7 +186,7 @@ export const CommandCard = memo(function CommandCard({
           <button
             onClick={() => onAssign(item)}
             disabled={isProcessingAssign}
-            className={`flex-1 py-2.5 px-4 bg-[#131313] text-white text-sm font-medium rounded-lg transition-colors ${
+            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#131313] text-white text-sm font-medium rounded-lg transition-colors ${
               isProcessingAssign
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:bg-[#333333]"

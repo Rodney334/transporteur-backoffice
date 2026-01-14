@@ -64,7 +64,7 @@ export default function DeliveryColumnVisibilityToggle({
           <button
             key={column}
             onClick={() => onToggleColumn(column)}
-            className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
+            className={`cursor-pointer flex items-center justify-between p-3 rounded-lg border transition-colors ${
               visibleColumns[column]
                 ? "border-[#FD481A] bg-orange-50"
                 : "border-gray-300 hover:border-gray-400"
