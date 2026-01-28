@@ -1,6 +1,8 @@
 // DeliveryCard.tsx
 import { Package } from "lucide-react";
 import { DeliveryCardInterface } from "../types/type";
+import { OrderStatusStepper } from "@/components/OrderStatusStepper";
+import { OrderStatus } from "@/type/enum";
 
 export const DeliveryCard = ({ item, type }: DeliveryCardInterface) => (
   <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
@@ -24,11 +26,10 @@ export const DeliveryCard = ({ item, type }: DeliveryCardInterface) => (
       <div className="w-2 h-2 bg-gray-900 rounded-full"></div>
     </div>
 
-    <div className="flex items-center justify-between">
-      <div>
-        <div className="text-xs text-gray-500 mb-1">Statut</div>
-        <div className="text-xs font-medium text-gray-700">{item.status}</div>
-      </div>
+    {/* Status Stepper */}
+    <OrderStatusStepper currentStatus={item.status as OrderStatus} />
+
+    <div className="flex items-center justify-end mt-3">
       <div className="text-xs text-gray-500">{item.date}</div>
     </div>
   </div>

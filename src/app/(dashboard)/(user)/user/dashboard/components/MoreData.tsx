@@ -44,6 +44,14 @@ export const MoreData = ({ form }: MoreDataProps) => {
                     {form.watch("weight")} kg
                   </span>
                 </div>
+                <div className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                  <span className="text-sm font-medium text-[#333333]">
+                    Date de livraison souhaitée
+                  </span>
+                  <span className="text-sm font-semibold text-[#131313]">
+                    {form.watch("scheduledAt")}
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-3">
@@ -61,6 +69,14 @@ export const MoreData = ({ form }: MoreDataProps) => {
                   </span>
                   <span className="text-sm font-semibold text-[#131313] text-right max-w-[150px] truncate">
                     {form.watch("description")}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                  <span className="text-sm font-medium text-[#333333]">
+                    Code promo
+                  </span>
+                  <span className="text-sm font-semibold text-[#131313]">
+                    {form.watch("promoCodeId")}
                   </span>
                 </div>
               </div>

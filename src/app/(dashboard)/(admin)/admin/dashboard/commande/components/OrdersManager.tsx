@@ -311,6 +311,7 @@ export const OrdersManager = ({
       deliveryType: selectedCommand.deliveryType,
       weight: selectedCommand.weight,
       status: selectedCommand.status,
+      description: selectedCommand.description,
     };
   }, [selectedCommand]);
 
@@ -373,17 +374,15 @@ export const OrdersManager = ({
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`cursor-pointer pb-3 text-sm font-medium transition-colors relative ${
-                      activeTab === tab
-                        ? "text-gray-900"
-                        : "text-gray-500 hover:text-gray-700"
-                    }`}
+                    className={`cursor-pointer pb-3 text-sm font-medium transition-colors relative ${activeTab === tab
+                      ? "text-gray-900"
+                      : "text-gray-500 hover:text-gray-700"
+                      }`}
                   >
-                    {`${tab} ${
-                      activeTab === tab
-                        ? `(${filteredAndFormattedOrders.length})`
-                        : ""
-                    }`}
+                    {`${tab} ${activeTab === tab
+                      ? `(${filteredAndFormattedOrders.length})`
+                      : ""
+                      }`}
                     {activeTab === tab && (
                       <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900"></div>
                     )}
@@ -419,7 +418,7 @@ export const OrdersManager = ({
                           onEnd={() => handleEnd(command)}
                           onAssign={
                             userRole === GrantedRole.Admin ||
-                            userRole === GrantedRole.Operateur
+                              userRole === GrantedRole.Operateur
                               ? () => handleAssign(command)
                               : undefined
                           }
@@ -535,6 +534,53 @@ export const OrdersManager = ({
                   </div>
                 )}
 
+
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="bg-linear-to-r from-green-50 to-emerald-50 px-4 py-3 border-b border-gray-200">
+                    <h3 className="text-sm font-semibold text-gray-800">Note</h3>
+                  </div>
+                  <div className="p-4 space-y-3 text-xs">
+                    <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
+                      <span className="font-medium text-gray-600 min-w-20">Description :</span>
+                      <span className="text-gray-800 text-right flex-1 capitalize">
+                        {selectedCommand?.description}
+                      </span>
+                    </div>
+                    {selectedCommand?.scheduledAt && (
+                      <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
+                        <span className="font-medium text-gray-600 min-w-20">Programmation :</span>
+                        <span className="text-gray-800 text-right flex-1 capitalize">
+                          {new Date(selectedCommand?.scheduledAt).toLocaleDateString("fr-FR", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            timeZone: "UTC"
+                          })}
+                        </span>
+                      </div>
+                    )}
+                    {selectedCommand?.promoCodeText && (
+                      <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
+                        <span className="font-medium text-gray-600 min-w-20">Code promo :</span>
+                        <span className="text-gray-800 text-right flex-1 capitalize">
+                          {selectedCommand?.promoCodeText}
+                        </span>
+                      </div>
+                    )}
+                    {selectedCommand?.promoErrorMessage && (
+                      <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
+                        <span className="font-medium text-gray-600 min-w-20">Message d'erreur :</span>
+                        <span className="text-gray-800 text-right flex-1 capitalize">
+                          {selectedCommand?.promoErrorMessage}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 {/* NOUVELLE SECTION : Informations du livreur */}
                 {selectedCommand && (
                   <InfoLivreurSection assignedTo={selectedCommand.assignedTo} />
@@ -584,8 +630,8 @@ export const OrdersManager = ({
                             strokeWidth={2}
                             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                           />
-                        </svg>
-                        {userRole === "client" ? "Prix client" : "Prix livreur"}
+                        </svg> Prix{" "}
+                        {userRole === "client" ? "client" : userRole === "admin" ? "admin" : "livreur"}
                       </button>
                     </div>
                   ) : (
@@ -611,17 +657,16 @@ export const OrdersManager = ({
                               className="block text-sm font-medium text-gray-700"
                             >
                               Prix (
-                              {userRole === "client" ? "client" : "livreur"})
+                              {userRole === "client" ? "client" : userRole === "admin" ? "admin" : "livreur"})
                               (FCFA)
                             </label>
                             <input
                               type="text"
                               id="price"
-                              className={`w-full px-4 py-3 text-base border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 ${
-                                errors.price
-                                  ? "border-red-300 bg-red-50"
-                                  : "border-gray-200 hover:border-gray-300"
-                              }`}
+                              className={`w-full px-4 py-3 text-base border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 ${errors.price
+                                ? "border-red-300 bg-red-50"
+                                : "border-gray-200 hover:border-gray-300"
+                                }`}
                               placeholder="Ex: 15000"
                               {...register("price", {
                                 required: "Le prix est requis",
@@ -656,11 +701,10 @@ export const OrdersManager = ({
                               </label>
                               <select
                                 id="paymentMethod"
-                                className={`w-full px-4 py-3 text-base border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 appearance-none bg-white ${
-                                  errors.method
-                                    ? "border-red-300 bg-red-50"
-                                    : "border-gray-200 hover:border-gray-300"
-                                }`}
+                                className={`w-full px-4 py-3 text-base border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 appearance-none bg-white ${errors.method
+                                  ? "border-red-300 bg-red-50"
+                                  : "border-gray-200 hover:border-gray-300"
+                                  }`}
                                 {...register("method", {
                                   required:
                                     "La méthode de paiement est requise",
@@ -798,22 +842,22 @@ export const OrdersManager = ({
 
         {(userRole === GrantedRole.Admin ||
           userRole === GrantedRole.Operateur) && (
-          <>
-            <AssignOrderModal
-              isOpen={isAssignModalOpen}
-              onClose={() => {
-                setIsAssignModalOpen(false);
-                closeAssignmentModal();
-                setSelectedCommandForAssignment(null);
-              }}
-              onAssign={executeAssignment}
-              livreurs={livreurs}
-              isAssigning={isAssigning}
-              isLoadingLivreurs={isLoadingLivreurs} // Passer l'état de chargement
-              orderReference={selectedCommandForAssignment?.reference}
-            />
-          </>
-        )}
+            <>
+              <AssignOrderModal
+                isOpen={isAssignModalOpen}
+                onClose={() => {
+                  setIsAssignModalOpen(false);
+                  closeAssignmentModal();
+                  setSelectedCommandForAssignment(null);
+                }}
+                onAssign={executeAssignment}
+                livreurs={livreurs}
+                isAssigning={isAssigning}
+                isLoadingLivreurs={isLoadingLivreurs} // Passer l'état de chargement
+                orderReference={selectedCommandForAssignment?.reference}
+              />
+            </>
+          )}
       </div>
     </>
   );

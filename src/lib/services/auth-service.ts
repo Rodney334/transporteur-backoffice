@@ -77,4 +77,9 @@ export const authService = {
     console.log(response.data);
     return response.data;
   },
+
+  // NOUVEAU : Envoyer le FCM token au serveur
+  async sendFCMToken(token: string): Promise<void> {
+    await api.post("/notifications/fcm-token", { token });
+  },
 };

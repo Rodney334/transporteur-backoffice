@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { Payment } from "@/type/order.type";
 import { paymentService } from "@/lib/services/payment-service";
 import { useOrderStore } from "@/lib/stores/order-store";
+import { OrderStatusStepper } from "@/components/OrderStatusStepper";
 
 export const CommandCard = memo(function CommandCard({
   activeTab,
@@ -76,15 +77,14 @@ export const CommandCard = memo(function CommandCard({
             <span>{item.date}</span>
             <span>|</span>
             <span
-              className={`capitalize bg-blue-500/10 text-blue-700 px-2 py-0.5 rounded-2xl ${
-                item.originalData.status === OrderStatus.LIVREE
-                  ? "bg-green-500/10 text-green-700"
-                  : item.originalData.status === OrderStatus.EN_ATTENTE
+              className={`capitalize bg-blue-500/10 text-blue-700 px-2 py-0.5 rounded-2xl ${item.originalData.status === OrderStatus.LIVREE
+                ? "bg-green-500/10 text-green-700"
+                : item.originalData.status === OrderStatus.EN_ATTENTE
                   ? "bg-orange-500/10 text-orange-700"
                   : item.originalData.status === OrderStatus.ECHEC
-                  ? "bg-red-500/10 text-red-700"
-                  : "bg-blue-500/10 text-blue-700"
-              }`}
+                    ? "bg-red-500/10 text-red-700"
+                    : "bg-blue-500/10 text-blue-700"
+                }`}
             >
               {item.originalData.status}
             </span>
@@ -109,14 +109,13 @@ export const CommandCard = memo(function CommandCard({
                     item.originalData.payments &&
                       item.originalData.payments?.length > 0
                       ? item.originalData.payments[
-                          item.originalData.payments?.length - 1
-                        ]
+                      item.originalData.payments?.length - 1
+                      ]
                       : undefined
                   );
                 }}
-                className={`${
-                  paidLoading && "animate-pulse"
-                } cursor-pointer text-sm font-medium text-gray-50 bg-[#131313] px-2 py-1 rounded hover:opacity-80 transition-colors`}
+                className={`${paidLoading && "animate-pulse"
+                  } cursor-pointer text-sm font-medium text-gray-50 bg-[#131313] px-2 py-1 rounded hover:opacity-80 transition-colors`}
                 disabled={paidLoading}
               >
                 {paidLoading ? "Traitement..." : "Paiement reçu"}
@@ -150,17 +149,19 @@ export const CommandCard = memo(function CommandCard({
         </div>
       </div>
 
+      {/* Status Stepper */}
+      <OrderStatusStepper currentStatus={item.originalData.status} />
+
       {/* Actions */}
       <div className="flex gap-3">
         {activeTab === "Nouvelles" && onAccept && (
           <button
             onClick={() => onAccept(item)}
             disabled={isProcessingAccept}
-            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
-              isProcessingAccept
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-[#E63F15]"
-            }`}
+            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${isProcessingAccept
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-[#E63F15]"
+              }`}
           >
             {isProcessingAccept ? "Traitement..." : "Accepter"}
           </button>
@@ -172,11 +173,10 @@ export const CommandCard = memo(function CommandCard({
             <button
               onClick={() => onEnd(item)}
               disabled={isProcessingEnd}
-              className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${
-                isProcessingEnd
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-[#E63F15]"
-              }`}
+              className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${isProcessingEnd
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-[#E63F15]"
+                }`}
             >
               {isProcessingEnd ? "Traitement..." : "Terminer"}
             </button>
@@ -186,29 +186,14 @@ export const CommandCard = memo(function CommandCard({
           <button
             onClick={() => onAssign(item)}
             disabled={isProcessingAssign}
-            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#131313] text-white text-sm font-medium rounded-lg transition-colors ${
-              isProcessingAssign
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-[#333333]"
-            }`}
+            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#131313] text-white text-sm font-medium rounded-lg transition-colors ${isProcessingAssign
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-[#333333]"
+              }`}
           >
             {isProcessingAssign ? "Traitement..." : "Assigner"}
           </button>
         )}
-
-        {/* {onReject && (
-          <button
-            onClick={() => onReject(item)}
-            disabled={isProcessingReject}
-            className={`flex-1 py-2.5 px-4 bg-gray-500 text-white text-sm font-medium rounded-lg transition-colors ${
-              isProcessingReject
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-gray-600"
-            }`}
-          >
-            {isProcessingReject ? "Traitement..." : "Rejeter"}
-          </button>
-        )} */}
       </div>
     </div>
   );

@@ -43,8 +43,8 @@ export default function DeliveryTable({
   const { openDetailsModal } = useDeliveries();
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
-  const toggleCard = (deliveryId: string) => {
-    setExpandedCard(expandedCard === deliveryId ? null : deliveryId);
+  const toggleCard = (orderNumber: string) => {
+    setExpandedCard(expandedCard === orderNumber ? null : orderNumber);
   };
 
   if (isLoading) {
@@ -179,7 +179,7 @@ export default function DeliveryTable({
                           {delivery.createdBy?.name || "Client inconnu"}
                         </div>
                         <div className="text-xs text-gray-500">
-                          ID: {delivery.id?.slice(-6)}
+                          ID: {delivery.orderNumber}
                         </div>
                       </div>
                     </div>
@@ -256,7 +256,7 @@ export default function DeliveryTable({
             {/* En-tête de la carte */}
             <div
               className="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
-              onClick={() => toggleCard(delivery.id)}
+              onClick={() => toggleCard(delivery.orderNumber)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -287,7 +287,7 @@ export default function DeliveryTable({
                   </div>
                 </div>
                 <div className="text-gray-400">
-                  {expandedCard === delivery.id ? (
+                  {expandedCard === delivery.orderNumber ? (
                     <ChevronUp className="w-5 h-5" />
                   ) : (
                     <ChevronDown className="w-5 h-5" />
@@ -323,7 +323,7 @@ export default function DeliveryTable({
             </div>
 
             {/* Contenu dépliable */}
-            {expandedCard === delivery.id && (
+            {expandedCard === delivery.orderNumber && (
               <div className="border-t border-gray-200 p-4 space-y-4">
                 {/* Informations détaillées */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -354,7 +354,7 @@ export default function DeliveryTable({
                       ID de commande
                     </label>
                     <div className="text-xs font-mono text-gray-500 bg-gray-50 p-2 rounded">
-                      {delivery.id}
+                      {delivery.orderNumber}
                     </div>
                   </div>
                 </div>

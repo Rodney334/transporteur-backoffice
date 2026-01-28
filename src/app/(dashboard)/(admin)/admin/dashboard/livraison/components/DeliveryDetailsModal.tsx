@@ -36,7 +36,7 @@ export default function DeliveryDetailsModal() {
 
   const deliverer =
     selectedDelivery.assignedTo &&
-    typeof selectedDelivery.assignedTo === "string"
+      typeof selectedDelivery.assignedTo === "string"
       ? deliverers[selectedDelivery.assignedTo]
       : null;
 
@@ -83,7 +83,7 @@ export default function DeliveryDetailsModal() {
                   Détails de la livraison
                 </h3>
                 <p className="text-gray-500 text-sm mt-1">
-                  Commande #{selectedDelivery.id?.slice(-8)}
+                  Commande #{selectedDelivery.orderNumber}
                 </p>
               </div>
             </div>
@@ -173,7 +173,7 @@ export default function DeliveryDetailsModal() {
                   Informations client
                 </h4>
                 {selectedDelivery.createdBy &&
-                typeof selectedDelivery.createdBy === "object" ? (
+                  typeof selectedDelivery.createdBy === "object" ? (
                   <div className="space-y-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">

@@ -52,10 +52,14 @@ export interface CreateOrderInterface {
   articleType: ArticleType;
   zone?: string;
   estimatedPrice?: number;
+  scheduledAt?: string;
+  promoCodeId?: string;
 }
 
 export interface Order {
   id: string;
+  orderNumber: string;
+  orderSeq: string;
   serviceType: string;
   description: string;
   weight: number;
@@ -75,6 +79,14 @@ export interface Order {
   createdAt: string;
   updatedAt: string;
   payments?: Payment[];
+  scheduledAt?: string;
+  isScheduled: boolean;
+  scheduledNotifiedAt?: string;
+  promoCodeId?: string;
+  promoCodeText?: string;
+  promoErrorMessage?: string;
+  discountAmount?: number;
+  basePriceBeforeDiscount: number;
 }
 
 export interface Negotiation {

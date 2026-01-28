@@ -178,14 +178,13 @@ export default function DashboardPage() {
               </h2>
               <div className={`flex flex-col mb-4 lg:mb-6`}>
                 <label htmlFor="weight">
-                  Poids en kg (faites une estimation même si vous n'êtes pas
-                  sûr) <strong className={`text-red-600`}>*</strong>
+                  Poids en kg (optionnel)
                 </label>
                 <input
                   id="weight"
                   type="text"
                   placeholder="Poids (kg)"
-                  {...register("weight", { required: "Le poids est requis" })}
+                  {...register("weight")}
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                 />
               </div>
@@ -204,6 +203,33 @@ export default function DashboardPage() {
                   value={description}
                   onChange={(e) => setValue("description", e.target.value)}
                 ></textarea>
+              </div>
+
+              <div className={`flex flex-col mb-4 lg:mb-6`}>
+                <label htmlFor="scheduledAt">
+                  Date de livraison programmée (optionnel)
+                </label>
+                <input
+                  id="scheduledAt"
+                  type="datetime-local"
+                  {...register("scheduledAt")}
+                  min={new Date().toISOString().slice(0, 16)}
+                  max={new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                />
+              </div>
+
+              <div className={`flex flex-col mb-4 lg:mb-6`}>
+                <label htmlFor="promoCodeId">
+                  Code promo (optionnel)
+                </label>
+                <input
+                  id="promoCodeId"
+                  type="text"
+                  placeholder="Entrez votre code promo"
+                  {...register("promoCodeId")}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                />
               </div>
             </div>
 
@@ -271,14 +297,12 @@ export default function DashboardPage() {
         {/* Indicateur d'étape */}
         <div className="flex justify-center items-center gap-2">
           <div
-            className={`w-3 h-3 rounded-full transition-colors ${
-              currentStep === 1 ? "bg-[#FD481A]" : "bg-gray-300"
-            }`}
+            className={`w-3 h-3 rounded-full transition-colors ${currentStep === 1 ? "bg-[#FD481A]" : "bg-gray-300"
+              }`}
           ></div>
           <div
-            className={`w-3 h-3 rounded-full transition-colors ${
-              currentStep === 2 ? "bg-[#FD481A]" : "bg-gray-300"
-            }`}
+            className={`w-3 h-3 rounded-full transition-colors ${currentStep === 2 ? "bg-[#FD481A]" : "bg-gray-300"
+              }`}
           ></div>
         </div>
       </div>

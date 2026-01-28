@@ -2,11 +2,12 @@
 import { Package } from "lucide-react";
 import { DeliveryCardProps } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager.types";
 import { OrderStatus } from "@/type/enum";
+import { OrderStatusStepper } from "@/components/OrderStatusStepper";
 
 export const DeliveryCard = ({ item, onViewDetails }: DeliveryCardProps) => (
   <div
     className="bg-white rounded-xl p-4 shadow-sm border border-gray-100"
-    // onClick={() => onViewDetails(item)}
+  // onClick={() => onViewDetails(item)}
   >
     <div className="flex justify-between text-xs font-semibold text-gray-600 mb-3">
       <span>{item.id}</span>
@@ -41,35 +42,37 @@ export const DeliveryCard = ({ item, onViewDetails }: DeliveryCardProps) => (
         <div className="text-xs text-gray-500 mb-1">Statut</div>
         <div className="text-xs font-medium text-gray-700">
           <span
-            className={`capitalize bg-blue-500/10 text-blue-700 px-2 py-0.5 rounded-2xl ${
-              item.originalData.status === OrderStatus.LIVREE
-                ? "bg-green-500/10 text-green-700"
-                : item.originalData.status === OrderStatus.EN_ATTENTE
+            className={`capitalize bg-blue-500/10 text-blue-700 px-2 py-0.5 rounded-2xl ${item.originalData.status === OrderStatus.LIVREE
+              ? "bg-green-500/10 text-green-700"
+              : item.originalData.status === OrderStatus.EN_ATTENTE
                 ? "bg-orange-500/10 text-orange-700"
                 : item.originalData.status === OrderStatus.ECHEC
-                ? "bg-red-500/10 text-red-700"
-                : "bg-blue-500/10 text-blue-700"
-            }`}
+                  ? "bg-red-500/10 text-red-700"
+                  : "bg-blue-500/10 text-blue-700"
+              }`}
           >
             {item.originalData.status === OrderStatus.LIVREE
               ? "Livrée"
               : item.originalData.status === OrderStatus.EN_ATTENTE
-              ? "En attente"
-              : item.originalData.status === OrderStatus.ECHEC
-              ? "Echouée"
-              : item.originalData.status === OrderStatus.EN_LIVRAISON
-              ? "En livraison"
-              : item.originalData.status === OrderStatus.EN_DISCUSSION
-              ? "En discussion"
-              : item.originalData.status === OrderStatus.PRIX_VALIDE
-              ? "Prix validé"
-              : item.originalData.status === OrderStatus.ASSIGNEE
-              ? "Acceptée"
-              : "En cours"}
+                ? "En attente"
+                : item.originalData.status === OrderStatus.ECHEC
+                  ? "Echouée"
+                  : item.originalData.status === OrderStatus.EN_LIVRAISON
+                    ? "En livraison"
+                    : item.originalData.status === OrderStatus.EN_DISCUSSION
+                      ? "En discussion"
+                      : item.originalData.status === OrderStatus.PRIX_VALIDE
+                        ? "Prix validé"
+                        : item.originalData.status === OrderStatus.ASSIGNEE
+                          ? "Acceptée"
+                          : "En cours"}
           </span>
         </div>
       </div>
       <div className="text-xs text-gray-500">{item.date}</div>
     </div>
+
+    {/* Status Stepper */}
+    <OrderStatusStepper currentStatus={item.originalData.status} />
   </div>
 );

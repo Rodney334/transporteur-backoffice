@@ -2,6 +2,7 @@ import { useAuthStore } from "@/lib/stores/auth-store";
 import { authService } from "@/lib/services/auth-service";
 import type { GenderType } from "@/type/enum";
 import { useCallback } from "react";
+import { getFCMToken } from "@/lib/firebase/fcm-service";
 
 export const useAuth = () => {
   const {
@@ -43,9 +44,22 @@ export const useAuth = () => {
     try {
       const { accessToken: newAccessToken, user: newUser } =
         await authService.login({ email, password });
-      console.log({ newUser });
       setTokens(newAccessToken);
       setUser(newUser);
+
+      // Envoyer le FCM token après un login réussi
+      try {
+        const fcmToken = await getFCMToken();
+        console.log("FCM token:", fcmToken);
+        if (fcmToken) {
+          await authService.sendFCMToken(fcmToken);
+          console.log("FCM token sent successfully");
+        }
+      } catch (fcmError) {
+        // Ne pas bloquer le login si l'envoi du FCM token échoue
+        console.warn("Failed to send FCM token:", fcmError);
+      }
+
       return newUser;
     } catch (error: any) {
       const errorMessage = handleAuthError(error);
@@ -79,6 +93,19 @@ export const useAuth = () => {
 
       setTokens(newAccessToken);
       setUser(newUser);
+
+      // Envoyer le FCM token après un register réussi
+      try {
+        const fcmToken = await getFCMToken();
+        if (fcmToken) {
+          await authService.sendFCMToken(fcmToken);
+          console.log("FCM token sent successfully");
+        }
+      } catch (fcmError) {
+        // Ne pas bloquer le register si l'envoi du FCM token échoue
+        console.warn("Failed to send FCM token:", fcmError);
+      }
+
       return newUser;
     } catch (error: any) {
       const errorMessage = handleAuthError(error);

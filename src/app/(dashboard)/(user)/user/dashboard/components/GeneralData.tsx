@@ -78,6 +78,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   onChange={(e) => {
                     form.setValue("pickupCountry", e.target.value);
                   }}
+                  disabled
                 />
               </div>
               <div>
@@ -200,6 +201,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   onChange={(e) => {
                     form.setValue("deliveryCountry", e.target.value);
                   }}
+                  disabled
                 />
               </div>
               <div>

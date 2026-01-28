@@ -40,6 +40,10 @@ export interface OrderFormData {
   deliveryCity: string;
   deliveryDistrict: string;
   deliveryStreet: string;
+
+  // Champs optionnels
+  scheduledAt?: string;
+  promoCodeId?: string;
 }
 
 // Clé pour le localStorage
@@ -96,16 +100,18 @@ export const useOrderForm = () => {
       estimatedPrice: 0,
       pickupName: "",
       pickupPhone: "",
-      pickupCountry: "",
+      pickupCountry: "Bénin",
       pickupCity: "",
       pickupDistrict: "",
       pickupStreet: "",
       deliveryName: "",
       deliveryPhone: "",
-      deliveryCountry: "",
+      deliveryCountry: "Bénin",
       deliveryCity: "",
       deliveryDistrict: "",
       deliveryStreet: "",
+      scheduledAt: "",
+      promoCodeId: "",
       ...savedData, // Fusionner avec les données sauvegardées
     },
 
@@ -196,6 +202,8 @@ export const useOrderForm = () => {
         articleType: data.articleType,
         zone: data.zone,
         estimatedPrice: data.estimatedPrice,
+        ...(data.scheduledAt && { scheduledAt: data.scheduledAt }),
+        ...(data.promoCodeId && { promoCodeId: data.promoCodeId }),
       };
 
       await orderService.createOrder(orderData);

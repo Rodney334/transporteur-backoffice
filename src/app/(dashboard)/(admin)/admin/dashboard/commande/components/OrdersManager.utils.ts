@@ -123,7 +123,7 @@ export const getAdminConfig = () => ({
   // Formatage des commandes pour admin/livreur
   formatOrder: (order: Order): FormattedCommandCard => ({
     id: order.id,
-    reference: `#${order.id.slice(0, 8).toUpperCase()}`,
+    reference: order.orderNumber,
     date: new Date(order.createdAt).toLocaleString("fr-FR", {
       hour: "2-digit",
       minute: "2-digit",
