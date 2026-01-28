@@ -98,13 +98,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       roles: [GrantedRole.Admin, GrantedRole.Operateur],
       current: pathname === "/admin/dashboard/paiement",
     },
-    // {
-    //   name: "Rapports",
-    //   href: "/admin/dashboard/report",
-    //   icon: MessageSquareMore,
-    //   roles: [GrantedRole.Admin, GrantedRole.Operateur],
-    //   current: pathname === "/admin/dashboard/report",
-    // },
+    {
+      name: "Rapports",
+      href: "/admin/dashboard/report",
+      icon: MessageSquareMore,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur],
+      current: pathname === "/admin/dashboard/report",
+    },
     {
       name: "Paramètres",
       href: "/admin/dashboard/settings",
@@ -166,12 +166,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="text-sm font-medium text-gray-900">{user.name}</div>
           <span
             className={`text-xs px-2 py-0.5 rounded-full ${user.role === GrantedRole.Admin
-                ? "bg-red-100 text-red-800"
-                : user.role === GrantedRole.Operateur
-                  ? "bg-blue-100 text-blue-800"
-                  : user.role === GrantedRole.Livreur
-                    ? "bg-green-100 text-green-800"
-                    : "bg-gray-100 text-gray-800"
+              ? "bg-red-100 text-red-800"
+              : user.role === GrantedRole.Operateur
+                ? "bg-blue-100 text-blue-800"
+                : user.role === GrantedRole.Livreur
+                  ? "bg-green-100 text-green-800"
+                  : "bg-gray-100 text-gray-800"
               }`}
           >
             {user.role === GrantedRole.Admin
@@ -243,8 +243,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   key={item.name}
                   href={item.href}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${item.current
-                      ? "bg-white text-black"
-                      : "text-gray-400 hover:bg-gray-900 hover:text-white"
+                    ? "bg-white text-black"
+                    : "text-gray-400 hover:bg-gray-900 hover:text-white"
                     }`}
                   onClick={closeSidebar}
                 >
@@ -261,12 +261,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="flex items-center gap-2">
               <div
                 className={`w-3 h-3 rounded-full ${user?.role === GrantedRole.Admin
-                    ? "bg-red-500"
-                    : user?.role === GrantedRole.Operateur
-                      ? "bg-blue-500"
-                      : user?.role === GrantedRole.Livreur
-                        ? "bg-green-500"
-                        : "bg-gray-500"
+                  ? "bg-red-500"
+                  : user?.role === GrantedRole.Operateur
+                    ? "bg-blue-500"
+                    : user?.role === GrantedRole.Livreur
+                      ? "bg-green-500"
+                      : "bg-gray-500"
                   }`}
               ></div>
               <span className="text-sm text-white capitalize">

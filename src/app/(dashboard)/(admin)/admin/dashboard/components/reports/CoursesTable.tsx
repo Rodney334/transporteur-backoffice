@@ -25,26 +25,26 @@ export const CoursesTable = ({
 
     const StatusBadge = ({ status }: { status: string }) => {
         let color = "bg-gray-100 text-gray-800";
-        if (status === "LIVREE") color = "bg-green-100 text-green-800";
-        else if (status === "ECHEC") color = "bg-red-100 text-red-800";
-        else if (status === "EN_LIVRAISON") color = "bg-blue-100 text-blue-800";
+        if (status === "livree") color = "bg-green-100 text-green-800";
+        else if (status === "echec") color = "bg-red-100 text-red-800";
+        else if (status === "en_livraison") color = "bg-blue-100 text-blue-800";
 
         return (
             <span className={`px-2 py-1 rounded-full text-xs font-semibold ${color}`}>
-                {status}
+                {status === "livree" ? "Livrée" : status === "echec" ? "Echec" : "En Livraison"}
             </span>
         );
     };
 
     const PaymentBadge = ({ status }: { status: string }) => {
         let color = "bg-gray-100 text-gray-800";
-        if (status === "PAID") color = "bg-green-100 text-green-800";
-        else if (status === "FAILED") color = "bg-red-100 text-red-800";
-        else if (status === "PENDING") color = "bg-orange-100 text-orange-800";
+        if (status === "paid") color = "bg-green-100 text-green-800";
+        else if (status === "failed") color = "bg-red-100 text-red-800";
+        else if (status === "pending") color = "bg-orange-100 text-orange-800";
 
         return (
             <span className={`px-2 py-1 rounded-full text-xs font-semibold ${color}`}>
-                {status}
+                {status === "paid" ? "Payé" : status === "failed" ? "Echec" : "En Attente"}
             </span>
         );
     };
@@ -74,9 +74,9 @@ export const CoursesTable = ({
                             className="w-full text-sm border-gray-300 rounded-lg p-2"
                         >
                             <option value="">Tous</option>
-                            <option value="LIVREE">LIVREE</option>
-                            <option value="ECHEC">ECHEC</option>
-                            <option value="EN_LIVRAISON">EN_LIVRAISON</option>
+                            <option value="livree">Livrée</option>
+                            <option value="echec">Echec</option>
+                            <option value="en_livraison">En Livraison</option>
                         </select>
                     </div>
                     <div>
@@ -87,9 +87,9 @@ export const CoursesTable = ({
                             className="w-full text-sm border-gray-300 rounded-lg p-2"
                         >
                             <option value="">Tous</option>
-                            <option value="PAID">PAYÉ</option>
-                            <option value="PENDING">EN ATTENTE</option>
-                            <option value="FAILED">ÉCHOUÉ</option>
+                            <option value="paid">Payé</option>
+                            <option value="pending">En Attente</option>
+                            <option value="failed">Échoué</option>
                         </select>
                     </div>
                 </div>
@@ -111,7 +111,13 @@ export const CoursesTable = ({
                         {courses.items.map((item) => (
                             <tr key={item.orderId} className="hover:bg-gray-50/50">
                                 <td className="px-4 py-3 text-sm text-gray-900">
-                                    {new Date(item.changedAt).toLocaleTimeString("fr-FR", { hour: '2-digit', minute: '2-digit' })}
+                                    {new Date(item.changedAt).toLocaleTimeString("fr-FR", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                    })}
                                 </td>
                                 <td className="px-4 py-3 text-sm font-medium text-gray-900">
                                     {item.courierName}
