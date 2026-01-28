@@ -234,25 +234,25 @@ export const useOrderStore = create<OrderStore>()(
         // );
 
         // Notification web (seulement si permission accordée)
-        if (typeof window !== "undefined" && "Notification" in window) {
-          if (Notification.permission === "granted") {
-            const notification = new Notification("Nouvelle notification", {
-              body: payload.message || "Vous avez une nouvelle notification",
-              icon: "/favicon.ico",
-            });
+        // if (typeof window !== "undefined" && "Notification" in window) {
+        //   if (Notification.permission === "granted") {
+        //     const notification = new Notification("Nouvelle notification", {
+        //       body: payload.message || "Vous avez une nouvelle notification",
+        //       icon: "/favicon.ico",
+        //     });
 
-            // Fermer automatiquement après 5 secondes
-            setTimeout(() => notification.close(), 5000);
+        //     // Fermer automatiquement après 5 secondes
+        //     setTimeout(() => notification.close(), 5000);
 
-            // Rediriger au clic
-            notification.onclick = () => {
-              window.focus();
-              notification.close();
-            };
-          }
-          // Si permission n'est pas "granted", on n'affiche pas de notification web
-          // L'utilisateur doit d'abord activer via SimpleNotificationToggle
-        }
+        //     // Rediriger au clic
+        //     notification.onclick = () => {
+        //       window.focus();
+        //       notification.close();
+        //     };
+        //   }
+        //   // Si permission n'est pas "granted", on n'affiche pas de notification web
+        //   // L'utilisateur doit d'abord activer via SimpleNotificationToggle
+        // }
 
         const authStore = useAuthStore.getState();
         const { user } = authStore;
@@ -303,10 +303,10 @@ export const useOrderStore = create<OrderStore>()(
         orders: state.orders.map((order) =>
           order.id === orderId
             ? {
-                ...order,
-                status: status as OrderStatus,
-                updatedAt: timestamp || new Date().toISOString(),
-              }
+              ...order,
+              status: status as OrderStatus,
+              updatedAt: timestamp || new Date().toISOString(),
+            }
             : order
         ),
       }));
