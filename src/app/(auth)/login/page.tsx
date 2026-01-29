@@ -166,9 +166,9 @@ function LoginContent() {
                 className="w-4 h-4 rounded border-gray-300 text-[#FD481A] focus:ring-[#FD481A] cursor-pointer"
                 {...register("rememberMe")}
               />
-              <span className="ml-2 text-sm text-gray-600">
+              {/* <span className="ml-2 text-sm text-gray-600">
                 Se souvenir de moi
-              </span>
+              </span> */}
             </label>
             <span className="text-sm text-[#FD481A] hover:underline font-medium cursor-pointer">
               Mot de passe oublié ?

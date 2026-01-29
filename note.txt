@@ -1,20 +1,8 @@
-description obligatoire -- ok
-
-bouton pour le voir détail -- ok
-
-Correction du texte pour le montant au niveau du client -- ok
-
-Lors de la création d'une commande que les entrées soient sauvegardées quand le formulaire
-n'est pas envoyé même si on recharge la page -- ok
-
 Laisser une note sur une commande déjà créé ?????
 
 Client doit pouvoir donner son avis par rapport au livreur et la livraison  ?????
 
 Quand un admin ?????
 
-Quartier au lieu de Arrondissement --ok
-
-Ne pas switcher si tout n'est pas bien remplir ???
-
-Le livreur doit pouvoir marquer qu'il a bien encaissé les sous du client -- à faire
+Mail vérification après register
+Forget password

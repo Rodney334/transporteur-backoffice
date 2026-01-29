@@ -37,7 +37,8 @@ function RegisterContent() {
       await registerUser(data);
       // router.push(redirect);
       toast.success("Redirection en cours.", { autoClose: 3000 });
-      router.push("/user/dashboard");
+      // router.push("/user/dashboard");
+      router.push(`/check-email?email=${encodeURIComponent(data.email)}`);
     } catch (error) {
       console.log("Registration failed:", error);
     }

@@ -44,6 +44,26 @@ interface RefreshTokenResponse {
   accessToken: string;
 }
 
+export interface VerifyEmailData {
+  email: string;
+  token: string;
+}
+
+// NOUVEAU : Type pour renvoyer la vérification
+export interface ResendVerificationData {
+  email: string;
+}
+
+// NOUVEAU : Interface pour la réponse de vérification d'email
+interface VerifyEmailResponse {
+  message: string;
+}
+
+// NOUVEAU : Interface pour la réponse de renvoi de vérification
+interface ResendVerificationResponse {
+  message: string;
+}
+
 export const authService = {
   async login(credentials: LoginData): Promise<LoginResponse> {
     const response = await api.post<LoginResponse>("/auth/login", credentials);
@@ -53,7 +73,7 @@ export const authService = {
   async register(userData: RegisterData): Promise<RegisterResponse> {
     const response = await api.post<RegisterResponse>(
       "/auth/register",
-      userData
+      userData,
     );
     return response.data;
   },
@@ -72,7 +92,7 @@ export const authService = {
     console.log("call refresh token");
     const response = await axios.post<RefreshTokenResponse>(
       "https://letransporteur-production.up.railway.app/api/v1/auth/refresh",
-      {}
+      {},
     );
     console.log(response.data);
     return response.data;
@@ -81,5 +101,25 @@ export const authService = {
   // NOUVEAU : Envoyer le FCM token au serveur
   async sendFCMToken(token: string): Promise<void> {
     await api.post("/notifications/fcm-token", { token });
+  },
+
+  // NOUVEAU : Vérifier l'email
+  async verifyEmail(data: VerifyEmailData): Promise<VerifyEmailResponse> {
+    const response = await api.post<VerifyEmailResponse>(
+      "/auth/verify-email",
+      data,
+    );
+    return response.data;
+  },
+
+  // NOUVEAU : Renvoyer l'email de vérification
+  async resendVerificationEmail(
+    data: ResendVerificationData,
+  ): Promise<ResendVerificationResponse> {
+    const response = await api.post<ResendVerificationResponse>(
+      "/auth/resend-verification",
+      data,
+    );
+    return response.data;
   },
 };
