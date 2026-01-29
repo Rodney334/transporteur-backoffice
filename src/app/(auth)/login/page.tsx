@@ -170,9 +170,12 @@ function LoginContent() {
                 Se souvenir de moi
               </span> */}
             </label>
-            <span className="text-sm text-[#FD481A] hover:underline font-medium cursor-pointer">
+            <Link
+              href="/forgot-password"
+              className="text-sm text-[#FD481A] hover:underline font-medium cursor-pointer"
+            >
               Mot de passe oublié ?
-            </span>
+            </Link>
           </div>
 
           {/* Submit button */}

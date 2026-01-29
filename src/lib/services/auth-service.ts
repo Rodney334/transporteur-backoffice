@@ -64,6 +64,26 @@ interface ResendVerificationResponse {
   message: string;
 }
 
+// NOUVEAU : Types pour le mot de passe oublié
+export interface ForgotPasswordData {
+  email: string;
+}
+
+export interface ResetPasswordData {
+  email: string;
+  token: string;
+  newPassword: string;
+}
+
+// NOUVEAU : Interfaces de réponse
+interface ForgotPasswordResponse {
+  message: string;
+}
+
+interface ResetPasswordResponse {
+  message: string;
+}
+
 export const authService = {
   async login(credentials: LoginData): Promise<LoginResponse> {
     const response = await api.post<LoginResponse>("/auth/login", credentials);
@@ -118,6 +138,26 @@ export const authService = {
   ): Promise<ResendVerificationResponse> {
     const response = await api.post<ResendVerificationResponse>(
       "/auth/resend-verification",
+      data,
+    );
+    return response.data;
+  },
+
+  // NOUVEAU : Demander la réinitialisation de mot de passe
+  async forgotPassword(
+    data: ForgotPasswordData,
+  ): Promise<ForgotPasswordResponse> {
+    const response = await api.post<ForgotPasswordResponse>(
+      "/auth/forgot-password",
+      data,
+    );
+    return response.data;
+  },
+
+  // NOUVEAU : Réinitialiser le mot de passe
+  async resetPassword(data: ResetPasswordData): Promise<ResetPasswordResponse> {
+    const response = await api.post<ResetPasswordResponse>(
+      "/auth/reset-password",
       data,
     );
     return response.data;
