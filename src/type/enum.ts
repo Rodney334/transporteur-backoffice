@@ -83,3 +83,9 @@ export enum ArticleType {
   ELECTRONIQUE = "electronique",
   AUTRE = "autre",
 }
+
+export enum LivreurVerificationStatus {
+  PENDING = "PENDING", // profil soumis / en attente
+  APPROVED = "APPROVED", // admin validé => accès total
+  REJECTED = "REJECTED", // admin refusé
+}

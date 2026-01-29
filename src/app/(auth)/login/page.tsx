@@ -159,17 +159,17 @@ function LoginContent() {
           </div>
 
           {/* Remember me & Forgot password */}
-          <div className="flex items-center justify-between">
-            <label className="flex items-center cursor-pointer">
+          <div className="flex items-center justify-end">
+            {/* <label className="flex items-center cursor-pointer">
               <input
                 type="checkbox"
                 className="w-4 h-4 rounded border-gray-300 text-[#FD481A] focus:ring-[#FD481A] cursor-pointer"
                 {...register("rememberMe")}
               />
-              {/* <span className="ml-2 text-sm text-gray-600">
+              <span className="ml-2 text-sm text-gray-600">
                 Se souvenir de moi
-              </span> */}
-            </label>
+              </span>
+            </label> */}
             <Link
               href="/forgot-password"
               className="text-sm text-[#FD481A] hover:underline font-medium cursor-pointer"

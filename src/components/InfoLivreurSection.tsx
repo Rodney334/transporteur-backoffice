@@ -123,14 +123,14 @@ export const InfoLivreurSection = ({ assignedTo }: InfoLivreurSectionProps) => {
           </span>
         </div>
 
-        {livreur.email && (
+        {/* {livreur.email && (
           <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
             <span className="font-medium text-gray-600 min-w-20">Email :</span>
             <span className="text-gray-800 text-right flex-1">
               {livreur.email}
             </span>
           </div>
-        )}
+        )} */}
 
         {livreur.phoneNumber && (
           <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
