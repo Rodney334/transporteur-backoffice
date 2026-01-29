@@ -85,28 +85,28 @@ export const useAuth = () => {
       await authService.register(userData);
 
       // 2. Login automatique avec les mêmes identifiants
-      const { accessToken: newAccessToken, user: newUser } =
-        await authService.login({
-          email: userData.email,
-          password: userData.password,
-        });
+      // const { accessToken: newAccessToken, user: newUser } =
+      //   await authService.login({
+      //     email: userData.email,
+      //     password: userData.password,
+      //   });
 
-      setTokens(newAccessToken);
-      setUser(newUser);
+      // setTokens(newAccessToken);
+      // setUser(newUser);
 
-      // Envoyer le FCM token après un register réussi
-      try {
-        const fcmToken = await getFCMToken();
-        if (fcmToken) {
-          await authService.sendFCMToken(fcmToken);
-          console.log("FCM token sent successfully");
-        }
-      } catch (fcmError) {
-        // Ne pas bloquer le register si l'envoi du FCM token échoue
-        console.warn("Failed to send FCM token:", fcmError);
-      }
+      // // Envoyer le FCM token après un register réussi
+      // try {
+      //   const fcmToken = await getFCMToken();
+      //   if (fcmToken) {
+      //     await authService.sendFCMToken(fcmToken);
+      //     console.log("FCM token sent successfully");
+      //   }
+      // } catch (fcmError) {
+      //   // Ne pas bloquer le register si l'envoi du FCM token échoue
+      //   console.warn("Failed to send FCM token:", fcmError);
+      // }
 
-      return newUser;
+      return true;
     } catch (error: any) {
       const errorMessage = handleAuthError(error);
       setError(errorMessage);
