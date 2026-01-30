@@ -33,6 +33,13 @@ export function DeliveryDriverProfileForm({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
+  const ID_TYPE_OPTIONS = [
+    "CIP/CIPR",
+    "CNI",
+    "Passeport",
+    "Permis de conduire",
+  ];
+
   const {
     register,
     handleSubmit,
@@ -327,11 +334,11 @@ export function DeliveryDriverProfileForm({
               errors.idType ? "border-red-300" : "border-gray-300"
             }`}
           >
-            <option value="">Sélectionnez un type</option>
-            <option value="CIN">CIN</option>
-            <option value="Passport">Passport</option>
-            <option value="Permis de conduire">Permis de conduire</option>
-            <option value="Carte consulaire">Carte consulaire</option>
+            {ID_TYPE_OPTIONS.map((type, index) => (
+              <option key={index} value={type}>
+                {type}
+              </option>
+            ))}
           </select>
           {errors.idType && (
             <p className="mt-1 text-sm text-red-600">{errors.idType.message}</p>

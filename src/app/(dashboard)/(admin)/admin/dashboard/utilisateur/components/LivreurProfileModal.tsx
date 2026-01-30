@@ -9,12 +9,7 @@ import { useUsersManagement } from "@/hooks/use-users-management";
 import type { UpdateLivreurProfileData } from "@/type/livreur.type";
 
 // Options pour les selects
-const ID_TYPE_OPTIONS = [
-  "Passport",
-  "CIN",
-  "Permis de conduire",
-  "Carte consulaire",
-];
+const ID_TYPE_OPTIONS = ["CIP/CIPR", "CNI", "Passeport", "Permis de conduire"];
 
 // Marques de moto courantes au Bénin et en Afrique de l'Ouest
 const MOTO_BRANDS = [
@@ -231,7 +226,7 @@ export default function LivreurProfileModal() {
     <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] flex flex-col">
         {/* En-tête fixe */}
-        <div className="p-6 border-b border-gray-200 shrink-0">
+        <div className="p-3 border-b border-gray-200 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-50 rounded-lg">
@@ -272,7 +267,7 @@ export default function LivreurProfileModal() {
                 {/* Statut actuel */}
                 {livreurProfile && (
                   <div
-                    className={`p-4 rounded-lg ${
+                    className={`p-2 rounded-lg ${
                       livreurProfile.verificationStatus === "APPROVED"
                         ? "bg-green-50 border border-green-200"
                         : livreurProfile.verificationStatus === "REJECTED"
@@ -336,25 +331,13 @@ export default function LivreurProfileModal() {
                     <div className="space-y-3">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Numéro de plaque
+                          Plaque d'immatriculation
                         </label>
                         <input
                           type="text"
                           placeholder="AB-1234-CD"
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                           {...register("motoPlateNumber")}
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Numéro de chassis
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="VIN-CHASSIS-123456"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          {...register("motoChassisNumber")}
                         />
                       </div>
 
@@ -388,6 +371,18 @@ export default function LivreurProfileModal() {
                           />
                         </div>
                       </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Numéro de chassis
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="VIN-CHASSIS-123456"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          {...register("motoChassisNumber")}
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -412,15 +407,15 @@ export default function LivreurProfileModal() {
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Type de pièce
+                            Pièce d'identité
                           </label>
                           <select
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             {...register("idType")}
                           >
                             <option value="">Sélectionnez</option>
-                            {ID_TYPE_OPTIONS.map((type) => (
-                              <option key={type} value={type}>
+                            {ID_TYPE_OPTIONS.map((type, index) => (
+                              <option key={index} value={type}>
                                 {type}
                               </option>
                             ))}
@@ -465,7 +460,7 @@ export default function LivreurProfileModal() {
         </div>
 
         {/* Pied de page fixe */}
-        <div className="p-6 border-t border-gray-200 shrink-0">
+        <div className="p-3 border-t border-gray-200 shrink-0">
           {isLoadingLivreurProfile ? (
             <div className="flex justify-center">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>

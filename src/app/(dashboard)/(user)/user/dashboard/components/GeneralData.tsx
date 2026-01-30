@@ -6,6 +6,20 @@ interface GeneralDataProps {
 }
 
 export const GeneralData = ({ form }: GeneralDataProps) => {
+  const country = [
+    { label: "Cotonou", value: "Cotonou" },
+    { label: "Porto-Novo", value: "Porto-Novo" },
+    { label: "Zè", value: "Zè" },
+    { label: "Sèmè-Kpodji", value: "Sèmè-Kpodji" },
+    { label: "Sèmè Kraké", value: "Sèmè Kraké" },
+    { label: "Djèrègbé", value: "Djèrègbé" },
+    { label: "Abomey-Calavi", value: "Abomey-Calavi" },
+    { label: "Glo Djigbé", value: "Glo Djigbé" },
+    { label: "Pahou", value: "Pahou" },
+    { label: "Adjarra", value: "Adjarra" },
+    { label: "Tori", value: "Tori" },
+  ];
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
       {/* Départ */}
@@ -86,7 +100,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   <label className="block text-xs text-gray-600 mb-1">
                     Ville <strong className={`text-red-600`}>*</strong>
                   </label>
-                  <input
+                  {/* <input
                     type="text"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                     placeholder="Ville"
@@ -94,7 +108,22 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                     onChange={(e) => {
                       form.setValue("pickupCity", e.target.value);
                     }}
-                  />
+                  /> */}
+                  <select
+                    name="pickupCity"
+                    id="pickupCity"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                    value={form.watch("pickupCity")}
+                    onChange={(e) => {
+                      form.setValue("pickupCity", e.target.value);
+                    }}
+                  >
+                    {country.map((item, index) => (
+                      <option key={index} value={item.value}>
+                        {item.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div>
@@ -209,7 +238,7 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   <label className="block text-xs text-gray-600 mb-1">
                     Ville <strong className={`text-red-600`}>*</strong>
                   </label>
-                  <input
+                  {/* <input
                     type="text"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                     placeholder="Ville"
@@ -217,7 +246,22 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                     onChange={(e) => {
                       form.setValue("deliveryCity", e.target.value);
                     }}
-                  />
+                  /> */}
+                  <select
+                    name="deliveryCity"
+                    id="deliveryCity"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                    value={form.watch("deliveryCity")}
+                    onChange={(e) => {
+                      form.setValue("deliveryCity", e.target.value);
+                    }}
+                  >
+                    {country.map((item, index) => (
+                      <option key={index} value={item.value}>
+                        {item.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div>
