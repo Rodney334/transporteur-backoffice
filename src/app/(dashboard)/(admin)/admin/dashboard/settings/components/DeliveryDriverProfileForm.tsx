@@ -21,6 +21,7 @@ interface DriverFormData {
   motoModel: string;
   idType: string;
   idNumber: string;
+  ifuNumber: string;
 }
 
 export function DeliveryDriverProfileForm({
@@ -53,6 +54,7 @@ export function DeliveryDriverProfileForm({
       motoModel: existingData?.motoModel || "",
       idType: existingData?.idType || "",
       idNumber: existingData?.idNumber || "",
+      ifuNumber: existingData?.ifuNumber || "",
     },
   });
 
@@ -104,15 +106,6 @@ export function DeliveryDriverProfileForm({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Numéro de châssis
-            </label>
-            <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm">
-              {existingData?.motoChassisNumber || "Non renseigné"}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
               Marque de la moto
             </label>
             <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm">
@@ -126,6 +119,15 @@ export function DeliveryDriverProfileForm({
             </label>
             <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm">
               {existingData?.motoModel || "Non renseigné"}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Numéro de châssis
+            </label>
+            <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm">
+              {existingData?.motoChassisNumber || "Non renseigné"}
             </div>
           </div>
 
@@ -235,6 +237,62 @@ export function DeliveryDriverProfileForm({
           )}
         </div>
 
+        {/* Marque de la moto */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Marque de la moto *
+          </label>
+          <input
+            type="text"
+            {...register("motoBrand", {
+              required: "La marque est requise",
+              minLength: {
+                value: 2,
+                message: "La marque doit contenir au moins 2 caractères",
+              },
+            })}
+            disabled={isSubmitting || success}
+            className={`w-full px-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A] disabled:bg-gray-50 disabled:cursor-not-allowed ${
+              errors.motoBrand ? "border-red-300" : "border-gray-300"
+            }`}
+            placeholder="Yamaha"
+          />
+          {errors.motoBrand && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.motoBrand.message}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Modèle de la moto */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Modèle de la moto *
+          </label>
+          <input
+            type="text"
+            {...register("motoModel", {
+              required: "Le modèle est requis",
+              minLength: {
+                value: 2,
+                message: "Le modèle doit contenir au moins 2 caractères",
+              },
+            })}
+            disabled={isSubmitting || success}
+            className={`w-full px-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A] disabled:bg-gray-50 disabled:cursor-not-allowed ${
+              errors.motoModel ? "border-red-300" : "border-gray-300"
+            }`}
+            placeholder="MT-07"
+          />
+          {errors.motoModel && (
+            <p className="mt-1 text-sm text-red-600">
+              {errors.motoModel.message}
+            </p>
+          )}
+        </div>
+
         {/* Numéro de châssis */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -264,62 +322,18 @@ export function DeliveryDriverProfileForm({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Marque de la moto */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Marque de la moto *
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Numéro IFU
           </label>
           <input
             type="text"
-            {...register("motoBrand", {
-              required: "La marque est requise",
-              minLength: {
-                value: 2,
-                message: "La marque doit contenir au moins 2 caractères",
-              },
-            })}
-            disabled={isSubmitting || success}
-            className={`w-full px-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A] disabled:bg-gray-50 disabled:cursor-not-allowed ${
-              errors.motoBrand ? "border-red-300" : "border-gray-300"
-            }`}
-            placeholder="Yamaha"
+            placeholder="IFU-123456789"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            {...register("ifuNumber")}
           />
-          {errors.motoBrand && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.motoBrand.message}
-            </p>
-          )}
         </div>
 
-        {/* Modèle de la moto */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Modèle de la moto *
-          </label>
-          <input
-            type="text"
-            {...register("motoModel", {
-              required: "Le modèle est requis",
-              minLength: {
-                value: 2,
-                message: "Le modèle doit contenir au moins 2 caractères",
-              },
-            })}
-            disabled={isSubmitting || success}
-            className={`w-full px-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A] disabled:bg-gray-50 disabled:cursor-not-allowed ${
-              errors.motoModel ? "border-red-300" : "border-gray-300"
-            }`}
-            placeholder="MT-07"
-          />
-          {errors.motoModel && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.motoModel.message}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Type de pièce d'identité */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
