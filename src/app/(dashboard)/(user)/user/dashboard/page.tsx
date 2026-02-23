@@ -233,12 +233,9 @@ export default function DashboardPage() {
               </label>
               <input
                 id="scheduledAt"
-                type="datetime-local"
+                type="time"
                 {...register("scheduledAt")}
-                min={new Date().toISOString().slice(0, 16)}
-                max={new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
-                  .toISOString()
-                  .slice(0, 16)}
+                min={new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
                 className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
               />
             </div>

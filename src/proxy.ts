@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Récupérer le token depuis les cookies
@@ -16,7 +16,7 @@ export function middleware(request: NextRequest) {
 
   // Vérifier si la route actuelle est protégée
   const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   // Vérifier si la route actuelle est une route d'auth

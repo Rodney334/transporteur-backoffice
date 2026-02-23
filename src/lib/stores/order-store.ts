@@ -2,13 +2,14 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Order } from "@/type/order.type";
-import { OrderStatus } from "@/type/enum";
+import { GrantedRole, OrderStatus, PaymentMethod } from "@/type/enum";
 import { orderService } from "@/lib/services/order-service";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useAuthStore } from "./auth-store";
 import { showSimpleNotification } from "@/utils/web-notifications-simple";
 import { useNotificationStore } from "./notification-store";
+import { User } from "@/type/user.type";
 
 interface OrderStore {
   // État
@@ -288,7 +289,7 @@ export const useOrderStore = create<OrderStore>()(
     handleOrderUpdated: (updatedOrder: Order) => {
       set((state) => ({
         orders: state.orders.map((order) =>
-          order.id === updatedOrder.id ? updatedOrder : order
+          order.id === updatedOrder.id ? updatedOrder : order,
         ),
       }));
 
@@ -303,11 +304,11 @@ export const useOrderStore = create<OrderStore>()(
         orders: state.orders.map((order) =>
           order.id === orderId
             ? {
-              ...order,
-              status: status as OrderStatus,
-              updatedAt: timestamp || new Date().toISOString(),
-            }
-            : order
+                ...order,
+                status: status as OrderStatus,
+                updatedAt: timestamp || new Date().toISOString(),
+              }
+            : order,
         ),
       }));
 
@@ -326,7 +327,7 @@ export const useOrderStore = create<OrderStore>()(
         {
           position: "top-right",
           autoClose: 3000,
-        }
+        },
       );
     },
 
@@ -344,7 +345,7 @@ export const useOrderStore = create<OrderStore>()(
     handlePriceNegotiation: ({ orderId, price, userId, action }: any) => {
       set((state) => ({
         orders: state.orders.map((order) =>
-          order.id === orderId ? order : order
+          order.id === orderId ? order : order,
         ),
       }));
 
@@ -359,7 +360,7 @@ export const useOrderStore = create<OrderStore>()(
     updateOrder: (orderId: string, updates: Partial<Order>) => {
       set((state) => ({
         orders: state.orders.map((order) =>
-          order.id === orderId ? { ...order, ...updates } : order
+          order.id === orderId ? { ...order, ...updates } : order,
         ),
       }));
     },
@@ -395,7 +396,7 @@ export const useOrderStore = create<OrderStore>()(
 
     getOrdersByStatus: (statuses: OrderStatus[]) => {
       return get().orders.filter((order) =>
-        statuses.includes(order.status as OrderStatus)
+        statuses.includes(order.status as OrderStatus),
       );
     },
 
@@ -471,7 +472,7 @@ export const useOrderStore = create<OrderStore>()(
         byStatus,
       };
     },
-  })
+  }),
   // {
   //   name: "order-storage",
   //   partialize: (state) => ({
@@ -552,12 +553,22 @@ export const useOrderActions = () => {
       }
     },
 
-    validatePrice: async (orderId: string, price: number, method?: string) => {
+    validatePrice: async (
+      orderId: string,
+      price: number,
+      method?: string,
+      userRole?: GrantedRole,
+    ) => {
       try {
-        if (method) {
-          await orderService.clientValidatePrice(orderId, price, method);
+        if (userRole === "admin") {
+          const methode = method || PaymentMethod.CASH;
+          await orderService.adminValidatePrice(orderId, price, methode);
         } else {
-          await orderService.validatePrice(orderId, price);
+          if (method) {
+            await orderService.clientValidatePrice(orderId, price, method);
+          } else {
+            await orderService.validatePrice(orderId, price);
+          }
         }
 
         // Recharger pour obtenir les données de négociation à jour

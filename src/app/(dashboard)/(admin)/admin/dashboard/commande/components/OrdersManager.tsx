@@ -72,7 +72,7 @@ export const OrdersManager = ({
   const [showPriceForm, setShowPriceForm] = useState(false);
   const [confirmationPrice, setConfirmationPrice] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
-    PaymentMethod.CASH
+    PaymentMethod.CASH,
   );
 
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
@@ -100,7 +100,7 @@ export const OrdersManager = ({
       openAssignmentModal(command.originalData.id);
       setIsAssignModalOpen(true);
     },
-    [openAssignmentModal]
+    [openAssignmentModal],
   );
 
   const executeAssignment = useCallback(
@@ -122,16 +122,15 @@ export const OrdersManager = ({
 
       return success;
     },
-    [selectedOrder, assignOrder, user, userRole, fetchOrders]
+    [selectedOrder, assignOrder, user, userRole, fetchOrders],
   );
 
   // Charger la négociation
   const fetchNegotiation = useCallback(async (orderId: string) => {
     try {
       setLoadingNegotiation(true);
-      const negotiationData = await orderService.getOrderNegociationPrice(
-        orderId
-      );
+      const negotiationData =
+        await orderService.getOrderNegociationPrice(orderId);
       setNegotiation(negotiationData);
     } catch (err) {
       console.log("Error fetching negotiation:", err);
@@ -169,13 +168,13 @@ export const OrdersManager = ({
       } catch (err: any) {
         console.log("Error accepting order:", err);
         toast.error(
-          err.response?.data?.message || "Erreur lors de l'acceptation"
+          err.response?.data?.message || "Erreur lors de l'acceptation",
         );
       } finally {
         setProcessingAction(null);
       }
     },
-    [acceptOrder]
+    [acceptOrder],
   );
 
   const handleReject = useCallback(
@@ -191,7 +190,7 @@ export const OrdersManager = ({
         setProcessingAction(null);
       }
     },
-    [rejectOrder]
+    [rejectOrder],
   );
 
   const handleEnd = useCallback(
@@ -204,13 +203,13 @@ export const OrdersManager = ({
       } catch (err: any) {
         console.log("Error ending order:", err);
         toast.error(
-          err.response?.data?.message || "Erreur lors de la finalisation"
+          err.response?.data?.message || "Erreur lors de la finalisation",
         );
       } finally {
         setProcessingAction(null);
       }
     },
-    [endOrder]
+    [endOrder],
   );
 
   const handleViewDetails = useCallback((command: any) => {
@@ -241,6 +240,9 @@ export const OrdersManager = ({
 
       if (userRole === "client") {
         await validatePrice(selectedCommand.id, price, paymentMethod);
+      } else if (userRole === "admin") {
+        // || userRole === "operateur"
+        await validatePrice(selectedCommand.id, price, paymentMethod, userRole);
       } else {
         await validatePrice(selectedCommand.id, price);
       }
@@ -251,7 +253,7 @@ export const OrdersManager = ({
     } catch (err: any) {
       console.log("Error validating price:", err);
       toast.error(
-        err.response?.data?.message || "Erreur lors de la validation"
+        err.response?.data?.message || "Erreur lors de la validation",
       );
     } finally {
       setValidatingPrice(false);
@@ -271,7 +273,7 @@ export const OrdersManager = ({
     (commandId: string, action: string) => {
       return processingAction === `${action}-${commandId}`;
     },
-    [processingAction]
+    [processingAction],
   );
 
   // Données pour les sections d'information
@@ -374,15 +376,17 @@ export const OrdersManager = ({
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`cursor-pointer pb-3 text-sm font-medium transition-colors relative ${activeTab === tab
-                      ? "text-gray-900"
-                      : "text-gray-500 hover:text-gray-700"
-                      }`}
+                    className={`cursor-pointer pb-3 text-sm font-medium transition-colors relative ${
+                      activeTab === tab
+                        ? "text-gray-900"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
                   >
-                    {`${tab} ${activeTab === tab
-                      ? `(${filteredAndFormattedOrders.length})`
-                      : ""
-                      }`}
+                    {`${tab} ${
+                      activeTab === tab
+                        ? `(${filteredAndFormattedOrders.length})`
+                        : ""
+                    }`}
                     {activeTab === tab && (
                       <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900"></div>
                     )}
@@ -418,31 +422,31 @@ export const OrdersManager = ({
                           onEnd={() => handleEnd(command)}
                           onAssign={
                             userRole === GrantedRole.Admin ||
-                              userRole === GrantedRole.Operateur
+                            userRole === GrantedRole.Operateur
                               ? () => handleAssign(command)
                               : undefined
                           }
                           onViewDetails={() => handleViewDetails(command)}
                           isProcessingAccept={isCommandProcessing(
                             command.id,
-                            "accept"
+                            "accept",
                           )}
                           isProcessingReject={isCommandProcessing(
                             command.id,
-                            "reject"
+                            "reject",
                           )}
                           isProcessingEnd={isCommandProcessing(
                             command.id,
-                            "end"
+                            "end",
                           )}
                           isProcessingAssign={isCommandProcessing(
                             command.id,
-                            "assign"
+                            "assign",
                           )}
                         />
                       )}
                     </div>
-                  )
+                  ),
                 )
               )}
             </div>
@@ -482,41 +486,69 @@ export const OrdersManager = ({
                 {selectedCommand && (
                   <div className="bg-linear-to-r from-gray-50 to-white rounded-2xl p-5 border border-gray-100 shadow-sm">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Prix & Estimation
+                      {!selectedCommand.finalPrice ||
+                      selectedCommand.finalPrice === 0
+                        ? "Prix & Estimation"
+                        : "Prix de la livraison"}
                     </h3>
                     <div className="space-y-3">
                       {/* Prix estimé */}
-                      <div className="flex justify-between items-center py-3 px-4 bg-white rounded-xl border border-gray-200">
-                        <span className="text-sm font-medium text-gray-600">
-                          Estimation du prix :
-                        </span>
-                        <span className="text-sm font-semibold text-gray-900">
-                          {selectedCommand.estimatedPrice
-                            ? `${selectedCommand.estimatedPrice} FCFA`
-                            : "Non estimé"}
-                        </span>
-                      </div>
+                      {!selectedCommand.finalPrice ||
+                      selectedCommand.finalPrice === 0 ? (
+                        <>
+                          <div className="flex justify-between items-center py-3 px-4 bg-white rounded-xl border border-gray-200">
+                            <span className="text-sm font-medium text-gray-600">
+                              Estimation du prix :
+                            </span>
+                            <span className="text-sm font-semibold text-gray-900">
+                              {selectedCommand.estimatedPrice
+                                ? `${selectedCommand.estimatedPrice} FCFA`
+                                : "Non estimé"}
+                            </span>
+                          </div>
+                          {/* Prix livreur */}
+                          {negotiation?.proposedByCourier && (
+                            <div className="flex justify-between items-center py-3 px-4 bg-blue-50 rounded-xl border border-blue-200">
+                              <span className="text-sm font-medium text-blue-700">
+                                Prix livreur :
+                              </span>
+                              <span className="text-sm font-bold text-blue-800">
+                                {negotiation.proposedByCourier} FCFA
+                              </span>
+                            </div>
+                          )}
 
-                      {/* Prix livreur */}
-                      {negotiation?.proposedByCourier && (
-                        <div className="flex justify-between items-center py-3 px-4 bg-blue-50 rounded-xl border border-blue-200">
-                          <span className="text-sm font-medium text-blue-700">
-                            Prix livreur :
+                          {/* Prix client confirmé */}
+                          {negotiation?.confirmedByClient && (
+                            <div className="flex justify-between items-center py-3 px-4 bg-green-50 rounded-xl border border-green-200">
+                              <span className="text-sm font-medium text-green-700">
+                                Prix client :
+                              </span>
+                              <span className="text-sm font-bold text-green-800">
+                                {negotiation.confirmedByClient} FCFA
+                              </span>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        // <div className="flex justify-between items-center py-3 px-4 bg-white rounded-xl border border-gray-200">
+                        //   <span className="text-sm font-medium text-gray-600">
+                        //     Prix final :
+                        //   </span>
+                        //   <span className="text-sm font-semibold text-gray-900">
+                        //     {selectedCommand.finalPrice
+                        //       ? `${selectedCommand.finalPrice} FCFA`
+                        //       : "Non estimé"}
+                        //   </span>
+                        // </div>
+                        <div className="flex justify-between items-center py-3 px-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                          <span className="text-sm font-medium text-emerald-700">
+                            Prix final :
                           </span>
-                          <span className="text-sm font-bold text-blue-800">
-                            {negotiation.proposedByCourier} FCFA
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Prix client confirmé */}
-                      {negotiation?.confirmedByClient && (
-                        <div className="flex justify-between items-center py-3 px-4 bg-green-50 rounded-xl border border-green-200">
-                          <span className="text-sm font-medium text-green-700">
-                            Prix client :
-                          </span>
-                          <span className="text-sm font-bold text-green-800">
-                            {negotiation.confirmedByClient} FCFA
+                          <span className="text-sm font-bold text-emerald-800">
+                            {selectedCommand.finalPrice
+                              ? `${selectedCommand.finalPrice} FCFA`
+                              : "Non estimé"}
                           </span>
                         </div>
                       )}
@@ -534,37 +566,45 @@ export const OrdersManager = ({
                   </div>
                 )}
 
-
-
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                   <div className="bg-linear-to-r from-green-50 to-emerald-50 px-4 py-3 border-b border-gray-200">
-                    <h3 className="text-sm font-semibold text-gray-800">Note</h3>
+                    <h3 className="text-sm font-semibold text-gray-800">
+                      Note
+                    </h3>
                   </div>
                   <div className="p-4 space-y-3 text-xs">
                     <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
-                      <span className="font-medium text-gray-600 min-w-20">Description :</span>
+                      <span className="font-medium text-gray-600 min-w-20">
+                        Description :
+                      </span>
                       <span className="text-gray-800 text-right flex-1 capitalize">
                         {selectedCommand?.description}
                       </span>
                     </div>
                     {selectedCommand?.scheduledAt && (
                       <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
-                        <span className="font-medium text-gray-600 min-w-20">Programmation :</span>
+                        <span className="font-medium text-gray-600 min-w-20">
+                          Programmation :
+                        </span>
                         <span className="text-gray-800 text-right flex-1 capitalize">
-                          {new Date(selectedCommand?.scheduledAt).toLocaleDateString("fr-FR", {
+                          {new Date(
+                            selectedCommand?.scheduledAt,
+                          ).toLocaleDateString("fr-FR", {
                             day: "2-digit",
                             month: "short",
                             year: "numeric",
                             hour: "2-digit",
                             minute: "2-digit",
-                            timeZone: "UTC"
+                            timeZone: "UTC",
                           })}
                         </span>
                       </div>
                     )}
                     {selectedCommand?.promoCodeText && (
                       <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
-                        <span className="font-medium text-gray-600 min-w-20">Code promo :</span>
+                        <span className="font-medium text-gray-600 min-w-20">
+                          Code promo :
+                        </span>
                         <span className="text-gray-800 text-right flex-1 capitalize">
                           {selectedCommand?.promoCodeText}
                         </span>
@@ -572,7 +612,9 @@ export const OrdersManager = ({
                     )}
                     {selectedCommand?.promoErrorMessage && (
                       <div className="flex justify-between items-start border-b border-gray-100 last:border-b-0">
-                        <span className="font-medium text-gray-600 min-w-20">Message d'erreur :</span>
+                        <span className="font-medium text-gray-600 min-w-20">
+                          Message d'erreur :
+                        </span>
                         <span className="text-gray-800 text-right flex-1 capitalize">
                           {selectedCommand?.promoErrorMessage}
                         </span>
@@ -630,8 +672,13 @@ export const OrdersManager = ({
                             strokeWidth={2}
                             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                           />
-                        </svg> Prix{" "}
-                        {userRole === "client" ? "client" : userRole === "admin" ? "admin" : "livreur"}
+                        </svg>{" "}
+                        Prix{" "}
+                        {userRole === "client"
+                          ? "client"
+                          : userRole === "admin"
+                            ? "admin"
+                            : "livreur"}
                       </button>
                     </div>
                   ) : (
@@ -657,16 +704,21 @@ export const OrdersManager = ({
                               className="block text-sm font-medium text-gray-700"
                             >
                               Prix (
-                              {userRole === "client" ? "client" : userRole === "admin" ? "admin" : "livreur"})
-                              (FCFA)
+                              {userRole === "client"
+                                ? "client"
+                                : userRole === "admin"
+                                  ? "admin"
+                                  : "livreur"}
+                              ) (FCFA)
                             </label>
                             <input
                               type="text"
                               id="price"
-                              className={`w-full px-4 py-3 text-base border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 ${errors.price
-                                ? "border-red-300 bg-red-50"
-                                : "border-gray-200 hover:border-gray-300"
-                                }`}
+                              className={`w-full px-4 py-3 text-base border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 ${
+                                errors.price
+                                  ? "border-red-300 bg-red-50"
+                                  : "border-gray-200 hover:border-gray-300"
+                              }`}
                               placeholder="Ex: 15000"
                               {...register("price", {
                                 required: "Le prix est requis",
@@ -691,7 +743,7 @@ export const OrdersManager = ({
                           </div>
 
                           {/* Sélecteur Méthode de Paiement (seulement pour les clients) */}
-                          {userRole === "client" && (
+                          {(userRole === "client" || userRole === "admin") && (
                             <div className="space-y-2">
                               <label
                                 htmlFor="paymentMethod"
@@ -701,10 +753,11 @@ export const OrdersManager = ({
                               </label>
                               <select
                                 id="paymentMethod"
-                                className={`w-full px-4 py-3 text-base border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 appearance-none bg-white ${errors.method
-                                  ? "border-red-300 bg-red-50"
-                                  : "border-gray-200 hover:border-gray-300"
-                                  }`}
+                                className={`w-full px-4 py-3 text-base border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 appearance-none bg-white ${
+                                  errors.method
+                                    ? "border-red-300 bg-red-50"
+                                    : "border-gray-200 hover:border-gray-300"
+                                }`}
                                 {...register("method", {
                                   required:
                                     "La méthode de paiement est requise",
@@ -842,22 +895,22 @@ export const OrdersManager = ({
 
         {(userRole === GrantedRole.Admin ||
           userRole === GrantedRole.Operateur) && (
-            <>
-              <AssignOrderModal
-                isOpen={isAssignModalOpen}
-                onClose={() => {
-                  setIsAssignModalOpen(false);
-                  closeAssignmentModal();
-                  setSelectedCommandForAssignment(null);
-                }}
-                onAssign={executeAssignment}
-                livreurs={livreurs}
-                isAssigning={isAssigning}
-                isLoadingLivreurs={isLoadingLivreurs} // Passer l'état de chargement
-                orderReference={selectedCommandForAssignment?.reference}
-              />
-            </>
-          )}
+          <>
+            <AssignOrderModal
+              isOpen={isAssignModalOpen}
+              onClose={() => {
+                setIsAssignModalOpen(false);
+                closeAssignmentModal();
+                setSelectedCommandForAssignment(null);
+              }}
+              onAssign={executeAssignment}
+              livreurs={livreurs}
+              isAssigning={isAssigning}
+              isLoadingLivreurs={isLoadingLivreurs} // Passer l'état de chargement
+              orderReference={selectedCommandForAssignment?.reference}
+            />
+          </>
+        )}
       </div>
     </>
   );

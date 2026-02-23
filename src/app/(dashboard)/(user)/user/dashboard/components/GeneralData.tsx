@@ -89,9 +89,9 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Pays"
                   value={form.watch("pickupCountry")}
-                  onChange={(e) => {
-                    form.setValue("pickupCountry", e.target.value);
-                  }}
+                  // onChange={(e) => {
+                  //   form.setValue("pickupCountry", e.target.value);
+                  // }}
                   disabled
                 />
               </div>
@@ -118,6 +118,9 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                       form.setValue("pickupCity", e.target.value);
                     }}
                   >
+                    <option value="" disabled>
+                      Selectionnez une ville
+                    </option>
                     {country.map((item, index) => (
                       <option key={index} value={item.value}>
                         {item.label}
@@ -227,9 +230,9 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Pays"
                   value={form.watch("deliveryCountry")}
-                  onChange={(e) => {
-                    form.setValue("deliveryCountry", e.target.value);
-                  }}
+                  // onChange={(e) => {
+                  //   form.setValue("deliveryCountry", e.target.value);
+                  // }}
                   disabled
                 />
               </div>
@@ -256,6 +259,9 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                       form.setValue("deliveryCity", e.target.value);
                     }}
                   >
+                    <option value="" disabled>
+                      Selectionnez une ville
+                    </option>
                     {country.map((item, index) => (
                       <option key={index} value={item.value}>
                         {item.label}

@@ -8,10 +8,11 @@ import { toast } from "react-toastify";
 import {
   ArticleType,
   DeliveryType,
+  GrantedRole,
   ServiceType,
   TransportMode,
 } from "@/type/enum";
-import { useOrderStore } from "@/lib/stores/order-store";
+import { useAuthStore } from "@/lib/stores/auth-store";
 
 // Interface alignée sur l'API
 export interface OrderFormData {
@@ -81,6 +82,7 @@ const clearLocalStorage = () => {
 };
 
 export const useOrderForm = () => {
+  const { user } = useAuthStore();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sameAddress, setSameAddress] = useState(false);
@@ -101,13 +103,13 @@ export const useOrderForm = () => {
       pickupName: "",
       pickupPhone: "",
       pickupCountry: "Bénin",
-      pickupCity: "",
+      pickupCity: "Cotonou",
       pickupDistrict: "",
       pickupStreet: "",
       deliveryName: "",
       deliveryPhone: "",
       deliveryCountry: "Bénin",
-      deliveryCity: "",
+      deliveryCity: "Cotonou",
       deliveryDistrict: "",
       deliveryStreet: "",
       scheduledAt: "",
@@ -152,7 +154,7 @@ export const useOrderForm = () => {
     serviceType: string,
     deliveryType: string,
     zone: string,
-    weight: number
+    weight: number,
   ): number => {
     // Logique de calcul basée sur la zone et le type de service
     // À adapter selon vos règles métier
@@ -163,7 +165,7 @@ export const useOrderForm = () => {
       serviceType === "transport" ? 2 : serviceType === "colis" ? 1.5 : 1;
 
     return Math.round(
-      (basePrice + weightPrice) * deliveryMultiplier * serviceMultiplier
+      (basePrice + weightPrice) * deliveryMultiplier * serviceMultiplier,
     );
   };
 
@@ -191,6 +193,15 @@ export const useOrderForm = () => {
         district: data.deliveryDistrict,
         street: data.deliveryStreet,
       };
+      let scheduledAtFormatted = data.scheduledAt;
+      if (data.scheduledAt && data.scheduledAt.length === 5) {
+        // Si scheduledAt est au format HH:mm, on construit une date complète locale
+        const [hours, minutes] = data.scheduledAt.split(":").map(Number);
+        const scheduledDate = new Date();
+        scheduledDate.setHours(hours, minutes, 0, 0);
+        scheduledAtFormatted = scheduledDate.toISOString();
+      }
+
       const orderData: CreateOrderInterface = {
         serviceType: data.serviceType,
         description: data.description,
@@ -202,11 +213,16 @@ export const useOrderForm = () => {
         articleType: data.articleType,
         zone: data.zone,
         estimatedPrice: data.estimatedPrice,
-        ...(data.scheduledAt && { scheduledAt: data.scheduledAt }),
-        ...(data.promoCodeId && { promoCodeId: data.promoCodeId }),
+        ...(scheduledAtFormatted && { scheduledAt: scheduledAtFormatted }),
+        // ...(data.promoCodeId && { promoCodeId: data.promoCodeId }),
       };
 
-      await orderService.createOrder(orderData);
+      const response = await orderService.createOrder(orderData);
+
+      if (data.promoCodeId) {
+        const orderID = response.id;
+        await orderService.addCodepromoToOrder(orderID, data.promoCodeId);
+      }
 
       toast.update(toastId, {
         render: "Commande créée avec succès !",
@@ -222,7 +238,11 @@ export const useOrderForm = () => {
       // Réinitialiser et rediriger
       form.reset();
       setTimeout(() => {
-        router.push("/user/dashboard/history");
+        if (user?.role === GrantedRole.Client) {
+          router.push("/user/dashboard/history");
+        } else {
+          router.push("/admin/dashboard/commande");
+        }
       }, 2000);
     } catch (error: any) {
       console.log("Erreur création commande:", error);

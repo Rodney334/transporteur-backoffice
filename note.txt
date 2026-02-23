@@ -6,3 +6,9 @@ Quand un admin ?????
 
 Mail vérification après register
 Forget password
+
+planification de commande
+
+rapport supplémentaire
+
+code promo management

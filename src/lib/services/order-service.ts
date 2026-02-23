@@ -4,7 +4,7 @@ import { OrderStatus } from "@/type/enum";
 import { CreateOrderInterface, Negotiation, Order } from "@/type/order.type";
 
 export const orderService = {
-  async createOrder(orderData: CreateOrderInterface) {
+  async createOrder(orderData: CreateOrderInterface): Promise<Order> {
     const response = await api.post("/order", orderData);
     return response.data;
   },
@@ -66,8 +66,24 @@ export const orderService = {
     return response.data;
   },
 
+  async adminValidatePrice(orderId: string, amount: number, method: string) {
+    const response = await api.patch(
+      `/negotiation/${orderId}/admin-set-price`,
+      {
+        price: amount,
+        paymentMethod: method,
+      },
+    );
+    return response.data;
+  },
+
   async getOrderNegociationPrice(orderId: string): Promise<Negotiation> {
     const response = await api.get(`/negotiation/${orderId}`);
+    return response.data;
+  },
+
+  async addCodepromoToOrder(orderId: string, code: string) {
+    const response = await api.post(`/order/${orderId}/promo`, { code });
     return response.data;
   },
 };

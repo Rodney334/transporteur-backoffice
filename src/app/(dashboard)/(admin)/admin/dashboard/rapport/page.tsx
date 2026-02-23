@@ -130,7 +130,7 @@ export default function ReportPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                Tableau de Bord Client
+                Tableau de Bord
               </h1>
               <p className="text-gray-600 mt-1">
                 Analyse de vos performances et historique des courses
@@ -212,7 +212,7 @@ export default function ReportPage() {
               <p className="mt-1">
                 Dernière activité:{" "}
                 {new Date(
-                  report.courses[0]?.date || Date.now()
+                  report.courses[0]?.date || Date.now(),
                 ).toLocaleDateString("fr-FR")}
               </p>
             </div>

@@ -32,6 +32,15 @@ export const CommandCard = memo(function CommandCard({
     activeTab === "Nouvelles" &&
     item.originalData.status === OrderStatus.EN_ATTENTE;
 
+  // Vérifier si l'action est verrouillée pour une course programmée
+  const isActionLocked = !!(
+    item.originalData.isScheduled &&
+    item.originalData.scheduledAt &&
+    new Date(item.originalData.scheduledAt) > new Date()
+  );
+
+  console.log({isActionLocked, date: new Date(item.originalData.scheduledAt as string), now: new Date()})
+
   const [paidLoading, setPaidLoading] = useState(false);
   const handlePaid = async (data?: Payment) => {
     if (!data) {
@@ -157,13 +166,13 @@ export const CommandCard = memo(function CommandCard({
         {activeTab === "Nouvelles" && onAccept && (
           <button
             onClick={() => onAccept(item)}
-            disabled={isProcessingAccept}
-            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${isProcessingAccept
+            disabled={isProcessingAccept || isActionLocked}
+            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${(isProcessingAccept || isActionLocked)
               ? "opacity-50 cursor-not-allowed"
               : "hover:bg-[#E63F15]"
               }`}
           >
-            {isProcessingAccept ? "Traitement..." : "Accepter"}
+            {isProcessingAccept ? "Traitement..." : isActionLocked ? "En attente de l'heure" : "Accepter"}
           </button>
         )}
 
@@ -185,13 +194,13 @@ export const CommandCard = memo(function CommandCard({
         {canAssign && isPendingAndAssignable && onAssign && (
           <button
             onClick={() => onAssign(item)}
-            disabled={isProcessingAssign}
-            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#131313] text-white text-sm font-medium rounded-lg transition-colors ${isProcessingAssign
+            disabled={isProcessingAssign || isActionLocked}
+            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#131313] text-white text-sm font-medium rounded-lg transition-colors ${(isProcessingAssign || isActionLocked)
               ? "opacity-50 cursor-not-allowed"
               : "hover:bg-[#333333]"
               }`}
           >
-            {isProcessingAssign ? "Traitement..." : "Assigner"}
+            {isProcessingAssign ? "Traitement..." : isActionLocked ? "Action verrouillée" : "Assigner"}
           </button>
         )}
       </div>
