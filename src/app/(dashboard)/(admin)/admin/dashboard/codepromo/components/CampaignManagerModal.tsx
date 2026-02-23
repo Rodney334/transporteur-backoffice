@@ -66,7 +66,7 @@ export default function CampaignManagerModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-40">
+    <div className="fixed inset-0 lg:left-64 bg-black/50 flex items-center justify-center p-4 z-40">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
         {/* En-tête */}
         <div className="p-6 border-b border-gray-200">
@@ -177,7 +177,7 @@ export default function CampaignManagerModal({
       )}
 
       {isDeleteOpen && campaignToDelete && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-60">
+        <div className="fixed inset-0 lg:left-64 bg-black/60 flex items-center justify-center p-4 z-60">
            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all">
             <div className="p-6 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-50 text-red-600 mb-4 animate-bounce">

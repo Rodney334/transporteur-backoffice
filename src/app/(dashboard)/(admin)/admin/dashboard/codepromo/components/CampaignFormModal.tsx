@@ -87,7 +87,7 @@ export default function CampaignFormModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-55">
+    <div className="fixed inset-0 lg:left-64 bg-black/50 flex items-center justify-center p-4 z-55">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
         {/* En-tête */}
         <div className="p-6 border-b border-gray-200">
