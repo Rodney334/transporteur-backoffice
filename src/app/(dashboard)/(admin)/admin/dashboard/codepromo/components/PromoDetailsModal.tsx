@@ -213,6 +213,20 @@ export default function PromoDetailsModal() {
                       : "Aucun minimum"}
                   </div>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Remise maximale
+                  </label>
+                  <div className="text-lg font-bold text-gray-900">
+                    {selectedPromo.maxDiscount
+                      ? new Intl.NumberFormat("fr-FR", {
+                          style: "currency",
+                          currency: "XOF",
+                          minimumFractionDigits: 0,
+                        }).format(selectedPromo.maxDiscount)
+                      : "Illimitée"}
+                  </div>
+                </div>
               </div>
             </div>
 

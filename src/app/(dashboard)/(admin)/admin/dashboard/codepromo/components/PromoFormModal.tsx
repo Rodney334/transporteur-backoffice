@@ -3,8 +3,9 @@
 
 import { useState, useEffect } from "react";
 import { X, Tag, Percent, DollarSign } from "lucide-react";
-import { PromoCode, PromoType } from "../types";
+import { PromoCode, PromoType, PromoChannel, PromoConstraints } from "../types";
 import { usePromos } from "../hooks";
+import { Calendar, Users, Target, Globe, Lock, ShieldCheck, ShieldAlert } from "lucide-react";
 
 interface PromoFormModalProps {
   isOpen: boolean;
@@ -22,6 +23,14 @@ export default function PromoFormModal({
     code: "",
     type: "PERCENT" as PromoType,
     value: "",
+    maxDiscount: "",
+    minOrderAmount: "0",
+    usageLimit: "",
+    usageLimitPerUser: "",
+    startsAt: "",
+    endsAt: "",
+    channel: "PUBLIC" as PromoChannel,
+    isActive: true,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -31,12 +40,28 @@ export default function PromoFormModal({
         code: promoToEdit.code,
         type: promoToEdit.type,
         value: promoToEdit.value.toString(),
+        maxDiscount: promoToEdit.maxDiscount?.toString() || "",
+        minOrderAmount: promoToEdit.minOrderAmount.toString(),
+        usageLimit: promoToEdit.usageLimit?.toString() || "",
+        usageLimitPerUser: promoToEdit.usageLimitPerUser?.toString() || "",
+        startsAt: promoToEdit.startsAt ? promoToEdit.startsAt.split('T')[0] : "",
+        endsAt: promoToEdit.endsAt ? promoToEdit.endsAt.split('T')[0] : "",
+        channel: promoToEdit.channel,
+        isActive: promoToEdit.isActive,
       });
     } else {
       setFormData({
         code: "",
         type: "PERCENT",
         value: "",
+        maxDiscount: "",
+        minOrderAmount: "0",
+        usageLimit: "",
+        usageLimitPerUser: "",
+        startsAt: "",
+        endsAt: "",
+        channel: "PUBLIC",
+        isActive: true,
       });
     }
     setErrors({});
@@ -79,6 +104,14 @@ export default function PromoFormModal({
         code: formData.code.toUpperCase().trim(),
         type: formData.type,
         value: Number(formData.value),
+        maxDiscount: formData.maxDiscount ? Number(formData.maxDiscount) : null,
+        minOrderAmount: Number(formData.minOrderAmount),
+        usageLimit: formData.usageLimit ? Number(formData.usageLimit) : null,
+        usageLimitPerUser: formData.usageLimitPerUser ? Number(formData.usageLimitPerUser) : null,
+        startsAt: formData.startsAt || null,
+        endsAt: formData.endsAt || null,
+        channel: formData.channel,
+        isActive: formData.isActive,
       };
 
       if (promoToEdit) {
@@ -208,13 +241,166 @@ export default function PromoFormModal({
               )}
             </div>
 
-            {/* Informations supplémentaires */}
-            <div className="bg-blue-50 rounded-lg p-4">
-              <p className="text-sm text-blue-700">
-                <strong>Note :</strong> Seuls ces champs sont modifiables. Les
-                autres paramètres (dates, limites, contraintes) peuvent être
-                configurés ultérieurement si nécessaire.
-              </p>
+            {/* Canal de diffusion */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Canal de diffusion <span className="text-red-500">*</span>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, channel: "PUBLIC" })}
+                  className={`cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-colors ${
+                    formData.channel === "PUBLIC"
+                      ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
+                      : "border-gray-300 hover:border-gray-400"
+                  }`}
+                  disabled={isLoading}
+                >
+                  <Globe className="w-4 h-4" />
+                  <span>Public</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, channel: "PRIVATE" })}
+                  className={`cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-colors ${
+                    formData.channel === "PRIVATE"
+                      ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
+                      : "border-gray-300 hover:border-gray-400"
+                  }`}
+                  disabled={isLoading}
+                >
+                  <Lock className="w-4 h-4" />
+                  <span>Privé</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Limites d'utilisation */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Limite totale
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={formData.usageLimit}
+                    onChange={(e) => setFormData({ ...formData, usageLimit: e.target.value })}
+                    placeholder="Illimité"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                    disabled={isLoading}
+                  />
+                  <Users className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Limite / utilisateur
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={formData.usageLimitPerUser}
+                    onChange={(e) => setFormData({ ...formData, usageLimitPerUser: e.target.value })}
+                    placeholder="Illimité"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                    disabled={isLoading}
+                  />
+                  <Users className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                </div>
+              </div>
+            </div>
+
+            {/* Montants additionnels */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Min. commande (XOF)
+                </label>
+                <input
+                  type="number"
+                  value={formData.minOrderAmount}
+                  onChange={(e) => setFormData({ ...formData, minOrderAmount: e.target.value })}
+                  placeholder="0"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                  disabled={isLoading}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Remise max (XOF)
+                </label>
+                <input
+                  type="number"
+                  value={formData.maxDiscount}
+                  onChange={(e) => setFormData({ ...formData, maxDiscount: e.target.value })}
+                  placeholder="Illimité"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+
+            {/* Période de validité */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Date de début
+                </label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    value={formData.startsAt}
+                    onChange={(e) => setFormData({ ...formData, startsAt: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Date de fin
+                </label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    value={formData.endsAt}
+                    onChange={(e) => setFormData({ ...formData, endsAt: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Statut d'activation */}
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg ${formData.isActive ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                  {formData.isActive ? <ShieldCheck className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">Code promo actif</p>
+                  <p className="text-xs text-gray-500">
+                    {formData.isActive ? "Le code peut être utilisé immédiatement" : "Le code ne peut pas être utilisé"}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, isActive: !formData.isActive })}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                  formData.isActive ? 'bg-[#FD481A]' : 'bg-gray-300'
+                }`}
+                disabled={isLoading}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    formData.isActive ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
             </div>
           </form>
         </div>

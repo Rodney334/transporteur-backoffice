@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { usePromoStore } from "../stores";
 import { promoService } from "../services";
 import { useAuth } from "@/hooks/use-auth";
-import { PromoCode, PromoType } from "../types";
+import { PromoCode, PromoType, CreatePromoDto, UpdatePromoDto } from "../types";
 
 export const usePromos = () => {
   const { user } = useAuth();
@@ -46,7 +46,7 @@ export const usePromos = () => {
 
   // Créer un code promo
   const createPromo = useCallback(
-    async (data: { code: string; type: PromoType; value: number }) => {
+    async (data: CreatePromoDto) => {
       try {
         setLoading(true);
         const newPromo = await promoService.createPromo(data);
@@ -76,7 +76,7 @@ export const usePromos = () => {
   const updatePromoCode = useCallback(
     async (
       id: string,
-      data: { code?: string; type?: PromoType; value?: number },
+      data: UpdatePromoDto,
     ) => {
       try {
         setLoading(true);

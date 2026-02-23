@@ -39,8 +39,6 @@ export const CommandCard = memo(function CommandCard({
     new Date(item.originalData.scheduledAt) > new Date()
   );
 
-  console.log({isActionLocked, date: new Date(item.originalData.scheduledAt as string), now: new Date()})
-
   const [paidLoading, setPaidLoading] = useState(false);
   const handlePaid = async (data?: Payment) => {
     if (!data) {

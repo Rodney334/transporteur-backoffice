@@ -2,7 +2,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Tag, Plus, RefreshCw, Download, Columns } from "lucide-react";
+import { Tag, Plus, RefreshCw, Download, Columns, Users } from "lucide-react";
+import Link from "next/link";
 import PromoTable from "./components/PromoTable";
 import PromoSearchFilters from "./components/PromoSearchFilters";
 import PromoPagination from "./components/PromoPagination";
@@ -172,6 +173,14 @@ export default function CodepromoPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/admin/dashboard/codepromo/partners"
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-white text-[#FD481A] border border-[#FD481A] rounded-lg hover:bg-orange-50 transition-colors font-bold"
+            >
+              <Users className="w-4 h-4" />
+              Gestion des partenaires
+            </Link>
+
             <button
               onClick={() => setIsCreateModalOpen(true)}
               className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-[#FD481A] text-white rounded-lg hover:bg-[#E63F15] transition-colors"
