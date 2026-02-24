@@ -1,9 +1,14 @@
 // components/reports/PaymentSummaryCard.tsx
-import { PaymentSummary } from "../lib/parsers/report-parser";
 import { Wallet, CheckCircle, Clock, XCircle } from "lucide-react";
 
 interface PaymentSummaryCardProps {
-  summary: PaymentSummary;
+  summary: {
+    paid: number;
+    pending: number;
+    failed: number;
+    deliveredNotPaidCount: number;
+    deliveredNotPaidAmount: number;
+  };
   className?: string;
 }
 
@@ -55,7 +60,7 @@ export const PaymentSummaryCard = ({
             <span className="text-sm font-medium text-gray-700">Payés</span>
           </div>
           <div className={`text-xl font-bold ${getAmountColor("paid")}`}>
-            {summary.paid}
+            {summary.paid.toLocaleString()} FCFA
           </div>
         </div>
 
@@ -67,7 +72,7 @@ export const PaymentSummaryCard = ({
             </span>
           </div>
           <div className={`text-xl font-bold ${getAmountColor("pending")}`}>
-            {summary.pending}
+            {summary.pending.toLocaleString()} FCFA
           </div>
         </div>
 
@@ -77,7 +82,7 @@ export const PaymentSummaryCard = ({
             <span className="text-sm font-medium text-gray-700">Échoués</span>
           </div>
           <div className={`text-xl font-bold ${getAmountColor("failed")}`}>
-            {summary.failed}
+            {summary.failed.toLocaleString()} FCFA
           </div>
         </div>
       </div>

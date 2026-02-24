@@ -89,3 +89,9 @@ export enum LivreurVerificationStatus {
   APPROVED = "APPROVED", // admin validé => accès total
   REJECTED = "REJECTED", // admin refusé
 }
+
+export enum SummaryPeriod {
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month',
+}

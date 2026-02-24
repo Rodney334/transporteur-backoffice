@@ -1,9 +1,12 @@
 // components/reports/ReportHeader.tsx
-import { BarChart3, Filter, Download } from "lucide-react";
+import { SummaryPeriod } from "@/type/report.type";
+import { BarChart3, Filter, Download, Calendar } from "lucide-react";
 
 interface ReportHeaderProps {
-  selectedPeriod: "all" | "daily" | "weekly" | "monthly";
-  onPeriodChange: (period: "all" | "daily" | "weekly" | "monthly") => void;
+  selectedPeriod: SummaryPeriod;
+  onPeriodChange: (period: SummaryPeriod) => void;
+  selectedDate: string;
+  onDateChange: (date: string) => void;
   isLoading: boolean;
   onExport?: () => void;
 }
@@ -11,14 +14,15 @@ interface ReportHeaderProps {
 export const ReportHeader = ({
   selectedPeriod,
   onPeriodChange,
+  selectedDate,
+  onDateChange,
   isLoading,
   onExport,
 }: ReportHeaderProps) => {
   const periodOptions = [
-    { value: "all", label: "Tout", icon: "📊" },
-    { value: "daily", label: "Journalier", icon: "📅" },
-    { value: "weekly", label: "Hebdomadaire", icon: "📆" },
-    { value: "monthly", label: "Mensuel", icon: "🗓️" },
+    { value: SummaryPeriod.DAY, label: "Journalier", icon: "📅" },
+    { value: SummaryPeriod.WEEK, label: "Hebdomadaire", icon: "📆" },
+    { value: SummaryPeriod.MONTH, label: "Mensuel", icon: "🗓️" },
   ];
 
   return (
@@ -40,10 +44,21 @@ export const ReportHeader = ({
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative">
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => onDateChange(e.target.value)}
+              disabled={isLoading}
+              className="pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
+
+          <div className="relative">
             <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <select
               value={selectedPeriod}
-              onChange={(e) => onPeriodChange(e.target.value as any)}
+              onChange={(e) => onPeriodChange(e.target.value as SummaryPeriod)}
               disabled={isLoading}
               className="pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all duration-200 appearance-none bg-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -74,7 +89,7 @@ export const ReportHeader = ({
           {periodOptions.map((option) => (
             <button
               key={option.value}
-              onClick={() => onPeriodChange(option.value as any)}
+              onClick={() => onPeriodChange(option.value)}
               disabled={isLoading}
               className={`cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                 selectedPeriod === option.value

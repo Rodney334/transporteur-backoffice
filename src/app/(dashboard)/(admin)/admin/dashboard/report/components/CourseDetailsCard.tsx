@@ -1,10 +1,10 @@
 // components/reports/CourseDetailsCard.tsx
-import { CourseDetail } from "../lib/parsers/report-parser";
-import { Package, MapPin, Clock, DollarSign, User, Hash } from "lucide-react";
+import { CourierCourseItem } from "@/type/report.type";
+import { Package, MapPin, Clock, DollarSign, User, Hash, Tag } from "lucide-react";
 
 interface CourseDetailsCardProps {
   livreurName: string;
-  courses: CourseDetail[];
+  courses: CourierCourseItem[];
   className?: string;
 }
 
@@ -30,19 +30,21 @@ export const CourseDetailsCard = ({
       <div className="space-y-4">
         {courses.map((course, index) => (
           <div
-            key={`${course.reference}-${index}`}
+            key={`${course.orderNumber}-${index}`}
             className="bg-gray-50 rounded-xl p-4 border border-gray-200 hover:border-[#FD481A]/30 transition-colors"
           >
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Package className="w-4 h-4 text-gray-400" />
                 <span className="text-sm font-medium text-gray-900">
-                  Course #{index + 1}
+                  {course.orderNumber}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-gray-600">{course.time}</span>
+                <span className="text-sm text-gray-600">
+                  {new Date(course.changedAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                </span>
               </div>
             </div>
 
@@ -51,8 +53,8 @@ export const CourseDetailsCard = ({
                 <MapPin className="w-4 h-4 text-gray-400" />
                 <div>
                   <p className="text-xs text-gray-500">De</p>
-                  <p className="text-sm font-medium text-gray-900">
-                    {course.from}
+                  <p className="text-sm font-medium text-gray-900 truncate max-w-[150px]">
+                    {course.fromCity || "Non spécifiée"}
                   </p>
                 </div>
               </div>
@@ -61,8 +63,8 @@ export const CourseDetailsCard = ({
                 <MapPin className="w-4 h-4 text-[#FD481A]" />
                 <div>
                   <p className="text-xs text-gray-500">À</p>
-                  <p className="text-sm font-medium text-gray-900">
-                    {course.to}
+                  <p className="text-sm font-medium text-gray-900 truncate max-w-[150px]">
+                    {course.toCity || "Non spécifiée"}
                   </p>
                 </div>
               </div>
@@ -72,27 +74,39 @@ export const CourseDetailsCard = ({
                 <div>
                   <p className="text-xs text-gray-500">Montant</p>
                   <p className="text-sm font-bold text-green-700">
-                    {course.amount}
+                    {course.amount.toLocaleString()} FCFA
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-              <div className="flex items-center gap-2">
-                <Hash className="w-4 h-4 text-gray-400" />
-                <span className="text-xs text-gray-500">
-                  {course.reference}
-                </span>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs text-gray-500">
+                    Client: {course.clientName}
+                  </span>
+                </div>
+                {course.promoUsed && (
+                  <div className="flex items-center gap-1">
+                    <Tag className="w-3 h-3 text-purple-600" />
+                    <span className="text-xs font-medium text-purple-600">
+                      Promo: -{course.discountAmount?.toLocaleString()} FCFA
+                    </span>
+                  </div>
+                )}
               </div>
               <div
                 className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  course.status === "pending"
+                  course.paymentStatus === "pending"
                     ? "bg-yellow-100 text-yellow-800"
-                    : "bg-green-100 text-green-800"
+                    : course.paymentStatus === "paid"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
                 }`}
               >
-                {course.status}
+                {course.status === "livree" ? "Livrée" : course.status} • {course.paymentStatus === "paid" ? "Payé" : "Impayé"}
               </div>
             </div>
           </div>

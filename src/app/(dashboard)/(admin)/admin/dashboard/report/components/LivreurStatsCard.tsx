@@ -1,24 +1,38 @@
 // components/reports/LivreurStatsCard.tsx
-import { LivreurSummary, GlobalStats } from "../lib/parsers/report-parser";
-import { User, TrendingUp, MapPin, Users, Calendar, Award } from "lucide-react";
-import { extractAmountValue } from "../lib/parsers/report-parser";
+import { CourierSummaryItem } from "@/type/report.type";
+import { User, TrendingUp, MapPin, Users, Calendar, Award, CheckCircle, Clock, XCircle, Tag } from "lucide-react";
 
 interface LivreurStatsCardProps {
-  summary: LivreurSummary;
-  stats: GlobalStats;
+  summary: CourierSummaryItem;
   className?: string;
 }
 
 export const LivreurStatsCard = ({
   summary,
-  stats,
   className = "",
 }: LivreurStatsCardProps) => {
-  const totalAmount = extractAmountValue(summary.totalAmount);
-  const paidAmount = extractAmountValue(summary.paid);
-  const pendingAmount = extractAmountValue(summary.pending);
+  const totalAmount = summary.totals.totalAmount;
+  const paidAmount = summary.totals.paid;
   const paidPercentage =
     totalAmount > 0 ? Math.round((paidAmount / totalAmount) * 100) : 0;
+
+  // Trouver les meilleures villes et clients à partir des courses
+  const getTopStats = () => {
+    const cities: Record<string, number> = {};
+    const clients: Record<string, number> = {};
+    
+    summary.courses.forEach(c => {
+      if (c.toCity) cities[c.toCity] = (cities[c.toCity] || 0) + 1;
+      if (c.clientName) clients[c.clientName] = (clients[c.clientName] || 0) + 1;
+    });
+
+    const bestCity = Object.entries(cities).sort((a,b) => b[1] - a[1])[0]?.[0] || "N/A";
+    const bestClient = Object.entries(clients).sort((a,b) => b[1] - a[1])[0]?.[0] || "N/A";
+
+    return { bestCity, bestClient };
+  };
+
+  const { bestCity, bestClient } = getTopStats();
 
   return (
     <div
@@ -30,15 +44,15 @@ export const LivreurStatsCard = ({
             <User className="w-6 h-6 text-[#FD481A]" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-gray-900">{summary.name}</h3>
+            <h3 className="text-lg font-bold text-gray-900">{summary.courierName}</h3>
             <p className="text-sm text-gray-500">
-              {summary.coursesCount} courses • {summary.totalAmount}
+              {summary.totals.courses} courses • {summary.totals.successRate}% succès
             </p>
           </div>
         </div>
         <div className="text-right">
           <div className="text-2xl font-bold text-gray-900">
-            {summary.totalAmount}
+            {summary.totals.totalAmount.toLocaleString()} FCFA
           </div>
           <div className="text-sm text-gray-500">Total généré</div>
         </div>
@@ -47,72 +61,84 @@ export const LivreurStatsCard = ({
       {/* Barre de progression des paiements */}
       <div className="mb-6">
         <div className="flex justify-between text-sm text-gray-600 mb-2">
-          <span>Paiements reçus</span>
+          <span>Paiements encaissés</span>
           <span>{paidPercentage}%</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2.5">
+        <div className="w-full bg-gray-100 rounded-full h-2.5">
           <div
-            className="bg-green-600 h-2.5 rounded-full"
+            className="bg-green-600 h-2.5 rounded-full transition-all duration-500"
             style={{ width: `${paidPercentage}%` }}
           ></div>
         </div>
-        <div className="flex justify-between mt-2">
-          <span className="text-xs text-green-600">✅ {summary.paid}</span>
-          <span className="text-xs text-yellow-600">⏳ {summary.pending}</span>
-          <span className="text-xs text-red-600">❌ {summary.failed}</span>
+        <div className="flex justify-between mt-3 text-xs">
+          <div className="flex items-center gap-1 text-green-600 font-medium">
+            <CheckCircle className="w-3 h-3" />
+            <span>{summary.totals.paid.toLocaleString()} FCFA</span>
+          </div>
+          <div className="flex items-center gap-1 text-yellow-600 font-medium">
+            <Clock className="w-3 h-3" />
+            <span>{summary.totals.pending.toLocaleString()} FCFA</span>
+          </div>
+          {summary.totals.failedPayments > 0 && (
+            <div className="flex items-center gap-1 text-red-600 font-medium">
+              <XCircle className="w-3 h-3" />
+              <span>{summary.totals.failedPayments.toLocaleString()} FCFA</span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Statistiques globales */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingUp className="w-4 h-4 text-blue-600" />
-            <span className="text-sm font-medium text-gray-700">
-              Taux de succès
+      {/* Statistiques clés */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
+          <div className="flex items-center gap-2 mb-1">
+            <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
+            <span className="text-[10px] font-bold text-blue-800 uppercase tracking-wider">
+              Succès
             </span>
           </div>
-          <div className="text-xl font-bold text-blue-700">
-            {stats.successRate}
+          <div className="text-base font-bold text-blue-700">
+            {summary.totals.successRate}%
           </div>
         </div>
 
-        <div className="bg-purple-50 border border-purple-100 rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <MapPin className="w-4 h-4 text-purple-600" />
-            <span className="text-sm font-medium text-gray-700">
-              Meilleure ville
+        <div className="bg-purple-50 border border-purple-100 rounded-xl p-3">
+          <div className="flex items-center gap-2 mb-1">
+            <MapPin className="w-3.5 h-3.5 text-purple-600" />
+            <span className="text-[10px] font-bold text-purple-800 uppercase tracking-wider">
+              Top Ville
             </span>
           </div>
-          <div className="text-lg font-semibold text-purple-700">
-            {stats.bestCity}
+          <div className="text-sm font-bold text-purple-700 truncate">
+            {bestCity}
           </div>
         </div>
 
-        <div className="bg-green-50 border border-green-100 rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Users className="w-4 h-4 text-green-600" />
-            <span className="text-sm font-medium text-gray-700">
-              Meilleur client
+        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-3">
+          <div className="flex items-center gap-2 mb-1">
+            <Users className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">
+              Top Client
             </span>
           </div>
-          <div className="text-lg font-semibold text-green-700">
-            {stats.bestClient}
+          <div className="text-sm font-bold text-emerald-700 truncate">
+            {bestClient}
           </div>
         </div>
 
-        <div className="bg-orange-50 border border-orange-100 rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Award className="w-4 h-4 text-orange-600" />
-            <span className="text-sm font-medium text-gray-700">
-              Performance
+        <div className="bg-orange-50 border border-orange-100 rounded-xl p-3">
+          <div className="flex items-center gap-2 mb-1">
+            <Tag className="w-3.5 h-3.5 text-orange-600" />
+            <span className="text-[10px] font-bold text-orange-800 uppercase tracking-wider">
+              Promos
             </span>
           </div>
-          <div className="text-lg font-semibold text-orange-700">
-            {stats.bestDay}
+          <div className="text-base font-bold text-orange-700">
+            {summary.totals.promoCount}
           </div>
         </div>
       </div>
     </div>
   );
 };
+

@@ -1,5 +1,5 @@
 import { api } from "../api/axios";
-import { KPIResponse, AlertsResponse, CoursesResponse, ReportPeriod, SummaryPeriod, CoursesFilters, CoursesPagination, KPISchema, AlertsSchema, CoursesSchema } from "@/type/report.type";
+import { KPIResponse, AlertsResponse, CoursesResponse, ReportPeriod, SummaryPeriod, CoursesFilters, CoursesPagination, KPISchema, AlertsSchema, CoursesSchema, CourierSummaryResponse } from "@/type/report.type";
 
 export interface Options {
   courierId?: string | null;
@@ -59,6 +59,13 @@ export const reportService = {
 
   async currentUser() {
     const response = await api.post("report/history/me", {});
+    return response.data;
+  },
+
+  async getCouriersSummary(period: string, date: string) {
+    const response = await api.get<CourierSummaryResponse>("/report/couriers/summary/json", {
+      params: { period, date },
+    });
     return response.data;
   },
 };
