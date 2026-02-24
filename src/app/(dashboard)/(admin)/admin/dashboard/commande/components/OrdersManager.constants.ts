@@ -9,6 +9,7 @@ export const STATUS_MAPPING: Record<string, OrderStatus[]> = {
     OrderStatus.PRIX_VALIDE,
     OrderStatus.EN_LIVRAISON,
   ],
+  Programmées: [OrderStatus.EN_ATTENTE],
   Terminées: [OrderStatus.LIVREE, OrderStatus.ECHEC],
 };
 

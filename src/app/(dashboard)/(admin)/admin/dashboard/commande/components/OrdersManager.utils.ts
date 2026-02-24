@@ -93,20 +93,34 @@ export const getAdminConfig = () => ({
     const isLivreur = user.role === GrantedRole.Livreur;
 
     const statuses = STATUS_MAPPING[activeTab] || [];
+    const now = new Date();
 
     return orders.filter((order) => {
-      // Pour admin et opérateur : toutes les commandes
+      const isInStatus = statuses.includes(order.status as OrderStatus);
+      if (!isInStatus) return false;
+      // Logique spécifique pour les commandes programmées
+      if (activeTab === "Nouvelles") {
+        // Dans "Nouvelles", on ne veut pas les commandes programmées dans le futur
+        if (order.isScheduled && order.scheduledAt) {
+          const scheduledDate = new Date(order.scheduledAt);
+          if (scheduledDate > now) return false;
+        }
+      } else if (activeTab === "Programmées") {
+        // Dans "Programmées", on ne veut QUE les commandes programmées dans le futur
+        if (!order.isScheduled || !order.scheduledAt) return false;
+        const scheduledDate = new Date(order.scheduledAt);
+        if (scheduledDate <= now) return false;
+      }
+
+      // Pour admin et opérateur : toutes les commandes qui passent les filtres ci-dessus
       if (isAdminOrOperateur) {
-        return statuses.includes(order.status as OrderStatus);
+        return true;
       }
 
       // Pour livreur : logique spécifique
       if (isLivreur) {
-        const isInCurrentTab = statuses.includes(order.status as OrderStatus);
-        if (!isInCurrentTab) return false;
-
-        // Pour "Nouvelles" : toutes les commandes en attente
-        if (activeTab === "Nouvelles") {
+        // Pour "Nouvelles" et "Programmées" : toutes les passées
+        if (activeTab === "Nouvelles" || activeTab === "Programmées") {
           return true;
         }
 

@@ -22,7 +22,7 @@ export default function CommandePage() {
     >
       <OrdersManager
         userRole={user?.role || GrantedRole.Admin}
-        tabs={["Nouvelles", "En cours", "Terminées"]}
+        tabs={["Nouvelles", "Programmées", "En cours", "Terminées"]}
         defaultTab="Nouvelles"
         cardComponent={CommandCard}
         shouldShowPriceForm={adminConfig.shouldShowPriceForm}

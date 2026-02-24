@@ -198,7 +198,7 @@ export const useOrderForm = () => {
         // Si scheduledAt est au format HH:mm, on construit une date complète locale
         const [hours, minutes] = data.scheduledAt.split(":").map(Number);
         const scheduledDate = new Date();
-        scheduledDate.setHours(hours, minutes, 0, 0);
+        scheduledDate.setUTCHours(hours, minutes, 0, 0);
         scheduledAtFormatted = scheduledDate.toISOString();
       }
 

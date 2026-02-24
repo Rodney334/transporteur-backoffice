@@ -59,14 +59,13 @@ export const useAuth = () => {
         // Ne pas bloquer le login si l'envoi du FCM token échoue
         console.warn("Failed to send FCM token:", fcmError);
       }
-
+      setLoading(false);
       return newUser;
     } catch (error: any) {
       const errorMessage = handleAuthError(error);
       setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
       setLoading(false);
+      throw new Error(errorMessage);
     }
   };
 

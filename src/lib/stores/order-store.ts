@@ -412,6 +412,7 @@ export const useOrderStore = create<OrderStore>()(
           OrderStatus.PRIX_VALIDE,
           OrderStatus.EN_LIVRAISON,
         ],
+        Programmées: [OrderStatus.EN_ATTENTE],
         Terminées: [OrderStatus.LIVREE, OrderStatus.ECHEC],
       };
 
@@ -431,8 +432,31 @@ export const useOrderStore = create<OrderStore>()(
           ? clientStatusMapping[tab] || []
           : statusMapping[tab] || [];
 
+      const now = new Date();
+
       return orders.filter((order) => {
         const isInStatus = statuses.includes(order.status as OrderStatus);
+        if (!isInStatus) return false;
+
+        // Logique spécifique pour les commandes programmées
+        if (userRole !== "client") {
+          if (tab === "Nouvelles") {
+            // Dans "Nouvelles", on ne veut pas les commandes programmées dans le futur
+            if (order.isScheduled && order.scheduledAt) {
+              const scheduledDate = new Date(order.scheduledAt);
+              if (scheduledDate > now) return false;
+            }
+          } else if (tab === "Programmées") {
+            // Dans "Programmées", on ne veut QUE les commandes programmées dans le futur
+            if (!order.isScheduled || !order.scheduledAt) return false;
+            const scheduledDate = new Date(order.scheduledAt);
+            const [date, time] = order.scheduledAt.split("T");
+            const [hour, minute] = time.split(":");
+            scheduledDate.setHours(parseInt(hour), parseInt(minute), 0, 0);
+            console.log({date: order.scheduledAt, scheduledDate, now, compare: scheduledDate <= now})
+            if (scheduledDate <= now) return false;
+          }
+        }
 
         // Pour le client, filtre par userId
         if (userRole === "client") {
