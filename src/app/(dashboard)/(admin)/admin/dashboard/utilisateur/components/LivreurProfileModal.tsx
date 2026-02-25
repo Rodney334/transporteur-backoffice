@@ -11,30 +11,6 @@ import type { UpdateLivreurProfileData } from "@/type/livreur.type";
 // Options pour les selects
 const ID_TYPE_OPTIONS = ["CIP/CIPR", "CNI", "Passeport", "Permis de conduire"];
 
-// Marques de moto courantes au Bénin et en Afrique de l'Ouest
-const MOTO_BRANDS = [
-  "Honda",
-  "Yamaha",
-  "Suzuki",
-  "Kawasaki",
-  "Bajaj",
-  "TVS",
-  "Hero",
-  "KTM",
-  "Piaggio",
-  "Vespa",
-  "SYM",
-  "Lifan",
-  "Zhongyu",
-  "Dayun",
-  "Haoyue",
-  "Jianshe",
-  "Qingqi",
-  "Jincheng",
-  "Zongshen",
-  "Other",
-];
-
 interface LivreurProfileFormData {
   motoPlateNumber: string;
   motoChassisNumber: string;
@@ -346,17 +322,12 @@ export default function LivreurProfileModal() {
                           <label className="block text-sm font-medium text-gray-700 mb-1">
                             Marque
                           </label>
-                          <select
+                          <input
+                            type="text"
+                            placeholder="Honda, Haojue..."
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             {...register("motoBrand")}
-                          >
-                            <option value="">Sélectionnez une marque</option>
-                            {MOTO_BRANDS.map((brand) => (
-                              <option key={brand} value={brand}>
-                                {brand}
-                              </option>
-                            ))}
-                          </select>
+                          />
                         </div>
 
                         <div>
