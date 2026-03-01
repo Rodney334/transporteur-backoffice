@@ -5,7 +5,6 @@ import {
   CreditCard,
   User,
   Truck,
-  DollarSign,
   Calendar,
   Package,
   MapPin,
@@ -85,7 +84,7 @@ export default function PaymentDetailsModal() {
                   </label>
                   <span
                     className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                      selectedPayment.status
+                      selectedPayment.status,
                     )}`}
                   >
                     {formatPaymentStatus(selectedPayment.status)}
@@ -97,7 +96,7 @@ export default function PaymentDetailsModal() {
                   </label>
                   <span
                     className={`px-3 py-1 text-xs font-medium rounded-full ${getMethodColor(
-                      selectedPayment.method
+                      selectedPayment.method,
                     )}`}
                   >
                     {formatPaymentMethod(selectedPayment.method)}
@@ -105,7 +104,6 @@ export default function PaymentDetailsModal() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">
-                    <DollarSign className="w-4 h-4 inline mr-1" />
                     Montant
                   </label>
                   <div className="text-lg font-bold text-gray-900">
@@ -338,7 +336,6 @@ export default function PaymentDetailsModal() {
             {/* Section 4: Informations financières */}
             <div className="bg-purple-50 rounded-lg p-4">
               <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <DollarSign className="w-5 h-5" />
                 Informations financières
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

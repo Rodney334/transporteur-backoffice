@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
   User,
   Truck,
-  DollarSign,
   Calendar,
   ChevronDown,
   ChevronUp,
@@ -105,10 +104,7 @@ export default function PaymentTable({
               )}
               {visibleColumns.amount && (
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  <div className="flex items-center gap-2">
-                    <DollarSign className="w-4 h-4" />
-                    Montant
-                  </div>
+                  <div className="flex items-center gap-2">Montant</div>
                 </th>
               )}
               {visibleColumns.method && (
@@ -207,7 +203,7 @@ export default function PaymentTable({
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-3 py-1 text-xs font-medium rounded-full ${getMethodColor(
-                          payment.method
+                          payment.method,
                         )}`}
                       >
                         {formatPaymentMethod(payment.method)}
@@ -218,7 +214,7 @@ export default function PaymentTable({
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                          payment.status
+                          payment.status,
                         )}`}
                       >
                         {formatPaymentStatus(payment.status)}
@@ -261,7 +257,7 @@ export default function PaymentTable({
                           onDelete(
                             payment.id,
                             payment.client?.name || "Client",
-                            payment.amount
+                            payment.amount,
                           )
                         }
                         className="cursor-pointer px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
@@ -308,7 +304,7 @@ export default function PaymentTable({
                       <div className="flex items-center gap-2 mt-1">
                         <span
                           className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                            payment.status
+                            payment.status,
                           )}`}
                         >
                           {formatPaymentStatus(payment.status)}
@@ -406,7 +402,7 @@ export default function PaymentTable({
                         onDelete(
                           payment.id,
                           payment.client?.name || "Client",
-                          payment.amount
+                          payment.amount,
                         )
                       }
                       className="cursor-pointer col-span-2 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"

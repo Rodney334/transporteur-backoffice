@@ -98,9 +98,9 @@ export const InfoLivreurSection = ({ assignedTo }: InfoLivreurSectionProps) => {
             <p className="text-sm text-gray-500 mb-2">
               {error || "Informations du livreur non disponibles"}
             </p>
-            <div className="text-xs text-gray-400 bg-gray-50 p-2 rounded">
+            {/* <div className="text-xs text-gray-400 bg-gray-50 p-2 rounded">
               ID livreur: {assignedTo}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -141,14 +141,14 @@ export const InfoLivreurSection = ({ assignedTo }: InfoLivreurSectionProps) => {
           </div>
         )}
 
-        {livreur.role && (
+        {/* {livreur.role && (
           <div className="flex justify-between items-start">
             <span className="font-medium text-gray-600 min-w-20">Rôle :</span>
             <span className="text-gray-800 text-right flex-1 capitalize">
               {livreur.role}
             </span>
           </div>
-        )}
+        )} */}
 
         {/* <div className="pt-2 border-t border-gray-100">
           <div className="text-xs text-gray-400 bg-gray-50 p-2 rounded">

@@ -5,7 +5,6 @@ import {
   Filter,
   Calendar,
   MapPin,
-  DollarSign,
   ChevronDown,
   ChevronUp,
   Download,
@@ -221,7 +220,6 @@ export const CoursesTable = ({
                   </td>
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-2">
-                      <DollarSign className="w-4 h-4 text-green-600" />
                       <span className="font-medium text-gray-900">
                         {formatAmount(course.amount)}
                       </span>
@@ -230,7 +228,7 @@ export const CoursesTable = ({
                   <td className="py-4 px-4">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                        course.status
+                        course.status,
                       )}`}
                     >
                       {getStatusLabel(course.status)}
@@ -240,7 +238,9 @@ export const CoursesTable = ({
                     <button
                       onClick={() =>
                         setExpandedRow(
-                          expandedRow === course.orderId ? null : course.orderId
+                          expandedRow === course.orderId
+                            ? null
+                            : course.orderId,
                         )
                       }
                       className="cursor-pointer text-[#FD481A] hover:text-[#E63F15] text-sm font-medium"
@@ -285,16 +285,16 @@ export const CoursesTable = ({
                                   course.isSuccess
                                     ? "bg-green-500"
                                     : course.isFailed
-                                    ? "bg-red-500"
-                                    : "bg-yellow-500"
+                                      ? "bg-red-500"
+                                      : "bg-yellow-500"
                                 }`}
                               />
                               <span>
                                 {course.isSuccess
                                   ? "Succès"
                                   : course.isFailed
-                                  ? "Échec"
-                                  : "En cours"}
+                                    ? "Échec"
+                                    : "En cours"}
                               </span>
                             </div>
                           </div>

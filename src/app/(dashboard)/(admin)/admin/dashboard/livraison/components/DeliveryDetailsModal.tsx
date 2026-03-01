@@ -7,7 +7,6 @@ import {
   User,
   MapPin,
   Truck,
-  DollarSign,
   Calendar,
   Weight,
   Info,
@@ -36,7 +35,7 @@ export default function DeliveryDetailsModal() {
 
   const deliverer =
     selectedDelivery.assignedTo &&
-      typeof selectedDelivery.assignedTo === "string"
+    typeof selectedDelivery.assignedTo === "string"
       ? deliverers[selectedDelivery.assignedTo]
       : null;
 
@@ -173,7 +172,7 @@ export default function DeliveryDetailsModal() {
                   Informations client
                 </h4>
                 {selectedDelivery.createdBy &&
-                  typeof selectedDelivery.createdBy === "object" ? (
+                typeof selectedDelivery.createdBy === "object" ? (
                   <div className="space-y-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
@@ -425,7 +424,6 @@ export default function DeliveryDetailsModal() {
               {/* Prix */}
               <div className="bg-yellow-50 rounded-lg p-4">
                 <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <DollarSign className="w-5 h-5" />
                   Informations financières
                 </h4>
                 <div className="space-y-3">

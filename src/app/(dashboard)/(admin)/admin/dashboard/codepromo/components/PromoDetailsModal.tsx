@@ -6,9 +6,7 @@ import {
   Tag,
   Calendar,
   Clock,
-  Power,
   Percent,
-  DollarSign,
   Users,
   Building2,
   User,
@@ -111,7 +109,6 @@ export default function PromoDetailsModal() {
                       </>
                     ) : (
                       <>
-                        <DollarSign className="w-4 h-4 text-green-500" />
                         <span className="text-sm text-gray-900">
                           Montant fixe
                         </span>

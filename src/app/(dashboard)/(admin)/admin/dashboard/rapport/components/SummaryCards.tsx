@@ -1,11 +1,5 @@
 // components/reports/SummaryCards.tsx
-import {
-  Package,
-  CheckCircle,
-  Clock,
-  TrendingUp,
-  DollarSign,
-} from "lucide-react";
+import { Package, CheckCircle, TrendingUp, DollarSign } from "lucide-react";
 import { formatAmount } from "../utils/report-transformer";
 
 interface SummaryCardsProps {

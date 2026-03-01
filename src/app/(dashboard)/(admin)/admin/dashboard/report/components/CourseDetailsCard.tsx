@@ -1,6 +1,6 @@
 // components/reports/CourseDetailsCard.tsx
 import { CourierCourseItem } from "@/type/report.type";
-import { Package, MapPin, Clock, DollarSign, User, Hash, Tag } from "lucide-react";
+import { Package, MapPin, Clock, User, Tag } from "lucide-react";
 
 interface CourseDetailsCardProps {
   livreurName: string;
@@ -43,7 +43,10 @@ export const CourseDetailsCard = ({
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-gray-400" />
                 <span className="text-sm text-gray-600">
-                  {new Date(course.changedAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                  {new Date(course.changedAt).toLocaleTimeString("fr-FR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </span>
               </div>
             </div>
@@ -70,7 +73,6 @@ export const CourseDetailsCard = ({
               </div>
 
               <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-green-600" />
                 <div>
                   <p className="text-xs text-gray-500">Montant</p>
                   <p className="text-sm font-bold text-green-700">
@@ -102,11 +104,12 @@ export const CourseDetailsCard = ({
                   course.paymentStatus === "pending"
                     ? "bg-yellow-100 text-yellow-800"
                     : course.paymentStatus === "paid"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
                 }`}
               >
-                {course.status === "livree" ? "Livrée" : course.status} • {course.paymentStatus === "paid" ? "Payé" : "Impayé"}
+                {course.status === "livree" ? "Livrée" : course.status} •{" "}
+                {course.paymentStatus === "paid" ? "Payé" : "Impayé"}
               </div>
             </div>
           </div>

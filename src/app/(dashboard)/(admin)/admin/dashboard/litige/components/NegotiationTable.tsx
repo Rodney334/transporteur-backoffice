@@ -1,7 +1,7 @@
 // components/negotiations/NegotiationTable.tsx
-import { NegotiationStatus, GrantedRole } from "@/type/enum";
+import { NegotiationStatus } from "@/type/enum";
 import { ExtendedNegotiation } from "../use-negotiation-management";
-import { User, DollarSign, Calendar, MapPin, AlertCircle } from "lucide-react";
+import { User, Calendar, MapPin, AlertCircle } from "lucide-react";
 
 interface NegotiationTableProps {
   negotiations: ExtendedNegotiation[];
@@ -170,7 +170,6 @@ export const NegotiationTable = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     {negotiation.proposedByCourier ? (
                       <div className="flex items-center gap-2">
-                        <DollarSign className="w-4 h-4 text-green-600" />
                         <span className="text-sm font-medium text-gray-900">
                           {negotiation.proposedByCourier} FCFA
                         </span>
@@ -182,7 +181,6 @@ export const NegotiationTable = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     {negotiation.confirmedByClient ? (
                       <div className="flex items-center gap-2">
-                        <DollarSign className="w-4 h-4 text-blue-600" />
                         <span className="text-sm font-medium text-gray-900">
                           {negotiation.confirmedByClient} FCFA
                         </span>
@@ -194,7 +192,7 @@ export const NegotiationTable = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
-                        negotiation.status
+                        negotiation.status,
                       )}`}
                     >
                       {getStatusLabel(negotiation.status)}
@@ -205,7 +203,7 @@ export const NegotiationTable = ({
                       <Calendar className="w-4 h-4 text-gray-400" />
                       <span className="text-sm text-gray-900">
                         {new Date(negotiation.createdAt).toLocaleDateString(
-                          "fr-FR"
+                          "fr-FR",
                         )}
                       </span>
                     </div>

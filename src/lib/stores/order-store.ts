@@ -88,18 +88,18 @@ export const useOrderStore = create<OrderStore>()(
 
     // Charger les commandes (avec cache)
     fetchOrders: async (userId?: string, userRole?: string) => {
-      const { lastFetched, orders, isConnected } = get();
+      // const { lastFetched, orders, isConnected } = get();
       const now = Date.now();
 
       // Vérifier le cache (sauf si WebSocket est connecté pour données temps réel)
-      if (
-        !isConnected &&
-        lastFetched &&
-        now - lastFetched < CACHE_DURATION &&
-        orders.length > 0
-      ) {
-        return; // Utiliser le cache
-      }
+      // if (
+      //   !isConnected &&
+      //   lastFetched &&
+      //   now - lastFetched < CACHE_DURATION &&
+      //   orders.length > 0
+      // ) {
+      //   return; // Utiliser le cache
+      // }
 
       try {
         set({ loading: true, error: null });
@@ -453,7 +453,12 @@ export const useOrderStore = create<OrderStore>()(
             const [date, time] = order.scheduledAt.split("T");
             const [hour, minute] = time.split(":");
             scheduledDate.setHours(parseInt(hour), parseInt(minute), 0, 0);
-            console.log({date: order.scheduledAt, scheduledDate, now, compare: scheduledDate <= now})
+            console.log({
+              date: order.scheduledAt,
+              scheduledDate,
+              now,
+              compare: scheduledDate <= now,
+            });
             if (scheduledDate <= now) return false;
           }
         }

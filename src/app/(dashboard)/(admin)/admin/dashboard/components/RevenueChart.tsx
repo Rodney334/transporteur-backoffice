@@ -12,7 +12,7 @@ import {
   Legend,
   Cell,
 } from "recharts";
-import { TrendingUp, DollarSign } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { RevenueData } from "../types";
 
 interface RevenueChartProps {
@@ -81,7 +81,6 @@ export const RevenueChart = ({
         </div>
         <div className="h-[300px] flex items-center justify-center bg-gray-50 rounded-lg">
           <div className="text-center">
-            <DollarSign className="w-12 h-12 text-gray-300 mx-auto mb-3" />
             <p className="text-gray-400">Aucun revenu à afficher</p>
           </div>
         </div>

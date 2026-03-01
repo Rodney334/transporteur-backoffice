@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Layers, Percent, DollarSign, Calendar, Users, Target } from "lucide-react";
-import { Partner, Campaign, BatchPromoDto, PromoType } from "../types";
+import { X, Layers, Percent, Target } from "lucide-react";
+import { Partner, BatchPromoDto } from "../types";
 import { usePartners } from "../hooks/use-partners";
 import { useCampaigns } from "../hooks/use-campaigns";
 
@@ -18,8 +18,12 @@ export default function BatchPromoModal({
   partner,
 }: BatchPromoModalProps) {
   const { generateBatch, isLoading: isGenerating } = usePartners();
-  const { campaigns, loadCampaigns, isLoading: isLoadingCampaigns } = useCampaigns();
-  
+  const {
+    campaigns,
+    loadCampaigns,
+    isLoading: isLoadingCampaigns,
+  } = useCampaigns();
+
   const [formData, setFormData] = useState<BatchPromoDto>({
     campaignId: "",
     count: 50,
@@ -48,8 +52,10 @@ export default function BatchPromoModal({
     const newErrors: Record<string, string> = {};
 
     if (!formData.campaignId) newErrors.campaignId = "La campagne est requise";
-    if (formData.count <= 0) newErrors.count = "Le nombre doit être supérieur à 0";
-    if (formData.value <= 0) newErrors.value = "La valeur doit être supérieure à 0";
+    if (formData.count <= 0)
+      newErrors.count = "Le nombre doit être supérieur à 0";
+    if (formData.value <= 0)
+      newErrors.value = "La valeur doit être supérieure à 0";
     if (!formData.startsAt) newErrors.startsAt = "Date de début requise";
     if (!formData.endsAt) newErrors.endsAt = "Date de fin requise";
 
@@ -81,11 +87,21 @@ export default function BatchPromoModal({
                 <Layers className="w-6 h-6 text-purple-600" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900">Générer un batch de codes</h3>
-                <p className="text-xs text-gray-500">Pour le partenaire: <span className="font-bold text-gray-700">{partner.name}</span></p>
+                <h3 className="text-xl font-bold text-gray-900">
+                  Générer multiple code promo
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Pour le partenaire:{" "}
+                  <span className="font-bold text-gray-700">
+                    {partner.name}
+                  </span>
+                </p>
               </div>
             </div>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-500 transition-colors">
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-500 transition-colors"
+            >
               <X className="w-6 h-6" />
             </button>
           </div>
@@ -96,10 +112,14 @@ export default function BatchPromoModal({
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Campagne */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Choisir une campagne</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Choisir une campagne
+              </label>
               <select
                 value={formData.campaignId}
-                onChange={(e) => setFormData({ ...formData, campaignId: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, campaignId: e.target.value })
+                }
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white ${
                   errors.campaignId ? "border-red-500" : "border-gray-300"
                 }`}
@@ -107,46 +127,65 @@ export default function BatchPromoModal({
               >
                 <option value="">Sélectionner une campagne...</option>
                 {campaigns.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
-              {errors.campaignId && <p className="mt-1 text-sm text-red-500">{errors.campaignId}</p>}
+              {errors.campaignId && (
+                <p className="mt-1 text-sm text-red-500">{errors.campaignId}</p>
+              )}
             </div>
 
             {/* Nombre et Type */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Nombre de codes</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre de codes
+                </label>
                 <div className="relative">
                   <input
                     type="number"
                     value={formData.count}
-                    onChange={(e) => setFormData({ ...formData, count: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        count: Number(e.target.value),
+                      })
+                    }
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                   <Target className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Type de réduction</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Type de réduction
+                </label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    onClick={() => setFormData({ ...formData, type: "PERCENT" })}
+                    onClick={() =>
+                      setFormData({ ...formData, type: "PERCENT" })
+                    }
                     className={`flex items-center justify-center gap-2 px-3 py-3 rounded-lg border text-xs transition-colors ${
-                      formData.type === "PERCENT" ? "border-purple-600 bg-purple-50 text-purple-600" : "border-gray-300 hover:bg-gray-50"
+                      formData.type === "PERCENT"
+                        ? "border-purple-600 bg-purple-50 text-purple-600"
+                        : "border-gray-300 hover:bg-gray-50"
                     }`}
                   >
-                    <Percent className="w-4 h-4" /> %
+                    Pourcentage %
                   </button>
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, type: "FIXED" })}
                     className={`flex items-center justify-center gap-2 px-3 py-3 rounded-lg border text-xs transition-colors ${
-                      formData.type === "FIXED" ? "border-purple-600 bg-purple-50 text-purple-600" : "border-gray-300 hover:bg-gray-50"
+                      formData.type === "FIXED"
+                        ? "border-purple-600 bg-purple-50 text-purple-600"
+                        : "border-gray-300 hover:bg-gray-50"
                     }`}
                   >
-                    <DollarSign className="w-4 h-4" /> Fixe
+                    Fixe (XOF)
                   </button>
                 </div>
               </div>
@@ -155,51 +194,83 @@ export default function BatchPromoModal({
             {/* Valeur et Max Discount */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Valeur</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Valeur
+                </label>
                 <input
                   type="number"
                   value={formData.value}
-                  onChange={(e) => setFormData({ ...formData, value: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, value: Number(e.target.value) })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Remise max (XOF)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Remise max (XOF)
+                </label>
                 <input
                   type="number"
                   value={formData.maxDiscount}
-                  onChange={(e) => setFormData({ ...formData, maxDiscount: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      maxDiscount: Number(e.target.value),
+                    })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Montant minimum (XOF)
+              </label>
+              <input
+                type="number"
+                value={formData.minOrderAmount}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    minOrderAmount: Number(e.target.value),
+                  })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              />
+            </div>
             {/* Min Order & Limits */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Min.Commande</label>
-                <input
-                  type="number"
-                  value={formData.minOrderAmount}
-                  onChange={(e) => setFormData({ ...formData, minOrderAmount: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Limite usage</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre d'utilisation total
+                </label>
                 <input
                   type="number"
                   value={formData.usageLimit}
-                  onChange={(e) => setFormData({ ...formData, usageLimit: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      usageLimit: Number(e.target.value),
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Limite /User</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre d'utilisation par utilisateur
+                </label>
                 <input
                   type="number"
                   value={formData.usageLimitPerUser}
-                  onChange={(e) => setFormData({ ...formData, usageLimitPerUser: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      usageLimitPerUser: Number(e.target.value),
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                 />
               </div>
@@ -208,22 +279,30 @@ export default function BatchPromoModal({
             {/* Période */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Début</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Début
+                </label>
                 <input
                   type="date"
                   value={formData.startsAt}
-                  onChange={(e) => setFormData({ ...formData, startsAt: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, startsAt: e.target.value })
+                  }
                   className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                     errors.startsAt ? "border-red-500" : "border-gray-300"
                   }`}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Fin</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Fin
+                </label>
                 <input
                   type="date"
                   value={formData.endsAt}
-                  onChange={(e) => setFormData({ ...formData, endsAt: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, endsAt: e.target.value })
+                  }
                   className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                     errors.endsAt ? "border-red-500" : "border-gray-300"
                   }`}

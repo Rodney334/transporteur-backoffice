@@ -10,7 +10,6 @@ import {
   Calendar,
   ChevronDown,
   ChevronUp,
-  DollarSign,
 } from "lucide-react";
 import { Order } from "@/type/order.type";
 import { useDeliveries } from "../hooks/use-deliveries";
@@ -132,10 +131,7 @@ export default function DeliveryTable({
               )}
               {visibleColumns.finalPrice && (
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  <div className="flex items-center gap-2">
-                    <DollarSign className="w-4 h-4" />
-                    Prix final
-                  </div>
+                  <div className="flex items-center gap-2">Prix final</div>
                 </th>
               )}
               {visibleColumns.status && (
@@ -219,7 +215,7 @@ export default function DeliveryTable({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`capitalize px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                        delivery.status
+                        delivery.status,
                       )}`}
                     >
                       {delivery.status}
@@ -273,7 +269,7 @@ export default function DeliveryTable({
                     <div className="flex items-center gap-2 mt-1">
                       <span
                         className={`capitalize px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                          delivery.status
+                          delivery.status,
                         )}`}
                       >
                         {delivery.status}

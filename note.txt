@@ -1,14 +1,21 @@
-Laisser une note sur une commande déjà créé ?????
+************************
+EN COURS
+************************
 
-Client doit pouvoir donner son avis par rapport au livreur et la livraison  ?????
+Laisser un avis et une note sur les commandes TERMINES
 
-Quand un admin ?????
+code promo management (partie 2)
 
-Mail vérification après register
-Forget password
 
-planification de commande
 
-rapport supplémentaire
+************************
+TERMINER
+************************
 
-code promo management
+Pays bien visible dans le formulaire de commande
+
+Rafraichissement des commandes via websocket corrigé
+
+Retirer le symbole Dollard des tableaux et formulaires
+
+Revoir les formulaires de code promo et partenaire

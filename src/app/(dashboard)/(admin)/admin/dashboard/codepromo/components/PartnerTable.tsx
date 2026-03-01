@@ -95,7 +95,10 @@ export default function PartnerTable({
           </thead>
           <tbody className="divide-y divide-gray-200">
             {partners.map((partner) => (
-              <tr key={partner.id} className="hover:bg-gray-50 transition-colors">
+              <tr
+                key={partner.id}
+                className="hover:bg-gray-50 transition-colors"
+              >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="shrink-0 h-10 w-10 rounded-full bg-linear-to-r from-[#FD481A] to-orange-400 flex items-center justify-center">
@@ -141,7 +144,7 @@ export default function PartnerTable({
                     <button
                       onClick={() => onGenerateBatch(partner)}
                       className="cursor-pointer p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                      title="Générer Batch"
+                      title="Multiple code"
                     >
                       <Layers className="w-4 h-4" />
                     </button>
@@ -233,7 +236,7 @@ export default function PartnerTable({
                     className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
                   >
                     <Layers className="w-4 h-4" />
-                    Batch
+                    Multiple code
                   </button>
                   <button
                     onClick={() => onEdit(partner)}

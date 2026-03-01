@@ -10,8 +10,6 @@ import {
   Edit,
   Trash2,
   Eye,
-  Percent,
-  DollarSign,
   Power,
   Clock,
 } from "lucide-react";
@@ -163,11 +161,6 @@ export default function PromoTable({
                 {visibleColumns.type && (
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-1">
-                      {promo.type === "PERCENT" ? (
-                        <Percent className="w-4 h-4 text-blue-500" />
-                      ) : (
-                        <DollarSign className="w-4 h-4 text-green-500" />
-                      )}
                       <span className="text-sm text-gray-900">
                         {promo.type === "PERCENT"
                           ? "Pourcentage"

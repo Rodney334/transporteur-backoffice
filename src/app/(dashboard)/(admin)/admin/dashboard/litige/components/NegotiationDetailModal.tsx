@@ -5,7 +5,6 @@ import {
   User,
   MapPin,
   Calendar,
-  DollarSign,
   Package,
   Phone,
   Mail,
@@ -131,7 +130,7 @@ export const NegotiationDetailModal = ({
                   </div>
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(
-                      negotiation.status
+                      negotiation.status,
                     )}`}
                   >
                     {getStatusLabel(negotiation.status)}
@@ -139,7 +138,6 @@ export const NegotiationDetailModal = ({
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <DollarSign className="w-4 h-4 text-gray-400" />
                     <span className="text-sm font-medium text-gray-700">
                       Méthode de paiement
                     </span>
@@ -166,9 +164,7 @@ export const NegotiationDetailModal = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <DollarSign className="w-5 h-5 text-blue-600" />
-                  </div>
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center"></div>
                   <div>
                     <h4 className="text-sm font-medium text-gray-700">
                       Prix livreur
@@ -183,9 +179,7 @@ export const NegotiationDetailModal = ({
               </div>
               <div className="bg-green-50 border border-green-200 rounded-2xl p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <DollarSign className="w-5 h-5 text-green-600" />
-                  </div>
+                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center"></div>
                   <div>
                     <h4 className="text-sm font-medium text-gray-700">
                       Prix client
@@ -200,9 +194,7 @@ export const NegotiationDetailModal = ({
               </div>
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                    <DollarSign className="w-5 h-5 text-gray-600" />
-                  </div>
+                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center"></div>
                   <div>
                     <h4 className="text-sm font-medium text-gray-700">Écart</h4>
                     <p className="text-2xl font-bold text-gray-700">
@@ -210,7 +202,7 @@ export const NegotiationDetailModal = ({
                       negotiation.confirmedByClient
                         ? `${Math.abs(
                             negotiation.proposedByCourier -
-                              negotiation.confirmedByClient
+                              negotiation.confirmedByClient,
                           )} FCFA`
                         : "-"}
                     </p>

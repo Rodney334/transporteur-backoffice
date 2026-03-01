@@ -1,5 +1,5 @@
 // components/dashboard/RecentOrders.tsx
-import { Package, MapPin, DollarSign, Clock, User } from "lucide-react";
+import { Package, MapPin, Clock, User } from "lucide-react";
 import { Order } from "@/type/order.type";
 import { format, parseISO } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -131,7 +131,6 @@ export const RecentOrders = ({ orders }: RecentOrdersProps) => {
               </div>
 
               <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-green-600" />
                 <div>
                   <p className="text-xs text-gray-500">Montant</p>
                   <p className="text-sm font-bold text-green-700">
@@ -159,7 +158,7 @@ export const RecentOrders = ({ orders }: RecentOrdersProps) => {
               </div>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                  order.status
+                  order.status,
                 )}`}
               >
                 {getStatusLabel(order.status)}
