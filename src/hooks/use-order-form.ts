@@ -1,6 +1,6 @@
 // hooks/use-order-form.ts
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useCallback, useEffect, useState } from "react";
+import { useForm, UseFormSetError } from "react-hook-form";
 import { orderService } from "@/lib/services/order-service";
 import { AddressInterface, CreateOrderInterface } from "@/type/order.type";
 import { useRouter } from "next/navigation";
@@ -144,11 +144,51 @@ export const useOrderForm = () => {
   // Sauvegarder automatiquement à chaque changement de valeur
   useEffect(() => {
     const subscription = form.watch((value) => {
-      saveToLocalStorage(value);
+      // Utiliser un debounce pour éviter trop d'écritures
+      const timeoutId = setTimeout(() => {
+        saveToLocalStorage(value);
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
     });
 
     return () => subscription.unsubscribe();
   }, [form]);
+
+  // Vérifier la validité des données chargées
+  useEffect(() => {
+    if (savedData) {
+      // Vérifier que les données chargées sont valides
+      const requiredFields = [
+        "pickupCountry",
+        "deliveryCountry",
+        "articleType",
+        "deliveryType",
+      ];
+
+      let hasInvalidData = false;
+      requiredFields.forEach((field) => {
+        if (!savedData[field as keyof OrderFormData]) {
+          hasInvalidData = true;
+        }
+      });
+
+      if (hasInvalidData) {
+        console.warn(
+          "Données sauvegardées incomplètes, réinitialisation partielle",
+        );
+        // Réinitialiser seulement les champs problématiques
+        requiredFields.forEach((field) => {
+          if (!savedData[field as keyof OrderFormData]) {
+            form.setValue(
+              field as any,
+              form.control._defaultValues[field as keyof OrderFormData],
+            );
+          }
+        });
+      }
+    }
+  }, [savedData, form]);
 
   const calculateEstimatedPrice = (
     serviceType: string,
@@ -168,6 +208,77 @@ export const useOrderForm = () => {
       (basePrice + weightPrice) * deliveryMultiplier * serviceMultiplier,
     );
   };
+
+  const validateCodepromo = useCallback(
+    async (
+      code: string,
+      setError: UseFormSetError<OrderFormData>,
+    ): Promise<boolean> => {
+      console.log("Début de la vérification du code promo:", code);
+
+      // Ne pas valider si le code est vide
+      if (!code || code.trim() === "") {
+        setError("promoCodeId", { message: "" });
+        return true;
+      }
+
+      const toastId = toast.loading("Vérification du code promo en cours...", {
+        position: "top-left",
+      });
+
+      try {
+        const response = await orderService.checkCodepromo(code);
+        console.log("Réponse code promo:", response);
+
+        if (response.data.valid) {
+          setError("promoCodeId", { message: "" });
+          toast.update(toastId, {
+            render: "✓ Code promo valide",
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+          });
+          return true;
+        } else {
+          setError("promoCodeId", { message: "Code promo non valide" });
+          toast.update(toastId, {
+            render: "✗ Code promo non valide",
+            type: "error",
+            isLoading: false,
+            autoClose: 3000,
+          });
+          return false;
+        }
+      } catch (error) {
+        console.error("Erreur validation code promo:", error);
+        setError("promoCodeId", {
+          message: "Erreur lors de la vérification du code",
+        });
+        toast.update(toastId, {
+          render: "Erreur lors de la vérification du code",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+        return false;
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    const validateSavedPromo = async () => {
+      const savedPromo = savedData?.promoCodeId;
+      if (savedPromo && savedPromo.trim() !== "") {
+        console.log("Validation du code promo sauvegardé:", savedPromo);
+        await validateCodepromo(savedPromo, form.setError);
+      }
+    };
+
+    if (savedData?.promoCodeId) {
+      validateSavedPromo();
+    }
+  }, [savedData?.promoCodeId, validateCodepromo, form.setError]);
 
   const onSubmit = async (data: OrderFormData) => {
     setIsSubmitting(true);
@@ -278,5 +389,6 @@ export const useOrderForm = () => {
     onSubmit: form.handleSubmit(onSubmit),
     calculateEstimatedPrice,
     clearSavedData,
+    validateCodepromo,
   };
 };

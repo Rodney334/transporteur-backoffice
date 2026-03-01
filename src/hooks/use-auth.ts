@@ -50,7 +50,6 @@ export const useAuth = () => {
       // Envoyer le FCM token après un login réussi
       try {
         const fcmToken = await getFCMToken();
-        console.log("FCM token:", fcmToken);
         if (fcmToken) {
           await authService.sendFCMToken(fcmToken);
           console.log("FCM token sent successfully");

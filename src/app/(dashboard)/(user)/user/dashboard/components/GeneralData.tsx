@@ -1,11 +1,13 @@
 // components/DimensionData.tsx
-import { UseFormReturn } from "react-hook-form";
+import { OrderFormData } from "@/hooks/use-order-form";
+import { FieldErrors, UseFormReturn } from "react-hook-form";
 
 interface GeneralDataProps {
   form: UseFormReturn<any>;
+  errors: FieldErrors<OrderFormData>;
 }
 
-export const GeneralData = ({ form }: GeneralDataProps) => {
+export const GeneralData = ({ form, errors }: GeneralDataProps) => {
   const country = [
     { label: "Cotonou", value: "Cotonou" },
     { label: "Porto-Novo", value: "Porto-Novo" },
@@ -45,32 +47,64 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Nom"
-                  // {...register("lastName", { required: "Le nom est requis." })}
                   value={form.watch("pickupName")}
+                  {...form.register("pickupName", {
+                    required: "Ce champ est requis",
+                  })}
                   onChange={(e) => {
                     form.setValue("pickupName", e.target.value);
                   }}
+                  onFocus={() => {
+                    form.setError("pickupName", { message: "" });
+                  }}
+                  onBlur={() => {
+                    if (!form.watch("pickupName")) {
+                      form.setError("pickupName", {
+                        message: "Ce champ est requis",
+                      });
+                    }
+                  }}
                 />
+                {errors.pickupName && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.pickupName.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="mt-2 lg:mt-3">
-              <label className="block text-xs text-gray-600 mb-1">
-                Téléphone (indicatif + numéro : +229 0197979797){" "}
-                <strong className={`text-red-600`}>*</strong>
-              </label>
-              <div className="flex gap-2">
-                {/* <select className="w-20 px-2 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]">
-                  <option>+ 91</option>
-                </select> */}
+              <div>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Téléphone (indicatif + numéro : +229 0197979797){" "}
+                  <strong className={`text-red-600`}>*</strong>
+                </label>
                 <input
                   type="text"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Numéro de téléphone"
                   value={form.watch("pickupPhone")}
+                  {...form.register("pickupPhone", {
+                    required: "Ce champ est requis",
+                  })}
                   onChange={(e) => {
                     form.setValue("pickupPhone", e.target.value);
                   }}
+                  onFocus={() => {
+                    form.setError("pickupPhone", { message: "" });
+                  }}
+                  onBlur={() => {
+                    if (!form.watch("pickupPhone")) {
+                      form.setError("pickupPhone", {
+                        message: "Ce champ est requis",
+                      });
+                    }
+                  }}
                 />
+                {errors.pickupPhone && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.pickupPhone.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -94,6 +128,11 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   // }}
                   disabled
                 />
+                {errors.pickupCountry && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.pickupCountry.message}
+                  </p>
+                )}
               </div>
               <div>
                 <div>
@@ -110,12 +149,25 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                     }}
                   /> */}
                   <select
-                    name="pickupCity"
+                    // name="pickupCity"
                     id="pickupCity"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                     value={form.watch("pickupCity")}
+                    {...form.register("pickupCity", {
+                      required: "Ce champ est requis",
+                    })}
                     onChange={(e) => {
                       form.setValue("pickupCity", e.target.value);
+                    }}
+                    onFocus={() => {
+                      form.setError("pickupCity", { message: "" });
+                    }}
+                    onBlur={() => {
+                      if (!form.watch("pickupCity")) {
+                        form.setError("pickupCity", {
+                          message: "Ce champ est requis",
+                        });
+                      }
                     }}
                   >
                     <option value="" disabled>
@@ -127,6 +179,11 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                       </option>
                     ))}
                   </select>
+                  {errors.pickupCity && (
+                    <p className={`text-xs text-red-600`}>
+                      {errors.pickupCity.message}
+                    </p>
+                  )}
                 </div>
               </div>
               <div>
@@ -138,10 +195,28 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Commune et/ou Arrondissement"
                   value={form.watch("pickupDistrict")}
+                  {...form.register("pickupDistrict", {
+                    required: "Ce champ est requis",
+                  })}
                   onChange={(e) => {
                     form.setValue("pickupDistrict", e.target.value);
                   }}
+                  onFocus={() => {
+                    form.setError("pickupDistrict", { message: "" });
+                  }}
+                  onBlur={() => {
+                    if (!form.watch("pickupDistrict")) {
+                      form.setError("pickupDistrict", {
+                        message: "Ce champ est requis",
+                      });
+                    }
+                  }}
                 />
+                {errors.pickupDistrict && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.pickupDistrict.message}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
@@ -153,10 +228,28 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Informations supplémentaires"
                   value={form.watch("pickupStreet")}
+                  {...form.register("pickupStreet", {
+                    required: "Ce champ est requis",
+                  })}
                   onChange={(e) => {
                     form.setValue("pickupStreet", e.target.value);
                   }}
+                  onFocus={() => {
+                    form.setError("pickupStreet", { message: "" });
+                  }}
+                  onBlur={() => {
+                    if (!form.watch("pickupStreet")) {
+                      form.setError("pickupStreet", {
+                        message: "Ce champ est requis",
+                      });
+                    }
+                  }}
                 />
+                {errors.pickupStreet && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.pickupStreet.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -188,30 +281,63 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Nom et prénom"
                   value={form.watch("deliveryName")}
+                  {...form.register("deliveryName", {
+                    required: "Ce champ est requis",
+                  })}
                   onChange={(e) => {
                     form.setValue("deliveryName", e.target.value);
                   }}
+                  onFocus={() => {
+                    form.setError("deliveryName", { message: "" });
+                  }}
+                  onBlur={() => {
+                    if (!form.watch("deliveryName")) {
+                      form.setError("deliveryName", {
+                        message: "Ce champ est requis",
+                      });
+                    }
+                  }}
                 />
+                {errors.deliveryName && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.deliveryName.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="mt-2 lg:mt-3">
-              <label className="block text-xs text-gray-600 mb-1">
-                Téléphone (indicatif + numéro : +229 0197979797){" "}
-                <strong className={`text-red-600`}>*</strong>
-              </label>
-              <div className="flex gap-2">
-                {/* <select className="w-20 px-2 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]">
-                  <option>+ 91</option>
-                </select> */}
+              <div>
+                <label className="block text-xs text-gray-600 mb-1">
+                  Téléphone (indicatif + numéro : +229 0197979797){" "}
+                  <strong className={`text-red-600`}>*</strong>
+                </label>
                 <input
                   type="text"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Numéro de téléphone"
                   value={form.watch("deliveryPhone")}
+                  {...form.register("deliveryPhone", {
+                    required: "Ce champ est requis",
+                  })}
                   onChange={(e) => {
                     form.setValue("deliveryPhone", e.target.value);
                   }}
+                  onFocus={() => {
+                    form.setError("deliveryPhone", { message: "" });
+                  }}
+                  onBlur={() => {
+                    if (!form.watch("deliveryPhone")) {
+                      form.setError("deliveryPhone", {
+                        message: "Ce champ est requis",
+                      });
+                    }
+                  }}
                 />
+                {errors.deliveryPhone && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.deliveryPhone.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -235,6 +361,11 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   // }}
                   disabled
                 />
+                {errors.deliveryCountry && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.deliveryCountry.message}
+                  </p>
+                )}
               </div>
               <div>
                 <div>
@@ -251,12 +382,25 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                     }}
                   /> */}
                   <select
-                    name="deliveryCity"
+                    // name="deliveryCity"
                     id="deliveryCity"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                     value={form.watch("deliveryCity")}
+                    {...form.register("deliveryCity", {
+                      required: "Ce champ est requis",
+                    })}
                     onChange={(e) => {
                       form.setValue("deliveryCity", e.target.value);
+                    }}
+                    onFocus={() => {
+                      form.setError("deliveryCity", { message: "" });
+                    }}
+                    onBlur={() => {
+                      if (!form.watch("deliveryCity")) {
+                        form.setError("deliveryCity", {
+                          message: "Ce champ est requis",
+                        });
+                      }
                     }}
                   >
                     <option value="" disabled>
@@ -268,6 +412,11 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                       </option>
                     ))}
                   </select>
+                  {errors.deliveryCity && (
+                    <p className={`text-xs text-red-600`}>
+                      {errors.deliveryCity.message}
+                    </p>
+                  )}
                 </div>
               </div>
               <div>
@@ -279,10 +428,28 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Commune et/ou Arrondissement"
                   value={form.watch("deliveryDistrict")}
+                  {...form.register("deliveryDistrict", {
+                    required: "Ce champ est requis",
+                  })}
                   onChange={(e) => {
                     form.setValue("deliveryDistrict", e.target.value);
                   }}
+                  onFocus={() => {
+                    form.setError("deliveryDistrict", { message: "" });
+                  }}
+                  onBlur={() => {
+                    if (!form.watch("deliveryDistrict")) {
+                      form.setError("deliveryDistrict", {
+                        message: "Ce champ est requis",
+                      });
+                    }
+                  }}
                 />
+                {errors.deliveryDistrict && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.deliveryDistrict.message}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
@@ -294,10 +461,28 @@ export const GeneralData = ({ form }: GeneralDataProps) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Informations supplémentaires"
                   value={form.watch("deliveryStreet")}
+                  {...form.register("deliveryStreet", {
+                    required: "Ce champ est requis",
+                  })}
                   onChange={(e) => {
                     form.setValue("deliveryStreet", e.target.value);
                   }}
+                  onFocus={() => {
+                    form.setError("deliveryStreet", { message: "" });
+                  }}
+                  onBlur={() => {
+                    if (!form.watch("deliveryStreet")) {
+                      form.setError("deliveryStreet", {
+                        message: "Ce champ est requis",
+                      });
+                    }
+                  }}
                 />
+                {errors.deliveryStreet && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.deliveryStreet.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>

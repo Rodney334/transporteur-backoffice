@@ -82,6 +82,11 @@ export const orderService = {
     return response.data;
   },
 
+  async checkCodepromo(code: string) {
+    const response = await api.get(`/promo/check?code=${code}`);
+    return response;
+  },
+
   async addCodepromoToOrder(orderId: string, code: string) {
     const response = await api.post(`/order/${orderId}/promo`, { code });
     return response.data;
