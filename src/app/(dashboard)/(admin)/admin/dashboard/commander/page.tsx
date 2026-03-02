@@ -23,16 +23,28 @@ import {
   TransportMode,
 } from "@/type/enum";
 import ProtectedRoute from "@/components/Protected-route";
+import { useOrderValidation } from "@/hooks/use-order-validation";
+import { toast } from "react-toastify";
 
 export default function DashboardPage() {
-  const { form, currentStep, setCurrentStep, isSubmitting, onSubmit } =
-    useOrderForm();
+  const {
+    form,
+    currentStep,
+    setCurrentStep,
+    isSubmitting,
+    onSubmit,
+    validateCodepromo,
+  } = useOrderForm();
+
+  const { validateStep1, isValidatingPromo } = useOrderValidation();
+  const [isChangingStep, setIsChangingStep] = useState(false);
 
   const {
     register,
     watch,
     setValue,
     formState: { errors },
+    setError,
   } = form;
 
   // const selectedDestination = watch("destination");
@@ -59,27 +71,98 @@ export default function DashboardPage() {
 
   const topRef = useRef<HTMLDivElement>(null);
 
-  const changeStep = (newStep: number) => {
-    setCurrentStep(newStep);
+  // const changeStep = (newStep: number) => {
+  //   setCurrentStep(newStep);
 
-    setTimeout(() => {
-      setCurrentStep(newStep);
+  //   setTimeout(() => {
+  //     setCurrentStep(newStep);
 
-      setTimeout(() => {
-        scrollToTop();
-        // setIsTransitioning(false);
-      }, 50);
-    }, 300);
-  };
+  //     setTimeout(() => {
+  //       scrollToTop();
+  //       // setIsTransitioning(false);
+  //     }, 50);
+  //   }, 300);
+  // };
 
   // Fonction pour scroller vers le haut
+  const changeStep = async (newStep: number) => {
+    if (isChangingStep) return; // Empêcher les clics multiples
+
+    if (newStep === 2) {
+      setIsChangingStep(true);
+
+      try {
+        // Réinitialiser les erreurs avant validation
+        const fieldsToValidate = [
+          "articleType",
+          "deliveryCity",
+          "deliveryCountry",
+          "deliveryDistrict",
+          "deliveryName",
+          "deliveryPhone",
+          "deliveryStreet",
+          "deliveryType",
+          "description",
+          "pickupCity",
+          "pickupCountry",
+          "pickupDistrict",
+          "pickupName",
+          "pickupPhone",
+          "pickupStreet",
+        ];
+
+        // Ne pas clear l'erreur du promoCodeId ici
+        fieldsToValidate.forEach((field) => {
+          form.clearErrors(field as any);
+        });
+
+        // Petite pause pour s'assurer que les clears sont bien pris en compte
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        const isValid = await validateStep1(form, validateCodepromo);
+
+        if (!isValid) {
+          // Récupérer les erreurs actuelles pour un message plus précis
+          const currentErrors = form.formState.errors;
+          const errorFields = Object.keys(currentErrors)
+            .map((key) => {
+              if (key === "promoCodeId") return "code promo";
+              return key;
+            })
+            .join(", ");
+
+          toast.warning(
+            `Veuillez remplir correctement tous les champs obligatoires${errorFields ? ` : ${errorFields}` : ""}.`,
+            {
+              position: "top-left",
+              autoClose: 7000,
+            },
+          );
+          return;
+        }
+
+        // Si tout est valide, on change d'étape
+        setCurrentStep(newStep);
+        scrollToTop();
+      } catch (error) {
+        console.error("Erreur lors de la validation:", error);
+        toast.error("Une erreur est survenue lors de la validation.");
+      } finally {
+        setIsChangingStep(false);
+      }
+    } else {
+      setCurrentStep(newStep);
+      scrollToTop();
+    }
+  };
+
   const scrollToTop = () => {
     setTimeout(() => {
       topRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-    }, 100); // Petit délai pour laisser le temps au state de se mettre à jour
+    }, 100);
   };
 
   return (
@@ -177,9 +260,7 @@ export default function DashboardPage() {
                 <strong className={`text-red-600`}>**</strong>
               </h2>
               <div className={`flex flex-col mb-4 lg:mb-6`}>
-                <label htmlFor="weight">
-                  Poids en kg (optionnel)
-                </label>
+                <label htmlFor="weight">Poids en kg (optionnel)</label>
                 <input
                   id="weight"
                   type="text"
@@ -191,18 +272,36 @@ export default function DashboardPage() {
 
               <div className={`flex flex-col mb-4 lg:mb-6`}>
                 <label htmlFor="description">
-                  Description <strong className={`text-red-600`}>*</strong>{" "}
+                  Description <strong className={`text-red-600`}>*</strong>
                 </label>
                 <textarea
-                  name="description"
+                  // name="description"
                   id="description"
                   cols={50}
                   rows={3}
                   placeholder="Description..."
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   value={description}
+                  {...register("description", {
+                    required: "Ce champ est requis",
+                  })}
                   onChange={(e) => setValue("description", e.target.value)}
+                  onFocus={() => {
+                    setError("description", { message: "" });
+                  }}
+                  onBlur={() => {
+                    if (!description) {
+                      setError("description", {
+                        message: "Ce champ est requis",
+                      });
+                    }
+                  }}
                 ></textarea>
+                {errors.description && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.description.message}
+                  </p>
+                )}
               </div>
 
               <div className={`flex flex-col mb-4 lg:mb-6`}>
@@ -213,22 +312,38 @@ export default function DashboardPage() {
                   id="scheduledAt"
                   type="time"
                   {...register("scheduledAt")}
-                  min={new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                  min={new Date().toLocaleTimeString("fr-FR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                 />
               </div>
 
               <div className={`flex flex-col mb-4 lg:mb-6`}>
-                <label htmlFor="promoCodeId">
-                  Code promo (optionnel)
-                </label>
+                <label htmlFor="promoCodeId">Code promo (optionnel)</label>
                 <input
                   id="promoCodeId"
                   type="text"
                   placeholder="Entrez votre code promo"
-                  {...register("promoCodeId")}
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+                  {...register("promoCodeId")}
+                  onFocus={() => {
+                    form.setError("promoCodeId", { message: "" });
+                  }}
+                  onBlur={() => {
+                    const code = watch("promoCodeId");
+                    console.log("check code promo: ", code);
+                    if (code) {
+                      validateCodepromo(code, setError);
+                    }
+                  }}
                 />
+                {errors.promoCodeId && (
+                  <p className={`text-xs text-red-600`}>
+                    {errors.promoCodeId.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -239,16 +354,48 @@ export default function DashboardPage() {
                 <strong className={`text-red-600`}>**</strong>
               </h2>
 
-              <GeneralData form={form} />
+              <GeneralData form={form} errors={errors} />
 
               {/* Next button */}
               <div className="flex justify-end">
-                <button
+                {/* <button
                   type="button"
                   onClick={() => changeStep(2)}
                   className="cursor-pointer w-full sm:w-auto px-6 py-3 bg-[#FD481A] text-white font-medium rounded-lg hover:bg-[#E63F15] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed text-sm lg:text-base"
                 >
                   Suivant
+                </button> */}
+                <button
+                  type="button"
+                  onClick={() => changeStep(2)}
+                  disabled={isChangingStep || isValidatingPromo}
+                  className="cursor-pointer w-full sm:w-auto px-6 py-3 bg-[#FD481A] text-white font-medium rounded-lg hover:bg-[#E63F15] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed text-sm lg:text-base flex items-center justify-center gap-2"
+                >
+                  {(isChangingStep || isValidatingPromo) && (
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  )}
+                  {isChangingStep || isValidatingPromo
+                    ? "Validation..."
+                    : "Suivant"}
                 </button>
               </div>
             </div>
@@ -296,12 +443,14 @@ export default function DashboardPage() {
         {/* Indicateur d'étape */}
         <div className="flex justify-center items-center gap-2">
           <div
-            className={`w-3 h-3 rounded-full transition-colors ${currentStep === 1 ? "bg-[#FD481A]" : "bg-gray-300"
-              }`}
+            className={`w-3 h-3 rounded-full transition-colors ${
+              currentStep === 1 ? "bg-[#FD481A]" : "bg-gray-300"
+            }`}
           ></div>
           <div
-            className={`w-3 h-3 rounded-full transition-colors ${currentStep === 2 ? "bg-[#FD481A]" : "bg-gray-300"
-              }`}
+            className={`w-3 h-3 rounded-full transition-colors ${
+              currentStep === 2 ? "bg-[#FD481A]" : "bg-gray-300"
+            }`}
           ></div>
         </div>
       </div>
