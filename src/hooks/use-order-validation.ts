@@ -19,18 +19,14 @@ export const useOrderValidation = () => {
         { name: "articleType", label: "Type d'article" },
         { name: "deliveryCity", label: "Ville de livraison" },
         { name: "deliveryCountry", label: "Pays de livraison" },
-        { name: "deliveryDistrict", label: "Quartier de livraison" },
         { name: "deliveryName", label: "Nom du destinataire" },
         { name: "deliveryPhone", label: "Téléphone du destinataire" },
-        { name: "deliveryStreet", label: "Adresse de livraison" },
         { name: "deliveryType", label: "Type de livraison" },
         { name: "description", label: "Description" },
         { name: "pickupCity", label: "Ville de départ" },
         { name: "pickupCountry", label: "Pays de départ" },
-        { name: "pickupDistrict", label: "Quartier de départ" },
         { name: "pickupName", label: "Nom de l'expéditeur" },
         { name: "pickupPhone", label: "Téléphone de l'expéditeur" },
-        { name: "pickupStreet", label: "Adresse de départ" },
       ];
 
       // Vérifier chaque champ requis

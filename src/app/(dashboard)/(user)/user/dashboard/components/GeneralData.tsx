@@ -29,7 +29,7 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
         <div className="flex items-center gap-2 mb-3 lg:mb-4">
           <div className="w-3 h-3 bg-red-500 rounded-full"></div>
           <h3 className="text-sm font-semibold text-gray-700">
-            Où le colis sera-t-il récupéré ?
+            Expéditeur / Commanditaire
           </h3>
         </div>
 
@@ -41,7 +41,7 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
             <div className="mt-2 lg:mt-3">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Nom et prénom <strong className={`text-red-600`}>*</strong>
+                  Nom et Prénom(s) <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
                   type="text"
@@ -188,29 +188,14 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Quartier <strong className={`text-red-600`}>*</strong>
+                  Quartier
                 </label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
-                  placeholder="Commune et/ou Arrondissement"
+                  placeholder="Quartier"
                   value={form.watch("pickupDistrict")}
-                  {...form.register("pickupDistrict", {
-                    required: "Ce champ est requis",
-                  })}
-                  onChange={(e) => {
-                    form.setValue("pickupDistrict", e.target.value);
-                  }}
-                  onFocus={() => {
-                    form.setError("pickupDistrict", { message: "" });
-                  }}
-                  onBlur={() => {
-                    if (!form.watch("pickupDistrict")) {
-                      form.setError("pickupDistrict", {
-                        message: "Ce champ est requis",
-                      });
-                    }
-                  }}
+                  {...form.register("pickupDistrict")}
                 />
                 {errors.pickupDistrict && (
                   <p className={`text-xs text-red-600`}>
@@ -220,30 +205,14 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Informations supplémentaires (Monument célèbre){" "}
-                  <strong className={`text-red-600`}>*</strong>
+                  Compléments d'infos / Monument célèbre
                 </label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Informations supplémentaires"
                   value={form.watch("pickupStreet")}
-                  {...form.register("pickupStreet", {
-                    required: "Ce champ est requis",
-                  })}
-                  onChange={(e) => {
-                    form.setValue("pickupStreet", e.target.value);
-                  }}
-                  onFocus={() => {
-                    form.setError("pickupStreet", { message: "" });
-                  }}
-                  onBlur={() => {
-                    if (!form.watch("pickupStreet")) {
-                      form.setError("pickupStreet", {
-                        message: "Ce champ est requis",
-                      });
-                    }
-                  }}
+                  {...form.register("pickupStreet")}
                 />
                 {errors.pickupStreet && (
                   <p className={`text-xs text-red-600`}>
@@ -261,7 +230,7 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
         <div className="flex items-center gap-2 mb-3 lg:mb-4">
           <div className="w-3 h-3 bg-green-500 rounded-full"></div>
           <h3 className="text-sm font-semibold text-gray-700">
-            Où est envoyé le colis ?
+            Destinataire / Bénéficiaire
           </h3>
         </div>
 
@@ -274,12 +243,12 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
             <div className="mt-2 lg:mt-3">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Nom et prénom <strong className={`text-red-600`}>*</strong>
+                  Nom et Prénom(s) <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
-                  placeholder="Nom et prénom"
+                  placeholder="Nom et Prénom(s)"
                   value={form.watch("deliveryName")}
                   {...form.register("deliveryName", {
                     required: "Ce champ est requis",
@@ -344,7 +313,7 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
 
           <div className="bg-gray-50 rounded-lg p-3 lg:p-4">
             <h4 className="text-xs font-semibold text-gray-700 mb-2 lg:mb-3">
-              Details Lieu d'arrivée
+              Details Lieu d'Arrivée
             </h4>
             <div className="space-y-2 lg:space-y-3">
               <div>
@@ -421,29 +390,14 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Quartier <strong className={`text-red-600`}>*</strong>
+                  Quartier
                 </label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
-                  placeholder="Commune et/ou Arrondissement"
+                  placeholder="Quartier"
                   value={form.watch("deliveryDistrict")}
-                  {...form.register("deliveryDistrict", {
-                    required: "Ce champ est requis",
-                  })}
-                  onChange={(e) => {
-                    form.setValue("deliveryDistrict", e.target.value);
-                  }}
-                  onFocus={() => {
-                    form.setError("deliveryDistrict", { message: "" });
-                  }}
-                  onBlur={() => {
-                    if (!form.watch("deliveryDistrict")) {
-                      form.setError("deliveryDistrict", {
-                        message: "Ce champ est requis",
-                      });
-                    }
-                  }}
+                  {...form.register("deliveryDistrict")}
                 />
                 {errors.deliveryDistrict && (
                   <p className={`text-xs text-red-600`}>
@@ -453,30 +407,14 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Informations supplémentaires (Monument célèbre){" "}
-                  <strong className={`text-red-600`}>*</strong>
+                  Compléments d'infos / Monument célèbre
                 </label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                   placeholder="Informations supplémentaires"
                   value={form.watch("deliveryStreet")}
-                  {...form.register("deliveryStreet", {
-                    required: "Ce champ est requis",
-                  })}
-                  onChange={(e) => {
-                    form.setValue("deliveryStreet", e.target.value);
-                  }}
-                  onFocus={() => {
-                    form.setError("deliveryStreet", { message: "" });
-                  }}
-                  onBlur={() => {
-                    if (!form.watch("deliveryStreet")) {
-                      form.setError("deliveryStreet", {
-                        message: "Ce champ est requis",
-                      });
-                    }
-                  }}
+                  {...form.register("deliveryStreet")}
                 />
                 {errors.deliveryStreet && (
                   <p className={`text-xs text-red-600`}>

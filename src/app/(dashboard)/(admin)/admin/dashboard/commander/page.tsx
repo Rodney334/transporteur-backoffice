@@ -63,10 +63,30 @@ export default function DashboardPage() {
   ];
 
   const transportTypes = [
-    { name: "Moto", icon: Motorbike, value: TransportMode.MOTO },
-    { name: "Voiture", icon: Car, value: TransportMode.VOITURE },
-    { name: "Camion", icon: Truck, value: TransportMode.CAMION },
-    { name: "Vélo", icon: Bike, value: TransportMode.VELO },
+    {
+      name: "Moto",
+      icon: Motorbike,
+      value: TransportMode.MOTO,
+      disabled: false,
+    },
+    {
+      name: "Tricycle",
+      icon: Motorbike,
+      value: TransportMode.TRICYCLE,
+      disabled: true
+    },
+    {
+      name: "Voiture",
+      icon: Car,
+      value: TransportMode.VOITURE,
+      disabled: true,
+    },
+    {
+      name: "Camion",
+      icon: Truck,
+      value: TransportMode.CAMION,
+      disabled: true,
+    },
   ];
 
   const topRef = useRef<HTMLDivElement>(null);
@@ -97,18 +117,14 @@ export default function DashboardPage() {
           "articleType",
           "deliveryCity",
           "deliveryCountry",
-          "deliveryDistrict",
           "deliveryName",
           "deliveryPhone",
-          "deliveryStreet",
           "deliveryType",
           "description",
           "pickupCity",
           "pickupCountry",
-          "pickupDistrict",
           "pickupName",
           "pickupPhone",
-          "pickupStreet",
         ];
 
         // Ne pas clear l'erreur du promoCodeId ici

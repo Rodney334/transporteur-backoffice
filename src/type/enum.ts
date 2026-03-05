@@ -72,7 +72,7 @@ export enum TransportMode {
   MOTO = "MOTO",
   VOITURE = "VOITURE",
   CAMION = "CAMION",
-  VELO = "VELO",
+  TRICYCLE = "TRICYCLE",
 }
 
 export enum ArticleType {

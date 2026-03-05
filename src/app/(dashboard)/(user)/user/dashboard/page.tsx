@@ -70,6 +70,12 @@ export default function DashboardPage() {
       disabled: false,
     },
     {
+      name: "Tricycle",
+      icon: Motorbike,
+      value: TransportMode.TRICYCLE,
+      disabled: true
+    },
+    {
       name: "Voiture",
       icon: Car,
       value: TransportMode.VOITURE,
@@ -81,7 +87,6 @@ export default function DashboardPage() {
       value: TransportMode.CAMION,
       disabled: true,
     },
-    { name: "Vélo", icon: Bike, value: TransportMode.VELO, disabled: true },
   ];
 
   const topRef = useRef<HTMLDivElement>(null);
@@ -191,18 +196,14 @@ export default function DashboardPage() {
           "articleType",
           "deliveryCity",
           "deliveryCountry",
-          "deliveryDistrict",
           "deliveryName",
           "deliveryPhone",
-          "deliveryStreet",
           "deliveryType",
           "description",
           "pickupCity",
           "pickupCountry",
-          "pickupDistrict",
           "pickupName",
           "pickupPhone",
-          "pickupStreet",
         ];
 
         // Ne pas clear l'erreur du promoCodeId ici
@@ -350,7 +351,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-2xl shadow-sm mb-4 p-4 lg:p-6">
             <h2 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 lg:mb-6">
               Informations sur le colis{" "}
-              <strong className={`text-red-600`}>**</strong>
+              <strong className={`text-red-600`}>*</strong>
             </h2>
             <div className={`flex flex-col mb-4 lg:mb-6`}>
               <label htmlFor="weight">Poids en kg (optionnel)</label>
@@ -435,7 +436,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-2xl shadow-sm p-4 lg:p-6">
             <h2 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 lg:mb-6">
               Information de la course{" "}
-              <strong className={`text-red-600`}>**</strong>
+              <strong className={`text-red-600`}>*</strong>
             </h2>
 
             <GeneralData form={form} errors={errors} />
