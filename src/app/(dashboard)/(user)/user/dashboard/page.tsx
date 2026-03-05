@@ -420,14 +420,7 @@ export default function DashboardPage() {
                 className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                 {...register("promoCodeId")}
                 onFocus={() => {
-                  form.setError("promoCodeId", { message: "" });
-                }}
-                onBlur={() => {
-                  const code = watch("promoCodeId");
-                  console.log("check code promo: ", code);
-                  if (code) {
-                    validateCodepromo(code, setError);
-                  }
+                  setError("promoCodeId", { message: "" });
                 }}
               />
               {errors.promoCodeId && (

@@ -327,18 +327,8 @@ export default function DashboardPage() {
                   type="text"
                   placeholder="Entrez votre code promo"
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
-                  {...register("promoCodeId")}
-                  onFocus={() => {
-                    form.setError("promoCodeId", { message: "" });
-                  }}
-                  onBlur={() => {
-                    const code = watch("promoCodeId");
-                    console.log("check code promo: ", code);
-                    if (code) {
-                      validateCodepromo(code, setError);
-                    }
-                  }}
-                />
+                {...register("promoCodeId")}
+              />
                 {errors.promoCodeId && (
                   <p className={`text-xs text-red-600`}>
                     {errors.promoCodeId.message}

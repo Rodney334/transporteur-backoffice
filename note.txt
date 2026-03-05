@@ -4,18 +4,15 @@ EN COURS
 
 Laisser un avis et une note sur les commandes TERMINES
 
-code promo management (partie 2)
+code promo management (partie 2) code promo spécifique aux utilisateurs
 
+refresh token
 
+liste séparée pour les codes promo (classique, partenaire, expiré ...)
 
-************************
-TERMINER
-************************
+date début et fin à revoir, ajouter les heures
 
-Pays bien visible dans le formulaire de commande
+websocket ne fonctionne pas bien
 
-Rafraichissement des commandes via websocket corrigé
+Deux fcm token envoyé (à revoir)
 
-Retirer le symbole Dollard des tableaux et formulaires
-
-Revoir les formulaires de code promo et partenaire

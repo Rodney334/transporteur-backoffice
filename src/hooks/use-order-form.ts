@@ -266,19 +266,6 @@ export const useOrderForm = () => {
     [],
   );
 
-  useEffect(() => {
-    const validateSavedPromo = async () => {
-      const savedPromo = savedData?.promoCodeId;
-      if (savedPromo && savedPromo.trim() !== "") {
-        console.log("Validation du code promo sauvegardé:", savedPromo);
-        await validateCodepromo(savedPromo, form.setError);
-      }
-    };
-
-    if (savedData?.promoCodeId) {
-      validateSavedPromo();
-    }
-  }, [savedData?.promoCodeId, validateCodepromo, form.setError]);
 
   const onSubmit = async (data: OrderFormData) => {
     setIsSubmitting(true);
