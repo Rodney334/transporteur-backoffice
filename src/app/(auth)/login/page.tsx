@@ -38,6 +38,37 @@ function LoginContent() {
   const onSubmit = async (data: LoginFormData) => {
     clearError();
 
+    // ── Vérification des permissions de notification (obligatoire) ──────────
+    if (typeof window !== "undefined" && "Notification" in window) {
+      if (Notification.permission === "denied") {
+        // Notifications bloquées par le navigateur → login impossible
+        setError(
+          "Les notifications sont bloquées. Veuillez les activer dans les paramètres de votre navigateur pour continuer.",
+        );
+        return;
+      }
+
+      if (Notification.permission === "default") {
+        // Demander la permission avant de se connecter
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission !== "granted") {
+            setError(
+              "Vous devez accepter les notifications pour utiliser l'application. Veuillez réessayer.",
+            );
+            return;
+          }
+        } catch (err) {
+          setError(
+            "Impossible de demander la permission de notification. Veuillez actualiser la page.",
+          );
+          return;
+        }
+      }
+      // permission === "granted" → continuer normalement
+    }
+    // ────────────────────────────────────────────────────────────────────────
+
     try {
       const response = await login(data.email, data.password);
       toast.success("Redirection en cours.", { autoClose: 5000 });
@@ -53,7 +84,6 @@ function LoginContent() {
       } else {
         setError("Erreur d'authentification. Réessayez plus tard.");
       }
-      // router.push("/dashboard");
     } catch (error) {
       console.log("Login failed:", error);
     }

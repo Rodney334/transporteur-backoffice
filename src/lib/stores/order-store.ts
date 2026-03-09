@@ -1,13 +1,12 @@
 // stores/order-store.ts
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import { Order } from "@/type/order.type";
 import { GrantedRole, OrderStatus, PaymentMethod } from "@/type/enum";
 import { orderService } from "@/lib/services/order-service";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useAuthStore } from "./auth-store";
-import { showSimpleNotification } from "@/utils/web-notifications-simple";
+import { notificationQueue } from "@/utils/notification-queue";
 import { useNotificationStore } from "./notification-store";
 import { User } from "@/type/user.type";
 
@@ -16,9 +15,10 @@ interface OrderStore {
   orders: Order[];
   loading: boolean;
   error: string | null;
-  lastFetched: number | null;
   socket: WebSocket | null;
   isConnected: boolean;
+  // Set des IDs de messages WS déjà traités (déduplication)
+  _processedWsKeys: Set<string>;
 
   // Actions de base
   setOrders: (orders: Order[]) => void;
@@ -47,9 +47,8 @@ interface OrderStore {
   addOrder: (order: Order) => void;
   removeOrder: (orderId: string) => void;
 
-  // Gestion du cache
+  // Nettoyage
   clearOrders: () => void;
-  invalidateCache: () => void;
 
   // Sélecteurs dérivés
   getOrderById: (orderId: string) => Order | undefined;
@@ -75,9 +74,9 @@ export const useOrderStore = create<OrderStore>()(
     orders: [],
     loading: false,
     error: null,
-    lastFetched: null,
     socket: null,
     isConnected: false,
+    _processedWsKeys: new Set<string>(),
 
     // Actions de base
     setOrders: (orders) => set({ orders }),
@@ -86,20 +85,8 @@ export const useOrderStore = create<OrderStore>()(
     setSocket: (socket) => set({ socket }),
     setIsConnected: (isConnected) => set({ isConnected }),
 
-    // Charger les commandes (avec cache)
+    // Charger les commandes (sans cache — état temps réel)
     fetchOrders: async (userId?: string, userRole?: string) => {
-      // const { lastFetched, orders, isConnected } = get();
-      const now = Date.now();
-
-      // Vérifier le cache (sauf si WebSocket est connecté pour données temps réel)
-      // if (
-      //   !isConnected &&
-      //   lastFetched &&
-      //   now - lastFetched < CACHE_DURATION &&
-      //   orders.length > 0
-      // ) {
-      //   return; // Utiliser le cache
-      // }
 
       try {
         set({ loading: true, error: null });
@@ -116,7 +103,6 @@ export const useOrderStore = create<OrderStore>()(
         set({
           orders: ordersData,
           loading: false,
-          lastFetched: now,
         });
       } catch (err: any) {
         console.log("Error fetching orders:", err);
@@ -224,44 +210,36 @@ export const useOrderStore = create<OrderStore>()(
 
         const { type, payload } = data;
 
-        toast.info(payload.message || "Nouvelle notification", {
+        // ── Déduplication ──────────────────────────────────────────────────
+        // Clé composite : type + orderId (si présent) + timestamp arrondi à 2s
+        const orderId = payload?.orderId || payload?.id || "";
+        const tsRounded = Math.floor(Date.now() / 2000); // fenêtre de 2s
+        const dedupKey = `${type}_${orderId}_${tsRounded}`;
+
+        const { _processedWsKeys } = get();
+        if (_processedWsKeys.has(dedupKey)) {
+          console.log("WebSocket message dupliqué ignoré:", dedupKey);
+          return;
+        }
+        // Ajouter la clé et l'expirer après 4s
+        _processedWsKeys.add(dedupKey);
+        setTimeout(() => _processedWsKeys.delete(dedupKey), 4000);
+        // ──────────────────────────────────────────────────────────────────
+
+        // Afficher le toast via la queue (délai 2s entre chaque)
+        const toastMessage = payload?.message || "Nouvelle notification";
+        notificationQueue.enqueueToast(toastMessage, {
           position: "top-right",
           autoClose: 5000,
-        });
+        }, dedupKey);
 
-        // await showSimpleNotification(
-        //   "Nouvelle notification",
-        //   payload.message || "Vous avez une nouvelle notification"
-        // );
-
-        // Notification web (seulement si permission accordée)
-        // if (typeof window !== "undefined" && "Notification" in window) {
-        //   if (Notification.permission === "granted") {
-        //     const notification = new Notification("Nouvelle notification", {
-        //       body: payload.message || "Vous avez une nouvelle notification",
-        //       icon: "/favicon.ico",
-        //     });
-
-        //     // Fermer automatiquement après 5 secondes
-        //     setTimeout(() => notification.close(), 5000);
-
-        //     // Rediriger au clic
-        //     notification.onclick = () => {
-        //       window.focus();
-        //       notification.close();
-        //     };
-        //   }
-        //   // Si permission n'est pas "granted", on n'affiche pas de notification web
-        //   // L'utilisateur doit d'abord activer via SimpleNotificationToggle
-        // }
-
+        // Rafraîchir les commandes et notifications
         const authStore = useAuthStore.getState();
         const { user } = authStore;
 
         const notifStore = useNotificationStore.getState();
         const { fetchNotifications } = notifStore;
 
-        // Rafraîchir les commandes
         const { fetchOrders } = get();
         if (user?._id && user?.role) {
           fetchOrders(user._id, user.role);
@@ -381,12 +359,7 @@ export const useOrderStore = create<OrderStore>()(
 
     // Vider les commandes
     clearOrders: () => {
-      set({ orders: [], lastFetched: null });
-    },
-
-    // Invalider le cache
-    invalidateCache: () => {
-      set({ lastFetched: null });
+      set({ orders: [] });
     },
 
     // Sélecteurs

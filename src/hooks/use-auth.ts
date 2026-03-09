@@ -48,11 +48,20 @@ export const useAuth = () => {
       setUser(newUser);
 
       // Envoyer le FCM token après un login réussi
+      // Déduplication : on ne renvoie le token que s'il a changé depuis le dernier envoi
       try {
         const fcmToken = await getFCMToken();
         if (fcmToken) {
-          await authService.sendFCMToken(fcmToken);
-          console.log("FCM token sent successfully");
+          const FCM_STORAGE_KEY = "lastSentFcmToken";
+          const lastSentToken = localStorage.getItem(FCM_STORAGE_KEY);
+
+          if (fcmToken !== lastSentToken) {
+            await authService.sendFCMToken(fcmToken);
+            localStorage.setItem(FCM_STORAGE_KEY, fcmToken);
+            console.log("FCM token sent successfully (new token)");
+          } else {
+            console.log("FCM token unchanged — skipping re-send");
+          }
         }
       } catch (fcmError) {
         // Ne pas bloquer le login si l'envoi du FCM token échoue

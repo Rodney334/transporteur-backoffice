@@ -2,6 +2,7 @@
 import { getToken, onMessage, Messaging } from "firebase/messaging";
 import { messaging } from "./firebase-config";
 import { firebaseConfig } from "./firebase-config";
+import { notificationQueue } from "@/utils/notification-queue";
 
 // VAPID key - You'll need to generate this from Firebase Console
 // Go to: Project Settings > Cloud Messaging > Web Push certificates
@@ -60,10 +61,12 @@ export const getFCMToken = async (): Promise<string | null> => {
 };
 
 /**
- * Listen for foreground messages
+ * Listen for foreground messages (Firebase Cloud Messaging).
+ * Les notifications passent par la notificationQueue (délai 2s, déduplication).
+ * @param callback optionnel pour traitement supplémentaire
  */
 export const onMessageListener = (
-  callback: (payload: any) => void,
+  callback?: (payload: any) => void,
 ): (() => void) => {
   if (!messaging) {
     console.warn("Firebase Messaging is not supported");
@@ -72,6 +75,32 @@ export const onMessageListener = (
 
   return onMessage(messaging as Messaging, (payload) => {
     console.log("Message received in foreground:", payload);
-    callback(payload);
+
+    // Clé de déduplication basée sur messageId Firebase
+    const dedupKey = payload.messageId
+      ? `fcm_${payload.messageId}`
+      : `fcm_${Math.floor(Date.now() / 2000)}`;
+
+    const title =
+      payload.notification?.title ||
+      payload.data?.title ||
+      "Nouvelle notification";
+    const body = payload.notification?.body || payload.data?.body || "";
+
+    // Toast via la queue (délai 2s entre chaque)
+    const message = body ? `${title} — ${body}` : title;
+    notificationQueue.enqueueToast(
+      message,
+      { position: "top-right", autoClose: 6000 },
+      dedupKey,
+    );
+
+    // Notification native si permission accordée et corps présent
+    if (body) {
+      notificationQueue.enqueueNotification(title, body, `${dedupKey}_native`);
+    }
+
+    // Callback optionnel
+    callback?.(payload);
   });
 };
