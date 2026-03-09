@@ -1,3 +1,7 @@
+liste séparée pour les codes promo (classique, partenaire, expiré ...)
+
+date début et fin à revoir, ajouter les heures
+
 ************************
 EN COURS
 ************************
@@ -8,9 +12,9 @@ code promo management (partie 2) code promo spécifique aux utilisateurs
 
 refresh token
 
-liste séparée pour les codes promo (classique, partenaire, expiré ...)
 
-date début et fin à revoir, ajouter les heures
+
+
 
 websocket ne fonctionne pas bien
 

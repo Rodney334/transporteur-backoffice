@@ -61,7 +61,10 @@ export default function CampaignFormModal({
 
     if (!formData.endsAt) {
       newErrors.endsAt = "La date de fin est requise";
-    } else if (formData.startsAt && new Date(formData.endsAt) < new Date(formData.startsAt)) {
+    } else if (
+      formData.startsAt &&
+      new Date(formData.endsAt) < new Date(formData.startsAt)
+    ) {
       newErrors.endsAt = "La date de fin doit être après la date de début";
     }
 
@@ -118,14 +121,18 @@ export default function CampaignFormModal({
             <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               placeholder="Ex: Ventes Flash Pâques"
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A] ${
                 errors.name ? "border-red-500" : "border-gray-300"
               }`}
               disabled={isLoading}
             />
-            {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+            {errors.name && (
+              <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -134,30 +141,38 @@ export default function CampaignFormModal({
                 Date de début <span className="text-red-500">*</span>
               </label>
               <input
-                type="date"
+                type="datetime-local"
                 value={formData.startsAt}
-                onChange={(e) => setFormData({ ...formData, startsAt: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, startsAt: e.target.value })
+                }
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A] ${
                   errors.startsAt ? "border-red-500" : "border-gray-300"
                 }`}
                 disabled={isLoading}
               />
-              {errors.startsAt && <p className="mt-1 text-sm text-red-500">{errors.startsAt}</p>}
+              {errors.startsAt && (
+                <p className="mt-1 text-sm text-red-500">{errors.startsAt}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Date de fin <span className="text-red-500">*</span>
               </label>
               <input
-                type="date"
+                type="datetime-local"
                 value={formData.endsAt}
-                onChange={(e) => setFormData({ ...formData, endsAt: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, endsAt: e.target.value })
+                }
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A] ${
                   errors.endsAt ? "border-red-500" : "border-gray-300"
                 }`}
                 disabled={isLoading}
               />
-              {errors.endsAt && <p className="mt-1 text-sm text-red-500">{errors.endsAt}</p>}
+              {errors.endsAt && (
+                <p className="mt-1 text-sm text-red-500">{errors.endsAt}</p>
+              )}
             </div>
           </div>
 
@@ -165,7 +180,9 @@ export default function CampaignFormModal({
             <div className="flex items-center gap-3">
               <div
                 className={`p-2 rounded-lg ${
-                  formData.isActive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
+                  formData.isActive
+                    ? "bg-green-100 text-green-600"
+                    : "bg-red-100 text-red-600"
                 }`}
               >
                 {formData.isActive ? (
@@ -175,7 +192,9 @@ export default function CampaignFormModal({
                 )}
               </div>
               <div>
-                <p className="font-medium text-gray-900 text-sm">Campagne active</p>
+                <p className="font-medium text-gray-900 text-sm">
+                  Campagne active
+                </p>
                 <p className="text-[10px] text-gray-500">
                   {formData.isActive ? "Activée" : "Désactivée"}
                 </p>
@@ -183,7 +202,9 @@ export default function CampaignFormModal({
             </div>
             <button
               type="button"
-              onClick={() => setFormData({ ...formData, isActive: !formData.isActive })}
+              onClick={() =>
+                setFormData({ ...formData, isActive: !formData.isActive })
+              }
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
                 formData.isActive ? "bg-[#FD481A]" : "bg-gray-300"
               }`}

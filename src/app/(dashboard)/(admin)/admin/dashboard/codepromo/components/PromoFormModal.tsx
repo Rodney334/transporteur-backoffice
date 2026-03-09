@@ -21,6 +21,25 @@ interface PromoFormModalProps {
   promoToEdit?: PromoCode | null;
 }
 
+const getTodayAtTime = (hours: number, minutes: number) => {
+  const date = new Date();
+  date.setHours(hours, minutes, 0, 0);
+  const pad = (num: number) => num.toString().padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+const formatToDateTimeLocal = (dateString: string | undefined | null) => {
+  if (!dateString) return "";
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "";
+    const pad = (num: number) => num.toString().padStart(2, "0");
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  } catch (e) {
+    return "";
+  }
+};
+
 export default function PromoFormModal({
   isOpen,
   onClose,
@@ -52,10 +71,8 @@ export default function PromoFormModal({
         minOrderAmount: promoToEdit.minOrderAmount.toString(),
         usageLimit: promoToEdit.usageLimit?.toString() || "",
         usageLimitPerUser: promoToEdit.usageLimitPerUser?.toString() || "",
-        startsAt: promoToEdit.startsAt
-          ? promoToEdit.startsAt.split("T")[0]
-          : "",
-        endsAt: promoToEdit.endsAt ? promoToEdit.endsAt.split("T")[0] : "",
+        startsAt: formatToDateTimeLocal(promoToEdit.startsAt),
+        endsAt: formatToDateTimeLocal(promoToEdit.endsAt),
         channel: promoToEdit.channel,
         isActive: promoToEdit.isActive,
       });
@@ -68,8 +85,8 @@ export default function PromoFormModal({
         minOrderAmount: "0",
         usageLimit: "",
         usageLimitPerUser: "",
-        startsAt: "",
-        endsAt: "",
+        startsAt: getTodayAtTime(0, 0),
+        endsAt: getTodayAtTime(23, 59),
         channel: "PUBLIC",
         isActive: true,
       });
@@ -257,13 +274,13 @@ export default function PromoFormModal({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Canal de diffusion <span className="text-red-500">*</span>
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <button
                   type="button"
                   onClick={() =>
                     setFormData({ ...formData, channel: "PUBLIC" })
                   }
-                  className={`cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-colors ${
+                  className={`cursor-pointer flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg border transition-colors ${
                     formData.channel === "PUBLIC"
                       ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
                       : "border-gray-300 hover:border-gray-400"
@@ -271,22 +288,35 @@ export default function PromoFormModal({
                   disabled={isLoading}
                 >
                   <Globe className="w-4 h-4" />
-                  <span>Public</span>
+                  <span className="text-xs">Public</span>
                 </button>
                 <button
                   type="button"
                   onClick={() =>
-                    setFormData({ ...formData, channel: "PRIVATE" })
+                    setFormData({ ...formData, channel: "PARTNER" })
                   }
-                  className={`cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-colors ${
-                    formData.channel === "PRIVATE"
+                  className={`cursor-pointer flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg border transition-colors ${
+                    formData.channel === "PARTNER"
                       ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
                       : "border-gray-300 hover:border-gray-400"
                   }`}
                   disabled={isLoading}
                 >
-                  <Lock className="w-4 h-4" />
-                  <span>Privé</span>
+                  <Users className="w-4 h-4" />
+                  <span className="text-xs">Partenaire</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, channel: "VIP" })}
+                  className={`cursor-pointer flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg border transition-colors ${
+                    formData.channel === "VIP"
+                      ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
+                      : "border-gray-300 hover:border-gray-400"
+                  }`}
+                  disabled={isLoading}
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span className="text-xs">VIP</span>
                 </button>
               </div>
             </div>
@@ -295,7 +325,7 @@ export default function PromoFormModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Nombre d'utilisation total
+                  Nombre d'utilisateur
                 </label>
                 <div className="relative">
                   <input
@@ -376,7 +406,7 @@ export default function PromoFormModal({
                 </label>
                 <div className="relative">
                   <input
-                    type="date"
+                    type="datetime-local"
                     value={formData.startsAt}
                     onChange={(e) =>
                       setFormData({ ...formData, startsAt: e.target.value })
@@ -392,7 +422,7 @@ export default function PromoFormModal({
                 </label>
                 <div className="relative">
                   <input
-                    type="date"
+                    type="datetime-local"
                     value={formData.endsAt}
                     onChange={(e) =>
                       setFormData({ ...formData, endsAt: e.target.value })
@@ -458,7 +488,6 @@ export default function PromoFormModal({
             </button>
             <button
               type="submit"
-              onClick={handleSubmit}
               disabled={isLoading}
               className="cursor-pointer flex-1 px-4 py-3 text-sm font-medium text-white bg-[#FD481A] hover:bg-[#E63F15] rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >

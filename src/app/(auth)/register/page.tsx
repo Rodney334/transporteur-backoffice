@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Check, X, Circle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -18,6 +18,10 @@ function RegisterContent() {
 
   const { register: registerUser, isLoading, error, clearError } = useAuth();
   const router = useRouter();
+
+  const [passwordValue, setPasswordValue] = useState("");
+  const hasMinLength = passwordValue.length >= 8;
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(passwordValue);
 
   const {
     register,
@@ -202,11 +206,18 @@ function RegisterContent() {
                 {...register("password", {
                   required: "Le mot de passe est obligatoire",
                   minLength: {
-                    value: 6,
+                    value: 8,
                     message:
-                      "Le mot de passe doit contenir au moins 6 caractères",
+                      "Le mot de passe doit contenir au moins 8 caractères",
                   },
+                  validate: (value) =>
+                    /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                    "Le mot de passe doit contenir au moins un caractère spécial",
                 })}
+                onChange={(e) => {
+                  register("password").onChange(e);
+                  setPasswordValue(e.target.value);
+                }}
               />
               <button
                 type="button"
@@ -220,7 +231,55 @@ function RegisterContent() {
                 )}
               </button>
             </div>
-            {errors.password && (
+            {/* Password Indicators */}
+            <div className="mt-3 space-y-2">
+              <div className="flex items-center gap-2 text-sm">
+                {passwordValue === "" ? (
+                  <Circle className="w-4 h-4 text-gray-300" />
+                ) : hasMinLength ? (
+                  <Check className="w-4 h-4 text-green-500" />
+                ) : (
+                  <X className="w-4 h-4 text-red-500" />
+                )}
+                <span
+                  className={
+                    passwordValue === ""
+                      ? "text-gray-500"
+                      : hasMinLength
+                        ? "text-green-600 font-medium"
+                        : "text-red-600"
+                  }
+                >
+                  Au moins 8 caractères
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                {passwordValue === "" ? (
+                  <Circle className="w-4 h-4 text-gray-300" />
+                ) : hasSpecialChar ? (
+                  <Check className="w-4 h-4 text-green-500" />
+                ) : (
+                  <X className="w-4 h-4 text-red-500" />
+                )}
+                <span
+                  className={
+                    passwordValue === ""
+                      ? "text-gray-500"
+                      : hasSpecialChar
+                        ? "text-green-600 font-medium"
+                        : "text-red-600"
+                  }
+                >
+                  Au moins un caractère spécial
+                </span>
+              </div>
+            </div>
+            {errors.password && !hasMinLength && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.password.message}
+              </p>
+            )}
+            {errors.password && hasMinLength && !hasSpecialChar && (
               <p className="mt-1 text-sm text-red-600">
                 {errors.password.message}
               </p>

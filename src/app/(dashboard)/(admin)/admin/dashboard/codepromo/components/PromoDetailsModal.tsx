@@ -80,7 +80,11 @@ export default function PromoDetailsModal() {
                     Canal
                   </label>
                   <div className="text-sm text-gray-900">
-                    {selectedPromo.channel === "PUBLIC" ? "Public" : "Privé"}
+                    {selectedPromo.channel === "PUBLIC"
+                      ? "Public"
+                      : selectedPromo.channel === "PARTNER"
+                        ? "Partenaire"
+                        : "VIP"}
                   </div>
                 </div>
                 <div>
@@ -181,7 +185,7 @@ export default function PromoDetailsModal() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">
-                    Limite totale
+                    Limite utilisateur
                   </label>
                   <div className="text-lg font-bold text-gray-900">
                     {selectedPromo.usageLimit?.toLocaleString() || "Illimité"}
@@ -189,7 +193,7 @@ export default function PromoDetailsModal() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">
-                    Par utilisateur
+                    Limite par utilisateur
                   </label>
                   <div className="text-lg font-bold text-gray-900">
                     {selectedPromo.usageLimitPerUser?.toLocaleString() ||

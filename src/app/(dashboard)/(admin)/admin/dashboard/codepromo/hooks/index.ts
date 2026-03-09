@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { usePromoStore } from "../stores";
 import { promoService } from "../services";
 import { useAuth } from "@/hooks/use-auth";
-import { PromoCode, PromoType, CreatePromoDto, UpdatePromoDto } from "../types";
+import { PromoCode, PromoType, CreatePromoDto, UpdatePromoDto, PromoUserEligibilityDto } from "../types";
 
 export const usePromos = () => {
   const { user } = useAuth();
@@ -131,6 +131,33 @@ export const usePromos = () => {
     [removePromo, setLoading],
   );
 
+  // Définir l'éligibilité des utilisateurs
+  const setUserEligibility = useCallback(
+    async (data: PromoUserEligibilityDto) => {
+      try {
+        setLoading(true);
+        await promoService.setUserEligibility(data);
+        toast.success("Éligibilité des utilisateurs mise à jour", {
+          position: "top-left",
+        });
+        return true;
+      } catch (error: any) {
+        console.error("Erreur éligibilité utilisateurs:", error);
+        toast.error(
+          error.response?.data?.message ||
+            "Erreur lors de la mise à jour de l'éligibilité",
+          {
+            position: "top-left",
+          },
+        );
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setLoading],
+  );
+
   // Exporter les codes promo
   const exportPromos = useCallback(
     async (format: "csv" = "csv") => {
@@ -216,6 +243,7 @@ export const usePromos = () => {
     createPromo,
     updatePromo: updatePromoCode,
     deletePromo,
+    setUserEligibility,
     exportPromos,
     openDetailsModal,
     closeDetailsModal,

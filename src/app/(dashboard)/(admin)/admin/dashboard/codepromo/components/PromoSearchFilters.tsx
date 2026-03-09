@@ -1,5 +1,5 @@
 // components/PromoSearchFilters.tsx
-import { Search, Filter, Calendar, Tag, Power } from "lucide-react";
+import { Search, Filter, Calendar, Tag, Power, Users } from "lucide-react";
 
 interface PromoSearchFiltersProps {
   searchTerm: string;
@@ -8,6 +8,14 @@ interface PromoSearchFiltersProps {
   onActiveFilterChange: (value: "all" | "active" | "inactive") => void;
   dateRangeFilter: { start: string; end: string };
   onDateRangeFilterChange: (range: { start: string; end: string }) => void;
+  channelFilter: string;
+  onChannelFilterChange: (value: string) => void;
+  companyFilter: string;
+  onCompanyFilterChange: (value: string) => void;
+  userFilter: string;
+  onUserFilterChange: (value: string) => void;
+  companies: any[];
+  users: any[];
   itemsPerPage: number;
   onItemsPerPageChange: (value: number) => void;
   totalItems: number;
@@ -28,6 +36,14 @@ export default function PromoSearchFilters({
   onActiveFilterChange,
   dateRangeFilter,
   onDateRangeFilterChange,
+  channelFilter,
+  onChannelFilterChange,
+  companyFilter,
+  onCompanyFilterChange,
+  userFilter,
+  onUserFilterChange,
+  companies,
+  users,
   itemsPerPage,
   onItemsPerPageChange,
   totalItems,
@@ -103,6 +119,64 @@ export default function PromoSearchFilters({
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
               />
             </div>
+          </div>
+
+          {/* Filtre par canal */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              <Tag className="w-4 h-4 inline mr-1" />
+              Canal
+            </label>
+            <select
+              value={channelFilter}
+              onChange={(e) => onChannelFilterChange(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+            >
+              <option value="all">Tous les canaux</option>
+              <option value="PUBLIC">Public</option>
+              <option value="PARTNER">Partenaire</option>
+              <option value="VIP">VIP</option>
+            </select>
+          </div>
+
+          {/* Filtre par entreprise */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              <Filter className="w-4 h-4 inline mr-1" />
+              Entreprise
+            </label>
+            <select
+              value={companyFilter}
+              onChange={(e) => onCompanyFilterChange(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+            >
+              <option value="all">Toutes les entreprises</option>
+              {companies.map((company) => (
+                <option key={company.id} value={company.id}>
+                  {company.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Filtre par utilisateur */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              <Users className="w-4 h-4 inline mr-1" />
+              Utilisateur assigné
+            </label>
+            <select
+              value={userFilter}
+              onChange={(e) => onUserFilterChange(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+            >
+              <option value="all">Tous les utilisateurs</option>
+              {users.map((user, index) => (
+                <option key={index} value={user._id}>
+                  {user.name} ({user.phoneNumber})
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 

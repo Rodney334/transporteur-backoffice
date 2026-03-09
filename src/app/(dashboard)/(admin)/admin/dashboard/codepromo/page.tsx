@@ -11,10 +11,15 @@ import PromoDetailsModal from "./components/PromoDetailsModal";
 import PromoFormModal from "./components/PromoFormModal";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
 import PromoColumnVisibilityToggle from "./components/PromoColumnVisibilityToggle";
+import PromoTypeSelectionModal from "./components/PromoTypeSelectionModal";
+import UserSpecificPromoModal from "./components/UserSpecificPromoModal";
 import ProtectedRoute from "@/components/Protected-route";
 import { usePromos } from "./hooks";
+import { usePartners } from "./hooks/use-partners";
 import { GrantedRole } from "@/type/enum";
 import { PromoCode } from "./types";
+import { userService } from "@/lib/services/user-service";
+import { User } from "@/type/user.type";
 
 // Définition des colonnes avec leur visibilité par défaut
 const defaultVisibleColumns = {
@@ -38,6 +43,8 @@ export default function CodepromoPage() {
     formatDate,
     getActiveStatusColor,
   } = usePromos();
+  const { partners, loadPartners } = usePartners();
+  const [users, setUsers] = useState<User[]>([]);
 
   // États pour les filtres
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,6 +55,9 @@ export default function CodepromoPage() {
     start: "",
     end: "",
   });
+  const [channelFilter, setChannelFilter] = useState("all");
+  const [companyFilter, setCompanyFilter] = useState("all");
+  const [userFilter, setUserFilter] = useState("all");
 
   // États pour la pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,15 +68,29 @@ export default function CodepromoPage() {
   const [showColumnToggle, setShowColumnToggle] = useState(false);
 
   // États pour les modals
+  const [isTypeSelectionModalOpen, setIsTypeSelectionModalOpen] =
+    useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isUserSpecificModalOpen, setIsUserSpecificModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedPromo, setSelectedPromo] = useState<PromoCode | null>(null);
 
-  // Charger les codes promo au montage
+  // Charger les données au montage
   useEffect(() => {
     loadPromos();
-  }, [loadPromos]);
+    loadPartners();
+    loadUsers();
+  }, [loadPromos, loadPartners]);
+
+  const loadUsers = async () => {
+    try {
+      const data = await userService.getAllUsers();
+      setUsers(data);
+    } catch (error) {
+      console.error("Erreur chargement utilisateurs:", error);
+    }
+  };
 
   // Filtrer les codes promo
   const filteredPromos = promos.filter((promo) => {
@@ -105,7 +129,26 @@ export default function CodepromoPage() {
       return matches;
     };
 
-    return matchesSearch && matchesActiveFilter && matchesDateRange();
+    // Filtre par canal
+    const matchesChannel =
+      channelFilter === "all" || promo.channel === channelFilter;
+
+    // Filtre par entreprise
+    const matchesCompany =
+      companyFilter === "all" || promo.companyId === companyFilter;
+
+    // Filtre par utilisateur assigné
+    const matchesUser =
+      userFilter === "all" || promo.assignedUserId === userFilter;
+
+    return (
+      matchesSearch &&
+      matchesActiveFilter &&
+      matchesDateRange() &&
+      matchesChannel &&
+      matchesCompany &&
+      matchesUser
+    );
   });
 
   // Calculer la pagination
@@ -118,7 +161,14 @@ export default function CodepromoPage() {
   // Réinitialiser à la première page quand les filtres changent
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, activeFilter, dateRangeFilter]);
+  }, [
+    searchTerm,
+    activeFilter,
+    dateRangeFilter,
+    channelFilter,
+    companyFilter,
+    userFilter,
+  ]);
 
   // Gestion du toggle des colonnes
   const handleToggleColumn = (column: string) => {
@@ -152,7 +202,9 @@ export default function CodepromoPage() {
 
   // Fermeture des modals
   const handleCloseModals = () => {
+    setIsTypeSelectionModalOpen(false);
     setIsCreateModalOpen(false);
+    setIsUserSpecificModalOpen(false);
     setIsEditModalOpen(false);
     setIsDeleteModalOpen(false);
     setSelectedPromo(null);
@@ -182,8 +234,8 @@ export default function CodepromoPage() {
             </Link>
 
             <button
-              onClick={() => setIsCreateModalOpen(true)}
-              className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-[#FD481A] text-white rounded-lg hover:bg-[#E63F15] transition-colors"
+              onClick={() => setIsTypeSelectionModalOpen(true)}
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-[#FD481A] text-white rounded-lg hover:bg-[#E63F15] transition-colors shadow-lg shadow-orange-100"
             >
               <Plus className="w-4 h-4" />
               Nouveau code
@@ -242,6 +294,14 @@ export default function CodepromoPage() {
           onActiveFilterChange={setActiveFilter}
           dateRangeFilter={dateRangeFilter}
           onDateRangeFilterChange={setDateRangeFilter}
+          channelFilter={channelFilter}
+          onChannelFilterChange={setChannelFilter}
+          companyFilter={companyFilter}
+          onCompanyFilterChange={setCompanyFilter}
+          userFilter={userFilter}
+          onUserFilterChange={setUserFilter}
+          companies={partners}
+          users={users}
           itemsPerPage={itemsPerPage}
           onItemsPerPageChange={setItemsPerPage}
           totalItems={promos.length}
@@ -292,6 +352,19 @@ export default function CodepromoPage() {
 
         {/* Modals */}
         <PromoDetailsModal />
+
+        <PromoTypeSelectionModal
+          isOpen={isTypeSelectionModalOpen}
+          onClose={() => setIsTypeSelectionModalOpen(false)}
+          onSelectGeneral={() => setIsCreateModalOpen(true)}
+          onSelectUserSpecific={() => setIsUserSpecificModalOpen(true)}
+        />
+
+        <UserSpecificPromoModal
+          isOpen={isUserSpecificModalOpen}
+          onClose={handleCloseModals}
+          users={users}
+        />
 
         <PromoFormModal
           isOpen={isCreateModalOpen}

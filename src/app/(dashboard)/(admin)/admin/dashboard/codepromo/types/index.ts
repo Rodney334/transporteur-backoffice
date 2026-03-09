@@ -1,6 +1,6 @@
 // types/promo.type.ts
 export type PromoType = "PERCENT" | "FIXED";
-export type PromoChannel = "PUBLIC" | "PRIVATE";
+export type PromoChannel = "PUBLIC" | "PARTNER" | "VIP";
 
 export interface PromoConstraints {
   maxDiscount?: number;
@@ -118,7 +118,7 @@ export interface BatchPromoDto {
   usageLimitPerUser: number;
   startsAt: string;
   endsAt: string;
-  channel: string;
+  channel: PromoChannel;
 }
 
 export interface PromoExportData {
@@ -140,4 +140,10 @@ export interface PromoExportData {
   minOrderAmount: string;
   maxDiscount: string;
   constraints: string;
+}
+export interface PromoUserEligibilityDto {
+  code: string;
+  userIds: string[];
+  mode: "ADD" | "SET";
+  forbidIfAlreadyUsed: boolean;
 }

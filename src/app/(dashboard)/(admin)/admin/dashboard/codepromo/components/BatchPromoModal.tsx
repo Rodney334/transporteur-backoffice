@@ -244,7 +244,7 @@ export default function BatchPromoModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Nombre d'utilisation total
+                  Nombre d'utilisateur
                 </label>
                 <input
                   type="number"
@@ -280,10 +280,10 @@ export default function BatchPromoModal({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Début
+                  Date de début
                 </label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   value={formData.startsAt}
                   onChange={(e) =>
                     setFormData({ ...formData, startsAt: e.target.value })
@@ -295,10 +295,10 @@ export default function BatchPromoModal({
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Fin
+                  Date de fin
                 </label>
                 <input
-                  type="date"
+                  type="datetime-local"
                   value={formData.endsAt}
                   onChange={(e) =>
                     setFormData({ ...formData, endsAt: e.target.value })

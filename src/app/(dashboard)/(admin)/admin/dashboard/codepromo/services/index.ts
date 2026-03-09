@@ -1,5 +1,5 @@
 // lib/services/promo-service.ts
-import { PromoCode, CreatePromoDto, UpdatePromoDto } from "../types";
+import { PromoCode, CreatePromoDto, UpdatePromoDto, PromoUserEligibilityDto } from "../types";
 import { api } from "@/lib/api/axios";
 
 export const promoService = {
@@ -30,6 +30,11 @@ export const promoService = {
   // Supprimer un code promo
   async deletePromo(id: string): Promise<void> {
     await api.delete(`/promo/codes/${id}`);
+  },
+
+  // Définir l'éligibilité des utilisateurs
+  async setUserEligibility(data: PromoUserEligibilityDto): Promise<void> {
+    await api.post("/promo/eligibility/users", data);
   },
 
   // Exporter en CSV
@@ -67,7 +72,11 @@ export const promoService = {
       promo.endsAt ? new Date(promo.endsAt).toLocaleString("fr-FR") : "-",
       new Date(promo.createdAt).toLocaleString("fr-FR"),
       new Date(promo.updatedAt).toLocaleString("fr-FR"),
-      promo.channel,
+      promo.channel === "PUBLIC"
+        ? "Public"
+        : promo.channel === "PARTNER"
+          ? "Partenaire"
+          : "VIP",
       promo.companyId || "-",
       promo.campaignId || "-",
       promo.assignedUserId || "-",

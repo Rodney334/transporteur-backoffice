@@ -152,7 +152,11 @@ export default function PromoTable({
                           {promo.code}
                         </div>
                         <div className="text-xs text-gray-500">
-                          {promo.channel}
+                          {promo.channel === "PUBLIC"
+                            ? "Public"
+                            : promo.channel === "PARTNER"
+                              ? "Partenaire"
+                              : "VIP"}
                         </div>
                       </div>
                     </div>
@@ -299,7 +303,13 @@ export default function PromoTable({
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Canal</p>
-                    <p className="text-sm text-gray-900">{promo.channel}</p>
+                    <p className="text-sm text-gray-900">
+                      {promo.channel === "PUBLIC"
+                        ? "Public"
+                        : promo.channel === "PARTNER"
+                          ? "Partenaire"
+                          : "VIP"}
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Début</p>
