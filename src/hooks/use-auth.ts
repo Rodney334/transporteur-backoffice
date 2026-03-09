@@ -83,6 +83,7 @@ export const useAuth = () => {
     password: string;
     phoneNumber: string;
     countryCode: string;
+    signupIntent: "livreur" | "client";
     genderrole: GenderType;
   }) => {
     setLoading(true);

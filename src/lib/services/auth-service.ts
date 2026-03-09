@@ -14,6 +14,7 @@ export interface RegisterData {
   password: string;
   phoneNumber: string;
   countryCode: string;
+  signupIntent: "livreur" | "client";
   genderrole: GenderType;
 }
 

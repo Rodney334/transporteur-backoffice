@@ -2,8 +2,8 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff, Check, X, Circle } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Eye, EyeOff, Check, X, Circle, ChevronDown } from "lucide-react";
+import { useForm, Controller } from "react-hook-form";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { GenderType } from "@/type/enum";
@@ -11,10 +11,27 @@ import { LoadingFullPage } from "@/components/Loading";
 import { RegisterData } from "@/lib/services/auth-service";
 import { toast } from "react-toastify";
 
+// Liste des pays prioritaires (Bénin en premier, puis les plus courants)
+const COUNTRY_CODES = [
+  { code: "+229", flag: "🇧🇯", name: "Bénin", iso: "BJ" },
+  { code: "+225", flag: "🇨🇮", name: "Côte d'Ivoire", iso: "CI" },
+  { code: "+221", flag: "🇸🇳", name: "Sénégal", iso: "SN" },
+  { code: "+226", flag: "🇧🇫", name: "Burkina Faso", iso: "BF" },
+  { code: "+228", flag: "🇹🇬", name: "Togo", iso: "TG" },
+  { code: "+227", flag: "🇳🇪", name: "Niger", iso: "NE" },
+  { code: "+223", flag: "🇲🇱", name: "Mali", iso: "ML" },
+  { code: "+237", flag: "🇨🇲", name: "Cameroun", iso: "CM" },
+  { code: "+242", flag: "🇨🇬", name: "Congo", iso: "CG" },
+  { code: "+243", flag: "🇨🇩", name: "RD Congo", iso: "CD" },
+  { code: "+33", flag: "🇫🇷", name: "France", iso: "FR" },
+  { code: "+1", flag: "🇺🇸", name: "États-Unis", iso: "US" },
+];
+
 function RegisterContent() {
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/dashboard";
   const [showPassword, setShowPassword] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]); // Bénin par défaut
 
   const { register: registerUser, isLoading, error, clearError } = useAuth();
   const router = useRouter();
@@ -26,22 +43,29 @@ function RegisterContent() {
   const {
     register,
     handleSubmit,
+    control,
+    setValue,
     formState: { errors },
   } = useForm<RegisterData>({
     defaultValues: {
-      countryCode: "BJ",
+      countryCode: "+229",
       genderrole: GenderType.Man,
+      signupIntent: "client",
     },
   });
 
   const onSubmit = async (data: RegisterData) => {
     clearError();
-
     try {
-      await registerUser(data);
-      // router.push(redirect);
-      toast.success("Redirection en cours.", { autoClose: 3000 });
-      // router.push("/user/dashboard");
+      // S'assurer que le countryCode correspond au pays sélectionné
+      const payload: RegisterData = {
+        ...data,
+        countryCode: selectedCountry.code,
+      };
+      await registerUser(payload);
+      toast.success("Inscription réussie ! Vérifiez votre email.", {
+        autoClose: 3000,
+      });
       router.push(`/check-email?email=${encodeURIComponent(data.email)}`);
     } catch (error) {
       console.log("Registration failed:", error);
@@ -112,7 +136,7 @@ function RegisterContent() {
             <input
               id="email"
               type="email"
-              placeholder="uistore@gmail.com"
+              placeholder="exemple@gmail.com"
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all ${
                 errors.email ? "border-red-500" : "border-gray-300"
               }`}
@@ -131,7 +155,7 @@ function RegisterContent() {
             )}
           </div>
 
-          {/* Phone Number */}
+          {/* Phone Number avec sélecteur de pays */}
           <div>
             <label
               htmlFor="phoneNumber"
@@ -139,24 +163,133 @@ function RegisterContent() {
             >
               Numéro de téléphone
             </label>
-            <input
-              id="phoneNumber"
-              type="tel"
-              placeholder="+229 01 02 03 04"
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all ${
+            <div
+              className={`flex border rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-[#FD481A] focus-within:border-transparent transition-all ${
                 errors.phoneNumber ? "border-red-500" : "border-gray-300"
               }`}
-              {...register("phoneNumber", {
-                required: "Le numéro de téléphone est obligatoire",
-                pattern: {
-                  value: /^\+?[\d\s-]+$/,
-                  message: "Numéro de téléphone invalide",
-                },
-              })}
-            />
+            >
+              {/* Sélecteur d'indicatif pays */}
+              <div className="relative">
+                <button
+                  type="button"
+                  id="countryCodeSelector"
+                  onClick={() => setShowCountryDropdown((v) => !v)}
+                  className="cursor-pointer flex items-center gap-1.5 px-3 py-3 bg-gray-50 border-r border-gray-300 hover:bg-gray-100 transition-colors h-full text-sm font-medium text-gray-700 whitespace-nowrap"
+                >
+                  <span className="text-base">{selectedCountry.flag}</span>
+                  <span>{selectedCountry.code}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+                </button>
+
+                {showCountryDropdown && (
+                  <div className="absolute z-50 top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+                    <div className="max-h-56 overflow-y-auto">
+                      {COUNTRY_CODES.map((country) => (
+                        <button
+                          key={country.iso}
+                          type="button"
+                          onClick={() => {
+                            setSelectedCountry(country);
+                            setValue("countryCode", country.code);
+                            setShowCountryDropdown(false);
+                          }}
+                          className={`cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-gray-50 transition-colors ${
+                            selectedCountry.iso === country.iso
+                              ? "bg-[#FD481A]/10 text-[#FD481A] font-medium"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <span className="text-base">{country.flag}</span>
+                          <span className="flex-1">{country.name}</span>
+                          <span className="text-gray-500 font-mono text-xs">
+                            {country.code}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Champ numéro */}
+              <input
+                id="phoneNumber"
+                type="tel"
+                placeholder="01 12 34 56 78"
+                className="flex-1 px-4 py-3 focus:outline-none bg-white text-sm"
+                {...register("phoneNumber", {
+                  required: "Le numéro de téléphone est obligatoire",
+                  pattern: {
+                    value: /^[\d\s\-().]+$/,
+                    message:
+                      "Numéro de téléphone invalide (chiffres uniquement)",
+                  },
+                  minLength: {
+                    value: 8,
+                    message: "Le numéro doit contenir au moins 8 chiffres",
+                  },
+                })}
+              />
+            </div>
             {errors.phoneNumber && (
               <p className="mt-1 text-sm text-red-600">
                 {errors.phoneNumber.message}
+              </p>
+            )}
+            <p className="mt-1 text-xs text-gray-400">
+              Saisissez uniquement les chiffres sans l'indicatif pays
+            </p>
+          </div>
+
+          {/* Signup Intent */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Je m'inscris en tant que
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <Controller
+                name="signupIntent"
+                control={control}
+                rules={{ required: "Veuillez choisir un rôle" }}
+                render={({ field }) => (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => field.onChange("client")}
+                      className={`cursor-pointer flex flex-col items-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
+                        field.value === "client"
+                          ? "border-[#FD481A] bg-[#FD481A]/5 text-[#FD481A]"
+                          : "border-gray-200 text-gray-600 hover:border-gray-300"
+                      }`}
+                    >
+                      <span className="text-2xl">📦</span>
+                      <span className="text-sm font-medium">Client</span>
+                      <span className="text-xs text-center opacity-70">
+                        Je veux envoyer des colis
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => field.onChange("livreur")}
+                      className={`cursor-pointer flex flex-col items-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
+                        field.value === "livreur"
+                          ? "border-[#FD481A] bg-[#FD481A]/5 text-[#FD481A]"
+                          : "border-gray-200 text-gray-600 hover:border-gray-300"
+                      }`}
+                    >
+                      <span className="text-2xl">🏍️</span>
+                      <span className="text-sm font-medium">Livreur</span>
+                      <span className="text-xs text-center opacity-70">
+                        Je veux livrer des colis
+                      </span>
+                    </button>
+                  </>
+                )}
+              />
+            </div>
+            {errors.signupIntent && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.signupIntent.message}
               </p>
             )}
           </div>
@@ -171,7 +304,7 @@ function RegisterContent() {
             </label>
             <select
               id="genderrole"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all bg-white"
               {...register("genderrole", {
                 required: "Le genre est obligatoire",
               })}
@@ -286,7 +419,7 @@ function RegisterContent() {
             )}
           </div>
 
-          {/* Country Code (hidden) */}
+          {/* Hidden fields */}
           <input type="hidden" {...register("countryCode")} />
 
           {/* Submit button */}
