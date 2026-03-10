@@ -43,10 +43,10 @@ export const AssignOrderModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden transform transition-all duration-300 scale-100">
         {/* Header */}
-        <div className="p-6 border-b border-gray-100">
+        <div className="p-6 border-b border-gray-100 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="shrink-0 w-10 h-10 bg-[#FD481A]/20 rounded-full flex items-center justify-center">
@@ -73,8 +73,11 @@ export const AssignOrderModal = ({
         </div>
 
         {/* Contenu */}
-        <form onSubmit={handleSubmit}>
-          <div className="p-6">
+        <form
+          onSubmit={handleSubmit}
+          className="flex-1 flex flex-col overflow-hidden"
+        >
+          <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-gray-200">
             <div className="space-y-6">
               {/* Information */}
               <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
@@ -114,7 +117,7 @@ export const AssignOrderModal = ({
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 p-6 border-t border-gray-100">
+          <div className="flex gap-3 p-6 border-t border-gray-100 bg-gray-50/50 shrink-0">
             <button
               type="button"
               onClick={onClose}

@@ -75,34 +75,39 @@ export const CommandCard = memo(function CommandCard({
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
         <div>
-          <div className="text-sm font-semibold text-[#FD481A] mb-1">
-            Reference no : {item.reference}
+          <div className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">
+            Référence
           </div>
-          <div className="flex gap-2 text-xs text-gray-400">
-            <span>{item.date}</span>
-            <span>|</span>
+          <div className="text-lg font-black text-[#FD481A] leading-none mb-2">
+            #{item.reference}
+          </div>
+          <div className="flex flex-wrap gap-2 text-[10px] font-bold">
+            <span className="px-2 py-1 bg-gray-100 text-gray-500 rounded-md">
+              {item.date}
+            </span>
             <span
-              className={`capitalize bg-blue-500/10 text-blue-700 px-2 py-0.5 rounded-2xl ${item.originalData.status === OrderStatus.LIVREE
-                ? "bg-green-500/10 text-green-700"
-                : item.originalData.status === OrderStatus.EN_ATTENTE
-                  ? "bg-orange-500/10 text-orange-700"
-                  : item.originalData.status === OrderStatus.ECHEC
-                    ? "bg-red-500/10 text-red-700"
-                    : "bg-blue-500/10 text-blue-700"
-                }`}
+              className={`capitalize px-2 py-1 rounded-md ${
+                item.originalData.status === OrderStatus.LIVREE
+                  ? "bg-green-100 text-green-700"
+                  : item.originalData.status === OrderStatus.EN_ATTENTE
+                    ? "bg-orange-100 text-orange-700"
+                    : item.originalData.status === OrderStatus.ECHEC
+                      ? "bg-red-100 text-red-700"
+                      : "bg-blue-100 text-blue-700"
+              }`}
             >
               {item.originalData.status}
             </span>
           </div>
         </div>
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-col gap-2 w-full sm:w-auto">
           <button
             onClick={() => onViewDetails(item)}
-            className="cursor-pointer text-sm font-medium text-gray-50 bg-[#FD481A] px-2 py-1 rounded hover:opacity-80 transition-colors"
+            className="w-full sm:w-auto cursor-pointer text-xs font-black text-white bg-[#FD481A] px-4 py-2.5 rounded-xl hover:bg-[#E63F15] transition-all shadow-sm shadow-orange-50 uppercase tracking-tighter"
           >
-            Prix et Details
+            Prix et Détails
           </button>
           {(item.originalData.status === OrderStatus.EN_LIVRAISON ||
             item.originalData.status === OrderStatus.LIVREE) &&
@@ -116,13 +121,14 @@ export const CommandCard = memo(function CommandCard({
                     item.originalData.payments &&
                       item.originalData.payments?.length > 0
                       ? item.originalData.payments[
-                      item.originalData.payments?.length - 1
-                      ]
-                      : undefined
+                          item.originalData.payments?.length - 1
+                        ]
+                      : undefined,
                   );
                 }}
-                className={`${paidLoading && "animate-pulse"
-                  } cursor-pointer text-sm font-medium text-gray-50 bg-[#131313] px-2 py-1 rounded hover:opacity-80 transition-colors`}
+                className={`${
+                  paidLoading && "animate-pulse"
+                } w-full sm:w-auto cursor-pointer text-xs font-black text-white bg-[#131313] px-4 py-2.5 rounded-xl hover:bg-black/80 transition-all uppercase tracking-tighter`}
                 disabled={paidLoading}
               >
                 {paidLoading ? "Traitement..." : "Paiement reçu"}
@@ -160,17 +166,22 @@ export const CommandCard = memo(function CommandCard({
       <OrderStatusStepper currentStatus={item.originalData.status} />
 
       {/* Actions */}
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         {activeTab === "Nouvelles" && onAccept && (
           <button
             onClick={() => onAccept(item)}
             disabled={isProcessingAccept || isActionLocked}
-            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${(isProcessingAccept || isActionLocked)
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-[#E63F15]"
-              }`}
+            className={`flex-1 py-3.5 px-6 bg-[#FD481A] text-white text-sm font-black uppercase tracking-widest rounded-xl transition-all shadow-md shadow-orange-100 ${
+              isProcessingAccept || isActionLocked
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-[#E63F15] hover:shadow-lg active:scale-[0.98]"
+            }`}
           >
-            {isProcessingAccept ? "Traitement..." : isActionLocked ? "En attente de l'heure" : "Accepter"}
+            {isProcessingAccept
+              ? "Chargement..."
+              : isActionLocked
+                ? "Verrouillé"
+                : "Accepter la course"}
           </button>
         )}
 
@@ -180,12 +191,13 @@ export const CommandCard = memo(function CommandCard({
             <button
               onClick={() => onEnd(item)}
               disabled={isProcessingEnd}
-              className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#FD481A] text-white text-sm font-medium rounded-lg transition-colors ${isProcessingEnd
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-[#E63F15]"
-                }`}
+              className={`flex-1 py-3.5 px-6 bg-[#FD481A] text-white text-sm font-black uppercase tracking-widest rounded-xl transition-all shadow-md shadow-orange-100 ${
+                isProcessingEnd
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-[#E63F15] hover:shadow-lg active:scale-[0.98]"
+              }`}
             >
-              {isProcessingEnd ? "Traitement..." : "Terminer"}
+              {isProcessingEnd ? "Chargement..." : "Terminer la course"}
             </button>
           )}
 
@@ -193,12 +205,17 @@ export const CommandCard = memo(function CommandCard({
           <button
             onClick={() => onAssign(item)}
             disabled={isProcessingAssign || isActionLocked}
-            className={`cursor-pointer flex-1 py-2.5 px-4 bg-[#131313] text-white text-sm font-medium rounded-lg transition-colors ${(isProcessingAssign || isActionLocked)
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-[#333333]"
-              }`}
+            className={`flex-1 py-3.5 px-6 bg-[#131313] text-white text-sm font-black uppercase tracking-widest rounded-xl transition-all shadow-md shadow-black/20 ${
+              isProcessingAssign || isActionLocked
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-black hover:shadow-lg active:scale-[0.98]"
+            }`}
           >
-            {isProcessingAssign ? "Traitement..." : isActionLocked ? "Action verrouillée" : "Assigner"}
+            {isProcessingAssign
+              ? "Chargement..."
+              : isActionLocked
+                ? "Action verrouillée"
+                : "Assigner à un livreur"}
           </button>
         )}
       </div>

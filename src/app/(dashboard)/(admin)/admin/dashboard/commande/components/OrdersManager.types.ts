@@ -29,6 +29,7 @@ export interface DetailCourseInterface {
 
 export interface FormattedDeliveryCard {
   id: string;
+  orderNumber: string;
   from: string;
   to: string;
   status: string;

@@ -50,6 +50,7 @@ export const getClientConfig = () => ({
   // Formatage des commandes pour le client
   formatOrder: (order: Order): FormattedDeliveryCard => ({
     id: `#${order.id.slice(0, 8).toUpperCase()}`,
+    orderNumber: order.orderNumber,
     from: order.pickupAddress.city,
     to: order.deliveryAddress.city,
     status: getStatusDisplayText(order.status),

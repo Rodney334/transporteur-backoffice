@@ -79,9 +79,9 @@ export default function OrderReviewModal({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in duration-300">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in duration-300">
         {/* Header */}
-        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50 shrink-0">
           <div>
             <h3 className="text-xl font-bold text-gray-900">Votre avis</h3>
             <p className="text-sm text-gray-500 mt-1">
@@ -100,7 +100,7 @@ export default function OrderReviewModal({
         </div>
 
         {isSuccess ? (
-          <div className="p-12 flex flex-col items-center justify-center text-center space-y-4 animate-in zoom-in duration-500">
+          <div className="p-12 flex-1 flex flex-col items-center justify-center text-center space-y-4 animate-in zoom-in duration-500">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-10 h-10 text-green-600" />
             </div>
@@ -110,68 +110,73 @@ export default function OrderReviewModal({
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-8">
-            {/* Rating Section */}
-            <div className="space-y-4 text-center">
-              <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
-                Note sur 10
-              </label>
+          <form
+            onSubmit={handleSubmit}
+            className="flex-1 flex flex-col overflow-hidden"
+          >
+            <div className="p-6 space-y-8 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
+              {/* Rating Section */}
+              <div className="space-y-4 text-center">
+                <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  Note sur 10
+                </label>
 
-              <div className="flex flex-col items-center gap-4">
-                <div
-                  className={`text-6xl transition-all duration-300 transform scale-110`}
-                >
-                  {getEmoji(rating)}
-                </div>
-                <div className={`text-3xl font-black ${getColor(rating)}`}>
-                  {rating} / 10
-                </div>
+                <div className="flex flex-col items-center gap-4">
+                  <div
+                    className={`text-6xl transition-all duration-300 transform scale-110`}
+                  >
+                    {getEmoji(rating)}
+                  </div>
+                  <div className={`text-3xl font-black ${getColor(rating)}`}>
+                    {rating} / 10
+                  </div>
 
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="1"
-                  value={rating}
-                  onChange={(e) => setRating(parseInt(e.target.value))}
-                  className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#FD481A]"
-                />
+                  <input
+                    type="range"
+                    min="0"
+                    max="10"
+                    step="1"
+                    value={rating}
+                    onChange={(e) => setRating(parseInt(e.target.value))}
+                    className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#FD481A]"
+                  />
 
-                <div className="flex justify-between w-full px-2 text-[10px] font-bold text-gray-400 uppercase">
-                  <span>Très Déçu</span>
-                  <span>Moyen</span>
-                  <span>Excellent</span>
+                  <div className="flex justify-between w-full px-2 text-[10px] font-bold text-gray-400 uppercase">
+                    <span>Très Déçu</span>
+                    <span>Moyen</span>
+                    <span>Excellent</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Comment Section */}
-            <div className="space-y-2">
-              <label
-                htmlFor="comment"
-                className="text-sm font-semibold text-gray-700 flex items-center gap-2"
-              >
-                <MessageSquare className="w-4 h-4 text-[#FD481A]" />
-                Commentaire (optionnel)
-              </label>
-              <div className="relative">
-                <textarea
-                  id="comment"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  maxLength={500}
-                  placeholder="Qu'avez-vous pensé de notre service ?"
-                  rows={4}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all bg-gray-50 focus:bg-white resize-none text-gray-700"
-                />
-                <div className="absolute bottom-3 right-3 text-[10px] font-medium text-gray-400">
-                  {comment.length} / 500
+              {/* Comment Section */}
+              <div className="space-y-2">
+                <label
+                  htmlFor="comment"
+                  className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+                >
+                  <MessageSquare className="w-4 h-4 text-[#FD481A]" />
+                  Commentaire (optionnel)
+                </label>
+                <div className="relative">
+                  <textarea
+                    id="comment"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    maxLength={500}
+                    placeholder="Qu'avez-vous pensé de notre service ?"
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all bg-gray-50 focus:bg-white resize-none text-gray-700"
+                  />
+                  <div className="absolute bottom-3 right-3 text-[10px] font-medium text-gray-400">
+                    {comment.length} / 500
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Footer / Submit */}
-            <div className="pt-2">
+            <div className="p-6 border-t border-gray-100 bg-gray-50/50 shrink-0">
               <button
                 type="submit"
                 disabled={isSubmitting}

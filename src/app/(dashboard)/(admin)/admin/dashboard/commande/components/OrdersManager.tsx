@@ -466,9 +466,9 @@ export const OrdersManager = ({
 
         {/* Modal pour les détails */}
         {isModalOpen && (
-          <div className="w-96 fixed z-50 bg-white shadow-2xl rounded-2xl transition-all duration-300 ease-in-out inset-y-4 left-auto h-[95vh] right-4 flex flex-col border border-gray-100">
+          <div className="w-full sm:w-96 fixed z-50 bg-white shadow-2xl rounded-none sm:rounded-2xl transition-all duration-300 ease-in-out inset-y-0 sm:inset-y-4 right-0 sm:right-4 h-full sm:h-[95vh] flex flex-col border-l sm:border border-gray-100">
             {/* Header du modal */}
-            <div className="sticky top-0 bg-white border-b border-gray-100 p-6 rounded-t-2xl z-10 shrink-0">
+            <div className="sticky top-0 bg-white border-b border-gray-100 p-6 rounded-t-none sm:rounded-t-2xl z-10 shrink-0">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">
@@ -542,16 +542,6 @@ export const OrdersManager = ({
                           )}
                         </>
                       ) : (
-                        // <div className="flex justify-between items-center py-3 px-4 bg-white rounded-xl border border-gray-200">
-                        //   <span className="text-sm font-medium text-gray-600">
-                        //     Prix final :
-                        //   </span>
-                        //   <span className="text-sm font-semibold text-gray-900">
-                        //     {selectedCommand.finalPrice
-                        //       ? `${selectedCommand.finalPrice} FCFA`
-                        //       : "Non estimé"}
-                        //   </span>
-                        // </div>
                         <div className="flex justify-between items-center py-3 px-4 bg-emerald-50 rounded-xl border border-emerald-200">
                           <span className="text-sm font-medium text-emerald-700">
                             Prix final :

@@ -13,19 +13,38 @@ export const DeliveryCard = ({
     className="bg-white rounded-xl p-4 shadow-sm border border-gray-100"
     // onClick={() => onViewDetails(item)}
   >
-    <div className="flex justify-between text-xs font-semibold text-gray-600 mb-3">
-      <span>{item.id}</span>
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+      <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+        ID: {item.orderNumber}
+      </span>
       <button
-        onClick={() => onViewDetails(item)}
-        className="text-sm font-medium text-gray-50 bg-[#FD481A] px-2 py-1 rounded cursor-pointer hover:opacity-80 transition-opacity"
+        onClick={(e) => {
+          e.stopPropagation();
+          onViewDetails(item);
+        }}
+        className="w-full sm:w-auto text-center text-sm font-bold text-white bg-[#FD481A] px-4 py-2 rounded-xl cursor-pointer hover:bg-[#E63F15] transition-all shadow-sm shadow-orange-100"
       >
-        Prix et Details
+        Prix et Détails
       </button>
     </div>
 
-    <div className="flex items-center justify-between mb-3">
-      <span className="text-sm font-medium text-gray-900">{item.from}</span>
-      <span className="text-sm font-medium text-gray-900">{item.to}</span>
+    <div className="grid grid-cols-2 gap-4 mb-4 items-center">
+      <div className="flex flex-col">
+        <span className="text-[10px] text-gray-400 uppercase font-bold">
+          Départ
+        </span>
+        <span className="text-sm font-bold text-gray-900 truncate">
+          {item.from}
+        </span>
+      </div>
+      <div className="flex flex-col text-right">
+        <span className="text-[10px] text-gray-400 uppercase font-bold">
+          Arrivée
+        </span>
+        <span className="text-sm font-bold text-gray-900 truncate">
+          {item.to}
+        </span>
+      </div>
     </div>
 
     <div className="flex items-center mb-3">
@@ -41,31 +60,33 @@ export const DeliveryCard = ({
       <div className="w-2 h-2 bg-gray-900 rounded-full"></div>
     </div>
 
-    <div className="flex items-center justify-between">
-      <div>
-        <div className="text-xs text-gray-500 mb-1">Statut</div>
-        <div className="text-xs font-medium text-gray-700">
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col gap-1">
+        <div className="text-[10px] text-gray-400 uppercase font-bold">
+          Statut
+        </div>
+        <div className="text-xs font-bold">
           <span
-            className={`capitalize bg-blue-500/10 text-blue-700 px-2 py-0.5 rounded-2xl ${
+            className={`capitalize px-3 py-1 rounded-full ${
               item.originalData.status === OrderStatus.LIVREE
-                ? "bg-green-500/10 text-green-700"
+                ? "bg-green-100 text-green-700"
                 : item.originalData.status === OrderStatus.EN_ATTENTE
-                  ? "bg-orange-500/10 text-orange-700"
+                  ? "bg-orange-100 text-orange-700"
                   : item.originalData.status === OrderStatus.ECHEC
-                    ? "bg-red-500/10 text-red-700"
-                    : "bg-blue-500/10 text-blue-700"
+                    ? "bg-red-100 text-red-700"
+                    : "bg-blue-100 text-blue-700"
             }`}
           >
             {item.originalData.status === OrderStatus.LIVREE
               ? "Livrée"
               : item.originalData.status === OrderStatus.EN_ATTENTE
-                ? "En attente"
+                ? "Attente"
                 : item.originalData.status === OrderStatus.ECHEC
                   ? "Echouée"
                   : item.originalData.status === OrderStatus.EN_LIVRAISON
-                    ? "En livraison"
+                    ? "Livraison"
                     : item.originalData.status === OrderStatus.EN_DISCUSSION
-                      ? "En discussion"
+                      ? "Discussion"
                       : item.originalData.status === OrderStatus.PRIX_VALIDE
                         ? "Prix validé"
                         : item.originalData.status === OrderStatus.ASSIGNEE
@@ -74,18 +95,19 @@ export const DeliveryCard = ({
           </span>
         </div>
       </div>
-      <div className="text-xs text-gray-500">{item.date}</div>
+      <div className="text-xs font-medium text-gray-400 bg-gray-50 px-2 py-1 rounded-lg border border-gray-100">
+        {item.date}
+      </div>
     </div>
 
-    {/* Review Button for completed orders */}
     {item.originalData.status === OrderStatus.LIVREE && onReview && (
-      <div className="mt-4 pt-4 border-t border-gray-50 flex justify-center">
+      <div className="mt-5 pt-4 border-t border-gray-100">
         <button
           onClick={(e) => {
             e.stopPropagation();
             onReview(item);
           }}
-          className="flex items-center gap-2 px-6 py-2 bg-orange-50 text-[#FD481A] text-sm font-bold rounded-xl hover:bg-[#FD481A] hover:text-white transition-all duration-300 border border-orange-100 shadow-sm shadow-orange-50"
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-orange-50 text-[#FD481A] text-sm font-bold rounded-xl hover:bg-[#FD481A] hover:text-white transition-all duration-300 border border-orange-100 shadow-sm"
         >
           <Star className="w-4 h-4 fill-current" />
           Laisser un avis
