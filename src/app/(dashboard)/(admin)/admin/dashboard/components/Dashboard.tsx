@@ -20,11 +20,19 @@ import { KPIsCards } from "./reports/KPIsCards";
 import { AlertsList } from "./reports/AlertsList";
 import { CoursesTable } from "./reports/CoursesTable";
 import { KPICharts } from "./reports/KPICharts";
+import ProtectedRoute from "@/components/Protected-route";
+import { GrantedRole } from "@/type/enum";
 
 export const Dashboard = () => {
   // 1. Logique existante du Dashboard
-  const { stats, isLoading: isDashboardLoading, lastUpdated, filters, setFilters, refreshData: refreshDashboard } =
-    useDashboard();
+  const {
+    stats,
+    isLoading: isDashboardLoading,
+    lastUpdated,
+    filters,
+    setFilters,
+    refreshData: refreshDashboard,
+  } = useDashboard();
 
   // 2. Logique pour les nouveaux rapports
   const {
@@ -87,164 +95,167 @@ export const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* =================================================================================
+    <ProtectedRoute allowedRoles={[GrantedRole.Admin, GrantedRole.Operateur]}>
+      <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* =================================================================================
             SECTION 1: DASHBOARD PRINCIPAL (EXISTANT)
            ================================================================================= */}
 
-        <DashboardHeader
-          filters={filters}
-          onFilterChange={setFilters}
-          lastUpdated={lastUpdated}
-          onRefresh={handleRefreshAll}
-          isLoading={isDashboardLoading || isReportLoading}
-        />
+          <DashboardHeader
+            filters={filters}
+            onFilterChange={setFilters}
+            lastUpdated={lastUpdated}
+            onRefresh={handleRefreshAll}
+            isLoading={isDashboardLoading || isReportLoading}
+          />
 
-        {stats && (
-          <>
-            {/* Cartes de statistiques principales */}
-            <StatsCards stats={stats} />
+          {stats && (
+            <>
+              {/* Cartes de statistiques principales */}
+              <StatsCards stats={stats} />
 
-            {/* Graphique des revenus */}
-            <RevenueChart
-              data={stats.revenueTrend}
-              period={filters.period}
-              totalRevenue={stats.totalRevenue}
-            />
+              {/* Graphique des revenus */}
+              <RevenueChart
+                data={stats.revenueTrend}
+                period={filters.period}
+                totalRevenue={stats.totalRevenue}
+              />
 
-            {/* Panel d'export */}
-            <ExportPanel
-              stats={stats}
-              filters={filters}
-              lastUpdated={lastUpdated}
-            />
+              {/* Panel d'export */}
+              <ExportPanel
+                stats={stats}
+                filters={filters}
+                lastUpdated={lastUpdated}
+              />
 
-            {/* Métriques avancées */}
-            <AdvancedMetrics stats={stats} />
+              {/* Métriques avancées */}
+              <AdvancedMetrics stats={stats} />
 
-            {/* Grille des sections inférieures */}
-            <div className="grid grid-cols-1 mb-8">
-              {/* Dernières commandes */}
-              <div>
-                <RecentOrders orders={stats.recentOrders} />
-              </div>
-            </div>
-
-            {/* Grille des tops performers */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-              {/* Top clients par commandes */}
-              <div>
-                <TopClients
-                  clients={stats.topClientsByOrders}
-                  title="Top Clients (Commandes)"
-                  metric="orders"
-                />
+              {/* Grille des sections inférieures */}
+              <div className="grid grid-cols-1 mb-8">
+                {/* Dernières commandes */}
+                <div>
+                  <RecentOrders orders={stats.recentOrders} />
+                </div>
               </div>
 
-              {/* Top clients par revenus */}
-              <div>
-                <TopClients
-                  clients={stats.topClientsByRevenue}
-                  title="Top Clients (Revenus)"
-                  metric="revenue"
-                />
-              </div>
+              {/* Grille des tops performers */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+                {/* Top clients par commandes */}
+                <div>
+                  <TopClients
+                    clients={stats.topClientsByOrders}
+                    title="Top Clients (Commandes)"
+                    metric="orders"
+                  />
+                </div>
 
-              {/* Top livreurs par livraisons */}
-              <div>
-                <TopCouriers
-                  couriers={stats.topCouriersByDeliveries}
-                  title="Top Livreurs (Livraisons)"
-                  metric="deliveries"
-                />
-              </div>
+                {/* Top clients par revenus */}
+                <div>
+                  <TopClients
+                    clients={stats.topClientsByRevenue}
+                    title="Top Clients (Revenus)"
+                    metric="revenue"
+                  />
+                </div>
 
-              {/* Top livreurs par revenus */}
-              <div>
-                <TopCouriers
-                  couriers={stats.topCouriersByRevenue}
-                  title="Top Livreurs (Revenus)"
-                  metric="revenue"
-                />
-              </div>
-            </div>
-          </>
-        )}
+                {/* Top livreurs par livraisons */}
+                <div>
+                  <TopCouriers
+                    couriers={stats.topCouriersByDeliveries}
+                    title="Top Livreurs (Livraisons)"
+                    metric="deliveries"
+                  />
+                </div>
 
-        {/* =================================================================================
+                {/* Top livreurs par revenus */}
+                <div>
+                  <TopCouriers
+                    couriers={stats.topCouriersByRevenue}
+                    title="Top Livreurs (Revenus)"
+                    metric="revenue"
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* =================================================================================
             SECTION 2: RAPPORTS DÉTAILLÉS (NOUVEAU)
            ================================================================================= */}
 
-        <div className="mt-12 pt-8 border-t-2 border-dashed border-gray-200">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center">
-              <BarChart3 className="w-5 h-5 text-white" />
+          <div className="mt-12 pt-8 border-t-2 border-dashed border-gray-200">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center">
+                <BarChart3 className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+                  Rapports Détaillés & KPIs
+                </h2>
+                <p className="text-gray-500 text-sm">
+                  Analyse approfondie des performances journalières
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900">
-                Rapports Détaillés & KPIs
-              </h2>
-              <p className="text-gray-500 text-sm">
-                Analyse approfondie des performances journalières
+
+            {/* Filtres Spécifiques aux Rapports */}
+            <ReportFilters
+              period={period}
+              onPeriodChange={setPeriod}
+              date={date}
+              onDateChange={setDate}
+              onRefresh={refreshReports}
+              isLoading={isReportLoading}
+            />
+
+            {/* KPIs Cards */}
+            {kpis && <KPIsCards kpis={kpis} />}
+
+            {/* Charts & Alerts Grid */}
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+              <div className="xl:col-span-2">
+                {kpis &&
+                (kpis.topToCities.length > 0 || kpis.topRoutes.length > 0) ? (
+                  <KPICharts kpis={kpis} />
+                ) : (
+                  <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-full flex items-center justify-center text-gray-400">
+                    Aucune donnée graphique disponible
+                  </div>
+                )}
+              </div>
+              <div className="xl:col-span-1">
+                {alerts && <AlertsList alerts={alerts} />}
+              </div>
+            </div>
+
+            {/* Courses Table */}
+            <div className="mb-8">
+              {courses && (
+                <CoursesTable
+                  courses={courses}
+                  filters={coursesFilters}
+                  onFilterChange={setCoursesFilters}
+                  page={coursesPage}
+                  limit={coursesLimit}
+                  onPageChange={setCoursesPage}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Footer Global */}
+          <div className="mt-8 pt-8 border-t border-gray-200">
+            <div className="text-sm text-gray-500 text-center">
+              <p>Dashboard mis à jour en temps quasi-réel</p>
+              <p className="mt-1">
+                © {new Date().getFullYear()} - Transporteur Backoffice
               </p>
             </div>
           </div>
-
-          {/* Filtres Spécifiques aux Rapports */}
-          <ReportFilters
-            period={period}
-            onPeriodChange={setPeriod}
-            date={date}
-            onDateChange={setDate}
-            onRefresh={refreshReports}
-            isLoading={isReportLoading}
-          />
-
-          {/* KPIs Cards */}
-          {kpis && <KPIsCards kpis={kpis} />}
-
-          {/* Charts & Alerts Grid */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
-            <div className="xl:col-span-2">
-              {kpis && (kpis.topToCities.length > 0 || kpis.topRoutes.length > 0) ? (
-                <KPICharts kpis={kpis} />
-              ) : (
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-full flex items-center justify-center text-gray-400">
-                  Aucune donnée graphique disponible
-                </div>
-              )}
-            </div>
-            <div className="xl:col-span-1">
-              {alerts && <AlertsList alerts={alerts} />}
-            </div>
-          </div>
-
-          {/* Courses Table */}
-          <div className="mb-8">
-            {courses && (
-              <CoursesTable
-                courses={courses}
-                filters={coursesFilters}
-                onFilterChange={setCoursesFilters}
-                page={coursesPage}
-                limit={coursesLimit}
-                onPageChange={setCoursesPage}
-              />
-            )}
-          </div>
-        </div>
-
-        {/* Footer Global */}
-        <div className="mt-8 pt-8 border-t border-gray-200">
-          <div className="text-sm text-gray-500 text-center">
-            <p>Dashboard mis à jour en temps quasi-réel</p>
-            <p className="mt-1">
-              © {new Date().getFullYear()} - Transporteur Backoffice
-            </p>
-          </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };

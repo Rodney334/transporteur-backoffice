@@ -180,7 +180,11 @@ export default function PromoFormModal({
 
         {/* Contenu scrollable */}
         <div className="flex-1 overflow-y-auto p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form
+            id="promo-code-form"
+            onSubmit={handleSubmit}
+            className="space-y-6"
+          >
             {/* Code promo */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -488,6 +492,7 @@ export default function PromoFormModal({
             </button>
             <button
               type="submit"
+              form="promo-code-form"
               disabled={isLoading}
               className="cursor-pointer flex-1 px-4 py-3 text-sm font-medium text-white bg-[#FD481A] hover:bg-[#E63F15] rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >

@@ -6,15 +6,16 @@ ajout et ajustement du logo sur les pages auth
 
 websocket ne fonctionne pas bien
 
-Deux fcm token envoyé (à revoir)
 
 code promo management (partie 2) code promo spécifique aux utilisateurs
+
+Laisser un avis et une note sur les commandes TERMINES
+
 ************************
 EN COURS
 ************************
 
-Laisser un avis et une note sur les commandes TERMINES
-
 refresh token
 
 
+Deux fcm token envoyé (à revoir)
