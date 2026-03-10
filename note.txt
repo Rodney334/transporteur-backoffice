@@ -2,21 +2,19 @@ liste séparée pour les codes promo (classique, partenaire, expiré ...)
 
 date début et fin à revoir, ajouter les heures
 
+ajout et ajustement du logo sur les pages auth
+
+websocket ne fonctionne pas bien
+
+Deux fcm token envoyé (à revoir)
+
+code promo management (partie 2) code promo spécifique aux utilisateurs
 ************************
 EN COURS
 ************************
 
 Laisser un avis et une note sur les commandes TERMINES
 
-code promo management (partie 2) code promo spécifique aux utilisateurs
-
 refresh token
 
-
-
-
-
-websocket ne fonctionne pas bien
-
-Deux fcm token envoyé (à revoir)
 

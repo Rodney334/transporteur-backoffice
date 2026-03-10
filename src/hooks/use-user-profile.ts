@@ -5,6 +5,7 @@ import { userService } from "@/lib/services/user-service";
 import { GenderType } from "@/type/enum";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { getFriendlyErrorMessage } from "@/utils/error-handler";
 
 interface ProfileFormData {
   name: string;
@@ -75,9 +76,7 @@ export const useUserProfile = () => {
       return updatedUser;
     } catch (error: any) {
       console.log("Erreur mise à jour profil:", error);
-      const errorMessage =
-        error.response?.data?.message ||
-        "Une erreur est survenue lors de la mise à jour";
+      const errorMessage = getFriendlyErrorMessage(error);
 
       toast.update(toastId, {
         render: errorMessage,
@@ -128,9 +127,7 @@ export const useUserProfile = () => {
       passwordForm.reset();
     } catch (error: any) {
       console.log("Erreur changement mot de passe:", error);
-      const errorMessage =
-        error.response?.data?.message ||
-        "Une erreur est survenue lors du changement de mot de passe";
+      const errorMessage = getFriendlyErrorMessage(error);
 
       toast.update(toastId, {
         render: errorMessage,

@@ -25,6 +25,7 @@ import {
 import ProtectedRoute from "@/components/Protected-route";
 import { useOrderValidation } from "@/hooks/use-order-validation";
 import { toast } from "react-toastify";
+import { getFieldLabel } from "@/utils/form-labels";
 
 export default function DashboardPage() {
   const {
@@ -73,7 +74,7 @@ export default function DashboardPage() {
       name: "Tricycle",
       icon: Motorbike,
       value: TransportMode.TRICYCLE,
-      disabled: true
+      disabled: true,
     },
     {
       name: "Voiture",
@@ -143,7 +144,7 @@ export default function DashboardPage() {
           const errorFields = Object.keys(currentErrors)
             .map((key) => {
               if (key === "promoCodeId") return "code promo";
-              return key;
+              return getFieldLabel(key);
             })
             .join(", ");
 
@@ -251,32 +252,39 @@ export default function DashboardPage() {
               </div>
 
               {/* Transport types */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 lg:gap-3">
-                {transportTypes.map((transport, index) => {
-                  const Icon = transport.icon;
-                  return (
-                    <ButtonCard
-                      key={index}
-                      Icon={Icon}
-                      label={transport.name}
-                      id={transport.value}
-                      selected={selectedTransportType}
-                      setSelected={(value) =>
-                        setValue("transportMode", value as TransportMode)
-                      }
-                    />
-                  );
-                })}
+              <div className="mb-4 lg:mb-6">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                  Type ou Mode de Transport{" "}
+                  <strong className={`text-red-600`}>*</strong>
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 lg:gap-3">
+                  {transportTypes.map((transport, index) => {
+                    const Icon = transport.icon;
+                    return (
+                      <ButtonCard
+                        key={index}
+                        Icon={Icon}
+                        label={transport.name}
+                        id={transport.value}
+                        selected={selectedTransportType}
+                        disabled={transport.disabled}
+                        setSelected={(value) =>
+                          setValue("transportMode", value as TransportMode)
+                        }
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm mb-4 p-4 lg:p-6">
               <h2 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 lg:mb-6">
                 Information sur le colis{" "}
-                <strong className={`text-red-600`}>**</strong>
+                <strong className={`text-red-600`}>*</strong>
               </h2>
               <div className={`flex flex-col mb-4 lg:mb-6`}>
-                <label htmlFor="weight">Poids en kg (optionnel)</label>
+                <label htmlFor="weight">Poids en kg</label>
                 <input
                   id="weight"
                   type="text"
@@ -321,9 +329,7 @@ export default function DashboardPage() {
               </div>
 
               <div className={`flex flex-col mb-4 lg:mb-6`}>
-                <label htmlFor="scheduledAt">
-                  Date de livraison programmée (optionnel)
-                </label>
+                <label htmlFor="scheduledAt">Heure de la livraison</label>
                 <input
                   id="scheduledAt"
                   type="time"
@@ -334,17 +340,22 @@ export default function DashboardPage() {
                   })}
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
                 />
+                {errors.scheduledAt && (
+                  <p className={`text-xs text-red-600 mt-1`}>
+                    {errors.scheduledAt.message}
+                  </p>
+                )}
               </div>
 
               <div className={`flex flex-col mb-4 lg:mb-6`}>
-                <label htmlFor="promoCodeId">Code promo (optionnel)</label>
+                <label htmlFor="promoCodeId">Code promo</label>
                 <input
                   id="promoCodeId"
                   type="text"
                   placeholder="Entrez votre code promo"
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
-                {...register("promoCodeId")}
-              />
+                  {...register("promoCodeId")}
+                />
                 {errors.promoCodeId && (
                   <p className={`text-xs text-red-600`}>
                     {errors.promoCodeId.message}
@@ -357,7 +368,7 @@ export default function DashboardPage() {
             <div className="bg-white rounded-2xl shadow-sm p-4 lg:p-6">
               <h2 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 lg:mb-6">
                 Information de la course{" "}
-                <strong className={`text-red-600`}>**</strong>
+                <strong className={`text-red-600`}>*</strong>
               </h2>
 
               <GeneralData form={form} errors={errors} />

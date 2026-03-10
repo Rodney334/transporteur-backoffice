@@ -1,6 +1,7 @@
 // hooks/use-users-management.ts
 import { useState, useCallback, useMemo } from "react";
 import { toast } from "react-toastify";
+import { getFriendlyErrorMessage } from "@/utils/error-handler";
 import { useUsersStore } from "@/lib/stores/users-store";
 import { userService } from "@/lib/services/user-service";
 import { livreurService } from "@/lib/services/livreur-service"; // IMPORT NOUVEAU
@@ -47,9 +48,7 @@ export const useUsersManagement = () => {
       const users = await userService.getAllUsers();
       setUsers(users);
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Erreur lors du chargement des utilisateurs";
+      const errorMessage = getFriendlyErrorMessage(error);
       setError(errorMessage);
       toast.error(errorMessage, { position: "top-left" });
     } finally {
@@ -72,9 +71,7 @@ export const useUsersManagement = () => {
           setLivreurProfile(null);
           return null;
         }
-        const errorMessage =
-          error.response?.data?.message ||
-          "Erreur lors du chargement du profil livreur";
+        const errorMessage = getFriendlyErrorMessage(error);
         toast.error(errorMessage, { position: "top-left" });
         throw error;
       } finally {
@@ -139,8 +136,7 @@ export const useUsersManagement = () => {
         return updatedUser;
       } catch (error: any) {
         console.log("Erreur promotion utilisateur:", error);
-        const errorMessage =
-          error.response?.data?.message || "Erreur lors du changement de rôle";
+        const errorMessage = getFriendlyErrorMessage(error);
 
         toast.update(toastId, {
           render: errorMessage,
@@ -185,9 +181,7 @@ export const useUsersManagement = () => {
         return updatedProfile;
       } catch (error: any) {
         console.log("Erreur mise à jour profil livreur:", error);
-        const errorMessage =
-          error.response?.data?.message ||
-          "Erreur lors de la mise à jour du profil";
+        const errorMessage = getFriendlyErrorMessage(error);
 
         toast.update(toastId, {
           render: errorMessage,
@@ -229,9 +223,7 @@ export const useUsersManagement = () => {
         return result;
       } catch (error: any) {
         console.log("Erreur approbation profil livreur:", error);
-        const errorMessage =
-          error.response?.data?.message ||
-          "Erreur lors de l'approbation du profil";
+        const errorMessage = getFriendlyErrorMessage(error);
 
         toast.update(toastId, {
           render: errorMessage,
@@ -273,8 +265,7 @@ export const useUsersManagement = () => {
         return result;
       } catch (error: any) {
         console.log("Erreur rejet profil livreur:", error);
-        const errorMessage =
-          error.response?.data?.message || "Erreur lors du rejet du profil";
+        const errorMessage = getFriendlyErrorMessage(error);
 
         toast.update(toastId, {
           render: errorMessage,

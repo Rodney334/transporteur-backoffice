@@ -40,6 +40,22 @@ export const useOrderValidation = () => {
         }
       });
 
+      // Validation de l'heure de livraison (scheduledAt) s'il est présent
+      const scheduledAt = watch("scheduledAt");
+      if (scheduledAt) {
+        const [hours, minutes] = scheduledAt.split(":").map(Number);
+        const now = new Date();
+        const currentHours = now.getHours();
+        const currentMinutes = now.getMinutes();
+
+        if (hours < currentHours || (hours === currentHours && minutes < currentMinutes)) {
+          errors["scheduledAt"] = "L'heure de livraison ne peut pas être passée";
+          setError("scheduledAt", {
+            message: "L'heure de livraison ne peut pas être passée",
+          });
+        }
+      }
+
       // Si déjà des erreurs, on ne valide pas le promo
       if (Object.keys(errors).length > 0) {
         return false;

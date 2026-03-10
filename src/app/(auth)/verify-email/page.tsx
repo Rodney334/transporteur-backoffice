@@ -73,90 +73,88 @@ function VerifyEmailContent() {
   }, [searchParams, router]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md text-center">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">
-            Vérification de l'email
-          </h1>
-          <p className="text-gray-600">Nous vérifions votre adresse email...</p>
-        </div>
+    <div className="w-full max-w-md text-center">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-gray-900 mb-3">
+          Vérification de l'email
+        </h1>
+        <p className="text-gray-600">Nous vérifions votre adresse email...</p>
+      </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-8 space-y-6">
-          {isVerifying ? (
-            <div className="space-y-4">
-              <div className="w-16 h-16 border-4 border-[#FD481A] border-t-transparent rounded-full animate-spin mx-auto"></div>
-              <p className="text-gray-700">
-                Vérification en cours, veuillez patienter...
-              </p>
+      <div className="bg-white rounded-lg shadow-sm p-8 space-y-6">
+        {isVerifying ? (
+          <div className="space-y-4">
+            <div className="w-16 h-16 border-4 border-[#FD481A] border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="text-gray-700">
+              Vérification en cours, veuillez patienter...
+            </p>
+          </div>
+        ) : verificationStatus === "success" ? (
+          <div className="space-y-4">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+              <svg
+                className="w-8 h-8 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
             </div>
-          ) : verificationStatus === "success" ? (
-            <div className="space-y-4">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                <svg
-                  className="w-8 h-8 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-              </div>
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Email vérifié !
-              </h2>
-              <p className="text-gray-600">
-                Redirection vers la page de succès...
-              </p>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-[#FD481A] h-2 rounded-full animate-pulse"></div>
-              </div>
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Email vérifié !
+            </h2>
+            <p className="text-gray-600">
+              Redirection vers la page de succès...
+            </p>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="bg-[#FD481A] h-2 rounded-full animate-pulse"></div>
             </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
-                <svg
-                  className="w-8 h-8 text-red-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-              </div>
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Échec de la vérification
-              </h2>
-              <p className="text-gray-600">{errorMessage}</p>
-              <div className="pt-4 space-y-3">
-                <Link
-                  href="/login"
-                  className="block w-full bg-[#FD481A] text-white py-3 rounded-lg font-medium hover:bg-[#E63F15] transition-colors"
-                >
-                  Retour à la connexion
-                </Link>
-                <Link
-                  href="/check-email"
-                  className="block text-[#FD481A] hover:underline font-medium text-sm"
-                >
-                  Renvoyer l'email de vérification
-                </Link>
-              </div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
+              <svg
+                className="w-8 h-8 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
             </div>
-          )}
-        </div>
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Échec de la vérification
+            </h2>
+            <p className="text-gray-600">{errorMessage}</p>
+            <div className="pt-4 space-y-3">
+              <Link
+                href="/login"
+                className="block w-full bg-[#FD481A] text-white py-3 rounded-lg font-medium hover:bg-[#E63F15] transition-colors"
+              >
+                Retour à la connexion
+              </Link>
+              <Link
+                href="/check-email"
+                className="block text-[#FD481A] hover:underline font-medium text-sm"
+              >
+                Renvoyer l'email de vérification
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

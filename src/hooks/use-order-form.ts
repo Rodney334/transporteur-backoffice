@@ -13,6 +13,7 @@ import {
   TransportMode,
 } from "@/type/enum";
 import { useAuthStore } from "@/lib/stores/auth-store";
+import { getFriendlyErrorMessage } from "@/utils/error-handler";
 
 // Interface alignée sur l'API
 export interface OrderFormData {
@@ -91,54 +92,54 @@ export const useOrderForm = () => {
   const savedData = loadFromLocalStorage();
 
   const form = useForm<OrderFormData>({
-    defaultValues: {
-      transportMode: TransportMode.MOTO,
-      articleType: ArticleType.COLIS,
-      serviceType: ServiceType.COLIS,
-      deliveryType: DeliveryType.STANDARD,
-      description: "",
-      weight: 0,
-      zone: "",
-      estimatedPrice: 0,
-      pickupName: "",
-      pickupPhone: "",
-      pickupCountry: "Bénin",
-      pickupCity: "Cotonou",
-      pickupDistrict: "",
-      pickupStreet: "",
-      deliveryName: "",
-      deliveryPhone: "",
-      deliveryCountry: "Bénin",
-      deliveryCity: "Cotonou",
-      deliveryDistrict: "",
-      deliveryStreet: "",
-      scheduledAt: "",
-      promoCodeId: "",
-      ...savedData, // Fusionner avec les données sauvegardées
-    },
-
     // defaultValues: {
     //   transportMode: TransportMode.MOTO,
     //   articleType: ArticleType.COLIS,
     //   serviceType: ServiceType.COLIS,
     //   deliveryType: DeliveryType.STANDARD,
-    //   description: "Une description",
-    //   weight: 0.5,
+    //   description: "",
+    //   weight: 0,
     //   zone: "",
     //   estimatedPrice: 0,
-    //   pickupName: "Test",
-    //   pickupPhone: "Test",
-    //   pickupCountry: "Test",
-    //   pickupCity: "Test",
-    //   pickupDistrict: "Test",
-    //   pickupStreet: "Test",
-    //   deliveryName: "Test",
-    //   deliveryPhone: "Test",
-    //   deliveryCountry: "Test",
-    //   deliveryCity: "Test",
-    //   deliveryDistrict: "Test",
-    //   deliveryStreet: "Test",
+    //   pickupName: "",
+    //   pickupPhone: "",
+    //   pickupCountry: "Bénin",
+    //   pickupCity: "Cotonou",
+    //   pickupDistrict: "",
+    //   pickupStreet: "",
+    //   deliveryName: "",
+    //   deliveryPhone: "",
+    //   deliveryCountry: "Bénin",
+    //   deliveryCity: "Cotonou",
+    //   deliveryDistrict: "",
+    //   deliveryStreet: "",
+    //   scheduledAt: "",
+    //   promoCodeId: "",
+    //   ...savedData, // Fusionner avec les données sauvegardées
     // },
+
+    defaultValues: {
+      transportMode: TransportMode.MOTO,
+      articleType: ArticleType.COLIS,
+      serviceType: ServiceType.COLIS,
+      deliveryType: DeliveryType.STANDARD,
+      description: "Une description",
+      weight: 0.5,
+      zone: "",
+      estimatedPrice: 0,
+      pickupName: "Test",
+      pickupPhone: "Test",
+      pickupCountry: "Test",
+      pickupCity: "Test",
+      pickupDistrict: "Test",
+      pickupStreet: "Test",
+      deliveryName: "Test",
+      deliveryPhone: "Test",
+      deliveryCountry: "Test",
+      deliveryCity: "Test",
+      deliveryDistrict: "Test",
+      deliveryStreet: "Test",
+    },
   });
 
   // Sauvegarder automatiquement à chaque changement de valeur
@@ -251,11 +252,12 @@ export const useOrderForm = () => {
         }
       } catch (error) {
         console.error("Erreur validation code promo:", error);
+        const errorMessage = getFriendlyErrorMessage(error);
         setError("promoCodeId", {
-          message: "Erreur lors de la vérification du code",
+          message: errorMessage,
         });
         toast.update(toastId, {
-          render: "Erreur lors de la vérification du code",
+          render: errorMessage,
           type: "error",
           isLoading: false,
           autoClose: 3000,
@@ -345,8 +347,7 @@ export const useOrderForm = () => {
     } catch (error: any) {
       console.log("Erreur création commande:", error);
 
-      const errorMessage =
-        error.response?.data?.message || "Une erreur est survenue";
+      const errorMessage = getFriendlyErrorMessage(error);
 
       toast.update(toastId, {
         render: errorMessage,

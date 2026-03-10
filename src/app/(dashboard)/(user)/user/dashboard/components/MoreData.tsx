@@ -46,7 +46,7 @@ export const MoreData = ({ form }: MoreDataProps) => {
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
                   <span className="text-sm font-medium text-[#333333]">
-                    Date de livraison souhaitée
+                    Heure de la livraison
                   </span>
                   <span className="text-sm font-semibold text-[#131313]">
                     {form.watch("scheduledAt")}
@@ -110,7 +110,7 @@ export const MoreData = ({ form }: MoreDataProps) => {
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-[#131313]">
-                  Adresse de pickup
+                  Expéditeur / Commanditaire
                 </h3>
               </div>
 
@@ -169,7 +169,7 @@ export const MoreData = ({ form }: MoreDataProps) => {
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-[#131313]">
-                  Adresse de livraison
+                  Destinataire / Bénéficiaire
                 </h3>
               </div>
 
