@@ -27,6 +27,7 @@ import {
 import { useOrderAssignment } from "@/hooks/use-order-assignment";
 import { AssignOrderModal } from "./AssignOrderModal";
 import { InfoLivreurSection } from "@/components/InfoLivreurSection";
+import OrderReviewModal from "@/app/(dashboard)/components/OrdersManager/OrderReviewModal";
 
 export const OrdersManager = ({
   userRole,
@@ -78,6 +79,10 @@ export const OrdersManager = ({
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [selectedCommandForAssignment, setSelectedCommandForAssignment] =
     useState<FormattedCommandCard | null>(null);
+
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [selectedCommandForReview, setSelectedCommandForReview] =
+    useState<FormattedDeliveryCard | null>(null);
 
   // React Hook Form
   const {
@@ -222,6 +227,11 @@ export const OrdersManager = ({
     setSelectedCommand(null);
     reset();
   }, [reset]);
+
+  const handleReview = useCallback((command: FormattedDeliveryCard) => {
+    setSelectedCommandForReview(command);
+    setIsReviewModalOpen(true);
+  }, []);
 
   const handlePriceValidation = (data: PriceFormData) => {
     setConfirmationPrice(data.price);
@@ -410,6 +420,7 @@ export const OrdersManager = ({
                         <CardComponent
                           item={command}
                           onViewDetails={() => handleViewDetails(command)}
+                          onReview={() => handleReview(command as any)}
                         />
                       ) : (
                         // Version admin/livreur - CommandCard avec actions
@@ -910,6 +921,22 @@ export const OrdersManager = ({
               orderReference={selectedCommandForAssignment?.reference}
             />
           </>
+        )}
+
+        {/* Modal pour les avis */}
+        {selectedCommandForReview && (
+          <OrderReviewModal
+            isOpen={isReviewModalOpen}
+            onClose={() => {
+              setIsReviewModalOpen(false);
+              setSelectedCommandForReview(null);
+            }}
+            orderId={selectedCommandForReview.originalData.id}
+            orderReference={selectedCommandForReview.id}
+            onSuccess={() => {
+              if (user) fetchOrders(user._id, userRole);
+            }}
+          />
         )}
       </div>
     </>

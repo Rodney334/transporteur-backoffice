@@ -145,5 +145,4 @@ export interface PromoUserEligibilityDto {
   code: string;
   userIds: string[];
   mode: "ADD" | "SET";
-  forbidIfAlreadyUsed: boolean;
 }

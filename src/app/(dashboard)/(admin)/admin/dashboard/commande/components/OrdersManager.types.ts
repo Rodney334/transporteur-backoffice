@@ -63,6 +63,7 @@ export interface CommandCardProps {
 export interface DeliveryCardProps {
   item: FormattedDeliveryCard;
   onViewDetails: (item: FormattedDeliveryCard) => void;
+  onReview?: (item: FormattedDeliveryCard) => void;
 }
 
 export interface OrdersManagerProps {

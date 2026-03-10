@@ -27,6 +27,7 @@ interface UserSpecificPromoModalProps {
   isOpen: boolean;
   onClose: () => void;
   users: User[];
+  promos: PromoCode[];
 }
 
 const getTodayAtTime = (hours: number, minutes: number) => {
@@ -40,21 +41,12 @@ export default function UserSpecificPromoModal({
   isOpen,
   onClose,
   users,
+  promos,
 }: UserSpecificPromoModalProps) {
-  const { createPromo, setUserEligibility, isLoading } = usePromos();
+  const { setUserEligibility, isLoading } = usePromos();
   const [formData, setFormData] = useState({
     code: "",
-    type: "PERCENT" as PromoType,
-    value: "",
-    maxDiscount: "",
-    minOrderAmount: "0",
-    usageLimit: "",
-    usageLimitPerUser: "1",
-    startsAt: "",
-    endsAt: "",
-    channel: "VIP" as PromoChannel,
-    isActive: true,
-    forbidIfAlreadyUsed: true,
+    mode: "ADD" as "ADD" | "SET",
   });
 
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
@@ -65,17 +57,7 @@ export default function UserSpecificPromoModal({
     if (isOpen) {
       setFormData({
         code: "",
-        type: "PERCENT",
-        value: "",
-        maxDiscount: "",
-        minOrderAmount: "0",
-        usageLimit: "",
-        usageLimitPerUser: "1",
-        startsAt: getTodayAtTime(0, 0),
-        endsAt: getTodayAtTime(23, 59),
-        channel: "VIP",
-        isActive: true,
-        forbidIfAlreadyUsed: true,
+        mode: "ADD",
       });
       setSelectedUserIds([]);
       setUserSearchTerm("");
@@ -103,22 +85,8 @@ export default function UserSpecificPromoModal({
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.code.trim()) {
-      newErrors.code = "Le code est requis";
-    } else if (formData.code.length < 3) {
-      newErrors.code = "Le code doit contenir au moins 3 caractères";
-    }
-
-    if (!formData.value) {
-      newErrors.value = "La valeur est requise";
-    } else {
-      const numValue = Number(formData.value);
-      if (isNaN(numValue) || numValue <= 0) {
-        newErrors.value = "La valeur doit être un nombre positif";
-      }
-      if (formData.type === "PERCENT" && numValue > 100) {
-        newErrors.value = "Le pourcentage ne peut pas dépasser 100%";
-      }
+    if (!formData.code) {
+      newErrors.code = "Veuillez sélectionner un code promo";
     }
 
     if (selectedUserIds.length === 0) {
@@ -135,35 +103,13 @@ export default function UserSpecificPromoModal({
     if (!validateForm()) return;
 
     try {
-      // 1. Créer le code promo (Requête standard)
-      const promoData = {
-        code: formData.code.toUpperCase().trim(),
-        type: formData.type,
-        value: Number(formData.value),
-        maxDiscount: formData.maxDiscount ? Number(formData.maxDiscount) : null,
-        minOrderAmount: Number(formData.minOrderAmount),
-        usageLimit: formData.usageLimit ? Number(formData.usageLimit) : null,
-        usageLimitPerUser: formData.usageLimitPerUser
-          ? Number(formData.usageLimitPerUser)
-          : null,
-        startsAt: formData.startsAt || null,
-        endsAt: formData.endsAt || null,
-        channel: formData.channel,
-        isActive: formData.isActive,
-      };
-
-      await createPromo(promoData);
-
-      // 2. Définir l'éligibilité (Requête spécifique avec body de 4 champs)
       const eligibilityData: PromoUserEligibilityDto = {
-        code: formData.code.toUpperCase().trim(),
+        code: formData.code,
         userIds: selectedUserIds,
-        mode: "ADD",
-        forbidIfAlreadyUsed: formData.forbidIfAlreadyUsed,
+        mode: formData.mode,
       };
 
       await setUserEligibility(eligibilityData);
-
       onClose();
     } catch (error) {
       // Les erreurs sont déjà gérées dans le hook
@@ -182,10 +128,10 @@ export default function UserSpecificPromoModal({
               </div>
               <div>
                 <h3 className="text-xl font-bold text-gray-900">
-                  Code promo ciblé
+                  Éligibilité Promo
                 </h3>
                 <p className="text-xs text-gray-500 mt-1">
-                  Créer un code promo pour des utilisateurs spécifiques
+                  Assigner des utilisateurs à un code promo existant
                 </p>
               </div>
             </div>
@@ -210,28 +156,38 @@ export default function UserSpecificPromoModal({
               <div className="space-y-6">
                 <h4 className="font-bold text-gray-900 flex items-center gap-2 border-b border-gray-100 pb-2">
                   <Tag className="w-4 h-4 text-[#FD481A]" />
-                  Configuration du code
+                  Configuration
                 </h4>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Code promo <span className="text-red-500">*</span>
+                    Sélectionner le code promo{" "}
+                    <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.code}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        code: e.target.value.toUpperCase(),
+                        code: e.target.value,
                       })
                     }
-                    placeholder="EX: USERVIP20"
                     className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A] transition-all bg-gray-50 focus:bg-white ${
                       errors.code ? "border-red-500" : "border-gray-200"
                     }`}
                     disabled={isLoading}
-                  />
+                  >
+                    <option value="">-- Choisir un code --</option>
+                    {promos.map((promo) => (
+                      <option key={promo.id} value={promo.code}>
+                        {promo.code} (
+                        {promo.type === "PERCENT"
+                          ? `${promo.value}%`
+                          : `${promo.value} XOF`}
+                        )
+                      </option>
+                    ))}
+                  </select>
                   {errors.code && (
                     <p className="mt-1 text-xs text-red-500">{errors.code}</p>
                   )}
@@ -239,124 +195,36 @@ export default function UserSpecificPromoModal({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Type de réduction <span className="text-red-500">*</span>
+                    Mode d'assignation <span className="text-red-500">*</span>
                   </label>
                   <div className="flex gap-2">
                     <button
                       type="button"
-                      onClick={() =>
-                        setFormData({ ...formData, type: "PERCENT" })
-                      }
+                      onClick={() => setFormData({ ...formData, mode: "ADD" })}
                       className={`flex-1 py-2.5 rounded-lg border text-sm font-medium transition-all flex items-center justify-center gap-2 ${
-                        formData.type === "PERCENT"
+                        formData.mode === "ADD"
                           ? "border-[#FD481A] bg-orange-50 text-[#FD481A] shadow-sm"
                           : "border-gray-200 hover:border-gray-300 text-gray-600"
                       }`}
                     >
-                      <Percent className="w-4 h-4" />%
+                      ADD (Ajouter)
                     </button>
                     <button
                       type="button"
-                      onClick={() =>
-                        setFormData({ ...formData, type: "FIXED" })
-                      }
+                      onClick={() => setFormData({ ...formData, mode: "SET" })}
                       className={`flex-1 py-2.5 rounded-lg border text-sm font-medium transition-all flex items-center justify-center gap-2 ${
-                        formData.type === "FIXED"
+                        formData.mode === "SET"
                           ? "border-[#FD481A] bg-orange-50 text-[#FD481A] shadow-sm"
                           : "border-gray-200 hover:border-gray-300 text-gray-600"
                       }`}
                     >
-                      XOF
+                      SET (Remplacer)
                     </button>
                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Valeur <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={formData.value}
-                      onChange={(e) =>
-                        setFormData({ ...formData, value: e.target.value })
-                      }
-                      placeholder="0"
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A] bg-gray-50 focus:bg-white ${
-                        errors.value ? "border-red-500" : "border-gray-200"
-                      }`}
-                    />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">
-                      {formData.type === "PERCENT" ? "%" : "XOF"}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1 uppercase">
-                      Début
-                    </label>
-                    <input
-                      type="datetime-local"
-                      value={formData.startsAt}
-                      onChange={(e) =>
-                        setFormData({ ...formData, startsAt: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#FD481A] outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1 uppercase">
-                      Fin
-                    </label>
-                    <input
-                      type="datetime-local"
-                      value={formData.endsAt}
-                      onChange={(e) =>
-                        setFormData({ ...formData, endsAt: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#FD481A] outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-xl space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-green-600" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Déjà utilisé ?
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFormData({
-                          ...formData,
-                          forbidIfAlreadyUsed: !formData.forbidIfAlreadyUsed,
-                        })
-                      }
-                      className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors ${
-                        formData.forbidIfAlreadyUsed
-                          ? "bg-[#FD481A]"
-                          : "bg-gray-300"
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
-                          formData.forbidIfAlreadyUsed
-                            ? "translate-x-6"
-                            : "translate-x-1"
-                        }`}
-                      />
-                    </button>
-                  </div>
-                  <p className="text-[10px] text-gray-500 italic">
-                    {formData.forbidIfAlreadyUsed
-                      ? "Interdire si l'utilisateur a déjà utilisé un code de l'éligibilité."
-                      : "Autoriser même si déjà utilisé."}
+                  <p className="mt-2 text-[10px] text-gray-500 italic">
+                    {formData.mode === "ADD"
+                      ? "Le mode ADD ajoute les utilisateurs à la liste existante."
+                      : "Le mode SET remplace la liste actuelle par les utilisateurs sélectionnés."}
                   </p>
                 </div>
               </div>
@@ -457,7 +325,7 @@ export default function UserSpecificPromoModal({
                 ) : (
                   <>
                     <ShieldCheck className="w-5 h-5" />
-                    Créer et assigner ({selectedUserIds.length} utilisateurs)
+                    Assigner ({selectedUserIds.length} utilisateurs)
                   </>
                 )}
               </button>

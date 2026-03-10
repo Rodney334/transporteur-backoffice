@@ -91,4 +91,9 @@ export const orderService = {
     const response = await api.post(`/order/${orderId}/promo`, { code });
     return response.data;
   },
+
+  async reviewOrder(orderId: string, data: { rating: number; comment: string }) {
+    const response = await api.post(`/order/${orderId}/review`, data);
+    return response.data;
+  },
 };

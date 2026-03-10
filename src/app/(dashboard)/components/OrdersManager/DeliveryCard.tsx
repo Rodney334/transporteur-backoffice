@@ -1,13 +1,17 @@
 // components/DeliveryCard.tsx - VERSION MISE À JOUR
-import { Package } from "lucide-react";
+import { Package, Star } from "lucide-react";
 import { DeliveryCardProps } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager.types";
 import { OrderStatus } from "@/type/enum";
 import { OrderStatusStepper } from "@/components/OrderStatusStepper";
 
-export const DeliveryCard = ({ item, onViewDetails }: DeliveryCardProps) => (
+export const DeliveryCard = ({
+  item,
+  onViewDetails,
+  onReview,
+}: DeliveryCardProps) => (
   <div
     className="bg-white rounded-xl p-4 shadow-sm border border-gray-100"
-  // onClick={() => onViewDetails(item)}
+    // onClick={() => onViewDetails(item)}
   >
     <div className="flex justify-between text-xs font-semibold text-gray-600 mb-3">
       <span>{item.id}</span>
@@ -42,14 +46,15 @@ export const DeliveryCard = ({ item, onViewDetails }: DeliveryCardProps) => (
         <div className="text-xs text-gray-500 mb-1">Statut</div>
         <div className="text-xs font-medium text-gray-700">
           <span
-            className={`capitalize bg-blue-500/10 text-blue-700 px-2 py-0.5 rounded-2xl ${item.originalData.status === OrderStatus.LIVREE
-              ? "bg-green-500/10 text-green-700"
-              : item.originalData.status === OrderStatus.EN_ATTENTE
-                ? "bg-orange-500/10 text-orange-700"
-                : item.originalData.status === OrderStatus.ECHEC
-                  ? "bg-red-500/10 text-red-700"
-                  : "bg-blue-500/10 text-blue-700"
-              }`}
+            className={`capitalize bg-blue-500/10 text-blue-700 px-2 py-0.5 rounded-2xl ${
+              item.originalData.status === OrderStatus.LIVREE
+                ? "bg-green-500/10 text-green-700"
+                : item.originalData.status === OrderStatus.EN_ATTENTE
+                  ? "bg-orange-500/10 text-orange-700"
+                  : item.originalData.status === OrderStatus.ECHEC
+                    ? "bg-red-500/10 text-red-700"
+                    : "bg-blue-500/10 text-blue-700"
+            }`}
           >
             {item.originalData.status === OrderStatus.LIVREE
               ? "Livrée"
@@ -71,6 +76,22 @@ export const DeliveryCard = ({ item, onViewDetails }: DeliveryCardProps) => (
       </div>
       <div className="text-xs text-gray-500">{item.date}</div>
     </div>
+
+    {/* Review Button for completed orders */}
+    {item.originalData.status === OrderStatus.LIVREE && onReview && (
+      <div className="mt-4 pt-4 border-t border-gray-50 flex justify-center">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onReview(item);
+          }}
+          className="flex items-center gap-2 px-6 py-2 bg-orange-50 text-[#FD481A] text-sm font-bold rounded-xl hover:bg-[#FD481A] hover:text-white transition-all duration-300 border border-orange-100 shadow-sm shadow-orange-50"
+        >
+          <Star className="w-4 h-4 fill-current" />
+          Laisser un avis
+        </button>
+      </div>
+    )}
 
     {/* Status Stepper */}
     <OrderStatusStepper currentStatus={item.originalData.status} />

@@ -364,6 +364,7 @@ export default function CodepromoPage() {
           isOpen={isUserSpecificModalOpen}
           onClose={handleCloseModals}
           users={users}
+          promos={promos}
         />
 
         <PromoFormModal
