@@ -101,25 +101,20 @@ export const transformReportData = (report: ClientReport) => {
 };
 
 // Obtenir la couleur du statut
-export const getStatusColor = (status: OrderStatus) => {
-  switch (status) {
-    case OrderStatus.LIVREE:
-      return "bg-green-100 text-green-800";
-    case OrderStatus.ECHEC:
-      return "bg-red-100 text-red-800";
-    case OrderStatus.EN_LIVRAISON:
-      return "bg-blue-100 text-blue-800";
-    case OrderStatus.PRIX_VALIDE:
-      return "bg-yellow-100 text-yellow-800";
-    case OrderStatus.EN_DISCUSSION:
-      return "bg-purple-100 text-purple-800";
-    case OrderStatus.ASSIGNEE:
-      return "bg-gray-100 text-gray-800";
-    case OrderStatus.EN_ATTENTE:
-      return "bg-gray-50 text-gray-600";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
+export const getStatusColor = (status: OrderStatus): string => {
+  const colors: Record<OrderStatus, string> = {
+    [OrderStatus.LIVREE]: "bg-green-100 text-green-800",
+    [OrderStatus.ECHEC]: "bg-red-100 text-red-800",
+    [OrderStatus.EN_LIVRAISON]: "bg-blue-100 text-blue-800",
+    [OrderStatus.PRIX_VALIDE]: "bg-yellow-100 text-yellow-800",
+    [OrderStatus.EN_DISCUSSION]: "bg-purple-100 text-purple-800",
+    [OrderStatus.ASSIGNEE]: "bg-gray-100 text-gray-800",
+    [OrderStatus.EN_ATTENTE]: "bg-gray-50 text-gray-600",
+    [OrderStatus.CONFLIT]: "bg-purple-100 text-purple-800",
+    [OrderStatus.ANNULEE_PAR_CLIENT]: "bg-red-100 text-red-800",
+    [OrderStatus.ANNULEE_PAR_LIVREUR]: "bg-red-100 text-red-800",
+  };
+  return colors[status] || "bg-gray-100 text-gray-800";
 };
 
 // Obtenir le libellé du statut
@@ -132,6 +127,9 @@ export const getStatusLabel = (status: OrderStatus): string => {
     [OrderStatus.EN_LIVRAISON]: "En livraison",
     [OrderStatus.LIVREE]: "Livrée",
     [OrderStatus.ECHEC]: "Échec",
+    [OrderStatus.CONFLIT]: "En conflit",
+    [OrderStatus.ANNULEE_PAR_CLIENT]: "Annulée par le client",
+    [OrderStatus.ANNULEE_PAR_LIVREUR]: "Annulée par le livreur",
   };
   return labels[status] || status;
 };

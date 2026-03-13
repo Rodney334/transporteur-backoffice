@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X, Layers, Percent, Target } from "lucide-react";
-import { Partner, BatchPromoDto } from "../types";
+import { Partner, BatchPromoDto, PromoType, PromoChannel } from "../types";
 import { usePartners } from "../hooks/use-partners";
 import { useCampaigns } from "../hooks/use-campaigns";
 
@@ -27,7 +27,7 @@ export default function BatchPromoModal({
   const [formData, setFormData] = useState<BatchPromoDto>({
     campaignId: "",
     count: 50,
-    type: "PERCENT",
+    type: PromoType.PERCENT,
     value: 15,
     maxDiscount: 5000,
     minOrderAmount: 20000,
@@ -35,7 +35,7 @@ export default function BatchPromoModal({
     usageLimitPerUser: 1,
     startsAt: "",
     endsAt: "",
-    channel: "PARTNER",
+    channel: PromoChannel.PARTNER,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -166,10 +166,10 @@ export default function BatchPromoModal({
                   <button
                     type="button"
                     onClick={() =>
-                      setFormData({ ...formData, type: "PERCENT" })
+                      setFormData({ ...formData, type: PromoType.PERCENT })
                     }
                     className={`flex items-center justify-center gap-2 px-3 py-3 rounded-lg border text-xs transition-colors ${
-                      formData.type === "PERCENT"
+                      formData.type === PromoType.PERCENT
                         ? "border-purple-600 bg-purple-50 text-purple-600"
                         : "border-gray-300 hover:bg-gray-50"
                     }`}
@@ -178,9 +178,11 @@ export default function BatchPromoModal({
                   </button>
                   <button
                     type="button"
-                    onClick={() => setFormData({ ...formData, type: "FIXED" })}
+                    onClick={() =>
+                      setFormData({ ...formData, type: PromoType.FIXED })
+                    }
                     className={`flex items-center justify-center gap-2 px-3 py-3 rounded-lg border text-xs transition-colors ${
-                      formData.type === "FIXED"
+                      formData.type === PromoType.FIXED
                         ? "border-purple-600 bg-purple-50 text-purple-600"
                         : "border-gray-300 hover:bg-gray-50"
                     }`}

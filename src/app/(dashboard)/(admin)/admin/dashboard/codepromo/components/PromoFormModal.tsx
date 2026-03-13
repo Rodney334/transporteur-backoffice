@@ -79,7 +79,7 @@ export default function PromoFormModal({
     } else {
       setFormData({
         code: "",
-        type: "PERCENT",
+        type: PromoType.PERCENT,
         value: "",
         maxDiscount: "",
         minOrderAmount: "0",
@@ -87,7 +87,7 @@ export default function PromoFormModal({
         usageLimitPerUser: "",
         startsAt: getTodayAtTime(0, 0),
         endsAt: getTodayAtTime(23, 59),
-        channel: "PUBLIC",
+        channel: PromoChannel.PUBLIC,
         isActive: true,
       });
     }
@@ -218,9 +218,11 @@ export default function PromoFormModal({
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, type: "PERCENT" })}
+                  onClick={() =>
+                    setFormData({ ...formData, type: PromoType.PERCENT })
+                  }
                   className={`cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-colors ${
-                    formData.type === "PERCENT"
+                    formData.type === PromoType.PERCENT
                       ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
                       : "border-gray-300 hover:border-gray-400"
                   }`}
@@ -231,9 +233,11 @@ export default function PromoFormModal({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, type: "FIXED" })}
+                  onClick={() =>
+                    setFormData({ ...formData, type: PromoType.FIXED })
+                  }
                   className={`cursor-pointer flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-colors ${
-                    formData.type === "FIXED"
+                    formData.type === PromoType.FIXED
                       ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
                       : "border-gray-300 hover:border-gray-400"
                   }`}
@@ -282,10 +286,10 @@ export default function PromoFormModal({
                 <button
                   type="button"
                   onClick={() =>
-                    setFormData({ ...formData, channel: "PUBLIC" })
+                    setFormData({ ...formData, channel: PromoChannel.PUBLIC })
                   }
                   className={`cursor-pointer flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg border transition-colors ${
-                    formData.channel === "PUBLIC"
+                    formData.channel === PromoChannel.PUBLIC
                       ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
                       : "border-gray-300 hover:border-gray-400"
                   }`}
@@ -297,10 +301,10 @@ export default function PromoFormModal({
                 <button
                   type="button"
                   onClick={() =>
-                    setFormData({ ...formData, channel: "PARTNER" })
+                    setFormData({ ...formData, channel: PromoChannel.PARTNER })
                   }
                   className={`cursor-pointer flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg border transition-colors ${
-                    formData.channel === "PARTNER"
+                    formData.channel === PromoChannel.PARTNER
                       ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
                       : "border-gray-300 hover:border-gray-400"
                   }`}
@@ -311,9 +315,11 @@ export default function PromoFormModal({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, channel: "VIP" })}
+                  onClick={() =>
+                    setFormData({ ...formData, channel: PromoChannel.VIP })
+                  }
                   className={`cursor-pointer flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg border transition-colors ${
-                    formData.channel === "VIP"
+                    formData.channel === PromoChannel.VIP
                       ? "border-[#FD481A] bg-orange-50 text-[#FD481A]"
                       : "border-gray-300 hover:border-gray-400"
                   }`}

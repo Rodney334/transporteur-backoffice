@@ -13,7 +13,7 @@ import {
   Power,
   Clock,
 } from "lucide-react";
-import { PromoCode } from "../types";
+import { PromoCode, PromoType } from "../types";
 import { usePromos } from "../hooks";
 
 interface PromoTableProps {
@@ -28,7 +28,7 @@ interface PromoTableProps {
     startsAt: boolean;
     endsAt: boolean;
   };
-  formatPromoType: (type: "PERCENT" | "FIXED", value: number) => string;
+  formatPromoType: (type: PromoType, value: number) => string;
   formatDate: (dateString: string | null) => string;
   getActiveStatusColor: (isActive: boolean) => string;
   onEdit: (promo: PromoCode) => void;
