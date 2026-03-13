@@ -1,3 +1,5 @@
+import { FormattedDeliveryCard } from "@/app/(dashboard)/(admin)/admin/dashboard/commande/components/OrdersManager.types";
+
 export type HistoriqueDataType = {
   id: string;
   from: string;
@@ -7,6 +9,6 @@ export type HistoriqueDataType = {
 };
 
 export interface DeliveryCardInterface {
-  item: HistoriqueDataType;
+  item: FormattedDeliveryCard;
   type: string;
 }

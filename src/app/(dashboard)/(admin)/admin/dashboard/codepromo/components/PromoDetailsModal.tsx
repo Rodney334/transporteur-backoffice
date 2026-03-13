@@ -231,11 +231,51 @@ export default function PromoDetailsModal() {
               </div>
             </div>
 
-            {/* Section 4: Contraintes spécifiques */}
+            {/* Section 4: Éligibilité */}
+            <div className="bg-orange-50 rounded-lg p-4">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <Target className="w-5 h-5" />
+                Éligibilité
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Mode d'éligibilité
+                  </label>
+                  <div className="text-sm font-medium text-gray-900">
+                    {selectedPromo.eligibilityMode === "USERS"
+                      ? "Utilisateurs spécifiques"
+                      : selectedPromo.eligibilityMode === "ALL"
+                        ? "Tous les utilisateurs"
+                        : selectedPromo.eligibilityMode}
+                  </div>
+                </div>
+                {selectedPromo.eligibleRole && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">
+                      Rôle éligible
+                    </label>
+                    <div className="text-sm text-gray-900">
+                      {selectedPromo.eligibleRole}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Utilisateurs max
+                  </label>
+                  <div className="text-sm text-gray-900">
+                    {selectedPromo.maxUsers?.toLocaleString() || "Illimité"}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 5: Contraintes spécifiques */}
             {selectedPromo.constraints && (
               <div className="bg-yellow-50 rounded-lg p-4">
                 <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <Target className="w-5 h-5" />
+                  <AlertCircle className="w-5 h-5" />
                   Contraintes spécifiques
                 </h4>
                 <div className="space-y-4">
@@ -285,53 +325,116 @@ export default function PromoDetailsModal() {
               </div>
             )}
 
-            {/* Section 5: Associations */}
-            <div className="bg-green-50 rounded-lg p-4">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Building2 className="w-5 h-5" />
-                Associations
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">
-                    Entreprise
-                  </label>
-                  <div className="text-sm text-gray-900">
-                    {selectedPromo.companyId || "Non associée"}
+            {/* Section 6: Utilisateurs assignés */}
+            {selectedPromo.hasAssignedUsers && (
+              <div className="bg-blue-50 rounded-lg p-4">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Users className="w-5 h-5" />
+                    Utilisateurs assignés
                   </div>
+                  <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    {selectedPromo.assignedUsersCount} utilisateur
+                    {selectedPromo.assignedUsersCount > 1 ? "s" : ""}
+                  </span>
+                </h4>
+                <div className="overflow-x-auto rounded-lg border border-blue-100 bg-white">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-blue-50 text-gray-700 uppercase text-xs font-semibold">
+                      <tr>
+                        <th className="px-4 py-2">Nom</th>
+                        <th className="px-4 py-2">Email</th>
+                        <th className="px-4 py-2">Téléphone</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-blue-50">
+                      {selectedPromo.assignedUsers &&
+                      selectedPromo.assignedUsers.length > 0 ? (
+                        selectedPromo.assignedUsers.map((user) => (
+                          <tr key={user.userId} className="hover:bg-blue-50/50">
+                            <td className="px-4 py-2 font-medium text-gray-900">
+                              {user.name}
+                            </td>
+                            <td className="px-4 py-2 text-gray-600">
+                              {user.email || "-"}
+                            </td>
+                            <td className="px-4 py-2 text-gray-600">
+                              {user.phoneNumber || "-"}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan={3}
+                            className="px-4 py-8 text-center text-gray-500 italic"
+                          >
+                            Chargement des utilisateurs...
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">
-                    Campagne
-                  </label>
-                  <div className="text-sm text-gray-900">
-                    {selectedPromo.campaignId || "Non associée"}
+              </div>
+            )}
+
+            {/* Section 7: Associations & Métadonnées */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-green-50 rounded-lg p-4">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <Building2 className="w-5 h-5" />
+                  Associations
+                </h4>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">
+                      Entreprise
+                    </label>
+                    <div className="text-sm text-gray-900">
+                      {selectedPromo.companyId || "Non associée"}
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">
-                    <User className="w-4 h-4 inline mr-1" />
-                    Utilisateur assigné
-                  </label>
-                  <div className="text-sm text-gray-900">
-                    {selectedPromo.assignedUserId || "Non assigné"}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">
+                      Campagne
+                    </label>
+                    <div className="text-sm text-gray-900">
+                      {selectedPromo.campaignId || "Non associée"}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">
+                      <User className="w-4 h-4 inline mr-1" />
+                      Utilisateur principal assigné
+                    </label>
+                    <div className="text-sm text-gray-900">
+                      {selectedPromo.assignedUserId || "Non assigné"}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Section 6: Métadonnées */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4">
-                Métadonnées
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-1">
-                    Dernière mise à jour
-                  </label>
-                  <div className="text-sm text-gray-900">
-                    {formatDate(selectedPromo.updatedAt)}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                  Métadonnées
+                </h4>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">
+                      Dernière mise à jour
+                    </label>
+                    <div className="text-sm text-gray-900">
+                      {formatDate(selectedPromo.updatedAt)}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">
+                      Créé le
+                    </label>
+                    <div className="text-sm text-gray-900">
+                      {formatDate(selectedPromo.createdAt)}
+                    </div>
                   </div>
                 </div>
               </div>

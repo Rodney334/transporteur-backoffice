@@ -10,7 +10,13 @@ export const STATUS_MAPPING: Record<string, OrderStatus[]> = {
     OrderStatus.EN_LIVRAISON,
   ],
   Programmées: [OrderStatus.EN_ATTENTE],
-  Terminées: [OrderStatus.LIVREE, OrderStatus.ECHEC],
+  Terminées: [OrderStatus.LIVREE],
+  Échouées: [
+    OrderStatus.ECHEC,
+    OrderStatus.ANNULEE_PAR_LIVREUR,
+    OrderStatus.ANNULEE_PAR_CLIENT,
+  ],
+  "En conflit": [OrderStatus.CONFLIT],
 };
 
 export const CLIENT_STATUS_MAPPING: Record<string, OrderStatus[]> = {
@@ -21,5 +27,11 @@ export const CLIENT_STATUS_MAPPING: Record<string, OrderStatus[]> = {
     OrderStatus.PRIX_VALIDE,
     OrderStatus.EN_LIVRAISON,
   ],
-  Terminées: [OrderStatus.LIVREE, OrderStatus.ECHEC],
+  Terminées: [OrderStatus.LIVREE],
+  Échouées: [
+    OrderStatus.ECHEC,
+    OrderStatus.ANNULEE_PAR_LIVREUR,
+    OrderStatus.ANNULEE_PAR_CLIENT,
+  ],
+  "En conflit": [OrderStatus.CONFLIT],
 };

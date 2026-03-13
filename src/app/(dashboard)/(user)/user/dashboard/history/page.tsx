@@ -12,7 +12,7 @@ export default function HistoriquePage() {
   return (
     <OrdersManager
       userRole={GrantedRole.Client}
-      tabs={["En cours", "Terminées"]}
+      tabs={["En cours", "Terminées", "Échouées", "En conflit"]}
       defaultTab="En cours"
       cardComponent={DeliveryCard}
       shouldShowPriceForm={clientConfig.shouldShowPriceForm}

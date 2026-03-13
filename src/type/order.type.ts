@@ -87,6 +87,8 @@ export interface Order {
   promoErrorMessage?: string;
   discountAmount?: number;
   basePriceBeforeDiscount: number;
+  hiddenForClient?: boolean;
+  hiddenForCourier?: boolean;
 }
 
 export interface Negotiation {

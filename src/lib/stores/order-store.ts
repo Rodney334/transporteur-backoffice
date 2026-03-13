@@ -298,6 +298,9 @@ export const useOrderStore = create<OrderStore>()(
         [OrderStatus.EN_LIVRAISON]: "En livraison",
         [OrderStatus.LIVREE]: "Livrée",
         [OrderStatus.ECHEC]: "Échec",
+        [OrderStatus.CONFLIT]: "En conflit",
+        [OrderStatus.ANNULEE_PAR_CLIENT]: "Annulée par le client",
+        [OrderStatus.ANNULEE_PAR_LIVREUR]: "Annulée par le livreur",
       };
 
       toast.info(
@@ -386,7 +389,13 @@ export const useOrderStore = create<OrderStore>()(
           OrderStatus.EN_LIVRAISON,
         ],
         Programmées: [OrderStatus.EN_ATTENTE],
-        Terminées: [OrderStatus.LIVREE, OrderStatus.ECHEC],
+        Terminées: [OrderStatus.LIVREE],
+        Échouées: [
+          OrderStatus.ECHEC,
+          OrderStatus.ANNULEE_PAR_LIVREUR,
+          OrderStatus.ANNULEE_PAR_CLIENT,
+        ],
+        "En conflit": [OrderStatus.CONFLIT],
       };
 
       const clientStatusMapping: Record<string, OrderStatus[]> = {
@@ -397,7 +406,13 @@ export const useOrderStore = create<OrderStore>()(
           OrderStatus.PRIX_VALIDE,
           OrderStatus.EN_LIVRAISON,
         ],
-        Terminées: [OrderStatus.LIVREE, OrderStatus.ECHEC],
+        Terminées: [OrderStatus.LIVREE],
+        Échouées: [
+          OrderStatus.ECHEC,
+          OrderStatus.ANNULEE_PAR_LIVREUR,
+          OrderStatus.ANNULEE_PAR_CLIENT,
+        ],
+        "En conflit": [OrderStatus.CONFLIT],
       };
 
       const statuses =
@@ -426,15 +441,13 @@ export const useOrderStore = create<OrderStore>()(
             const [date, time] = order.scheduledAt.split("T");
             const [hour, minute] = time.split(":");
             scheduledDate.setHours(parseInt(hour), parseInt(minute), 0, 0);
-            console.log({
-              date: order.scheduledAt,
-              scheduledDate,
-              now,
-              compare: scheduledDate <= now,
-            });
             if (scheduledDate <= now) return false;
           }
         }
+
+        // Filtres de visibilité (hiddenForClient / hiddenForCourier)
+        if (userRole === "client" && order.hiddenForClient) return false;
+        if (userRole === "livreur" && order.hiddenForCourier) return false;
 
         // Pour le client, filtre par userId
         if (userRole === "client") {
@@ -574,6 +587,34 @@ export const useOrderActions = () => {
         }
 
         // Recharger pour obtenir les données de négociation à jour
+        await store.fetchOrders();
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    cancelOrder: async (orderId: string) => {
+      try {
+        await orderService.deleteOrder(orderId);
+        store.removeOrder(orderId);
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    cancelOrderByCourier: async (orderId: string, reason: string) => {
+      try {
+        await orderService.cancelOrderByCourier(orderId, reason);
+        // On pourrait juste mettre à jour le statut ou recharger
+        await store.fetchOrders();
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    cancelOrderByClient: async (orderId: string, reason: string) => {
+      try {
+        await orderService.cancelOrderByClient(orderId, reason);
         await store.fetchOrders();
       } catch (err) {
         throw err;

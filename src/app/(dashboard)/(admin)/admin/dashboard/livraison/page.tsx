@@ -38,6 +38,7 @@ export default function LivraisonPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [deliveryTypeFilter, setDeliveryTypeFilter] = useState<string>("all");
   const [transportModeFilter, setTransportModeFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   // États pour la pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,11 +57,11 @@ export default function LivraisonPage() {
 
   // Extraire les options uniques pour les filtres
   const deliveryTypes = Array.from(
-    new Set(deliveries.map((d) => d.deliveryType).filter(Boolean))
+    new Set(deliveries.map((d) => d.deliveryType).filter(Boolean)),
   );
 
   const transportModes = Array.from(
-    new Set(deliveries.map((d) => d.transportMode).filter(Boolean))
+    new Set(deliveries.map((d) => d.transportMode).filter(Boolean)),
   );
 
   // Filtrer les livraisons en fonction des critères
@@ -69,7 +70,7 @@ export default function LivraisonPage() {
     const matchesSearch =
       searchTerm === "" ||
       (delivery.createdBy?.name?.toLowerCase() || "").includes(
-        searchTerm.toLowerCase()
+        searchTerm.toLowerCase(),
       ) ||
       formatAddress(delivery.pickupAddress)
         .toLowerCase()
@@ -89,7 +90,16 @@ export default function LivraisonPage() {
       transportModeFilter === "all" ||
       delivery.transportMode === transportModeFilter;
 
-    return matchesSearch && matchesDeliveryType && matchesTransportMode;
+    // Filtre par statut
+    const matchesStatus =
+      statusFilter === "all" || delivery.status === statusFilter;
+
+    return (
+      matchesSearch &&
+      matchesDeliveryType &&
+      matchesTransportMode &&
+      matchesStatus
+    );
   });
 
   // Calculer la pagination
@@ -102,7 +112,7 @@ export default function LivraisonPage() {
   // Réinitialiser à la première page quand les filtres changent
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, deliveryTypeFilter, transportModeFilter]);
+  }, [searchTerm, deliveryTypeFilter, transportModeFilter, statusFilter]);
 
   // Gestion du toggle des colonnes
   const handleToggleColumn = (column: string) => {
@@ -136,12 +146,8 @@ export default function LivraisonPage() {
         {/* En-tête avec statistiques */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Livraisons terminées
-            </h1>
-            <p className="text-gray-500 mt-2">
-              Historique des livraisons complétées avec succès
-            </p>
+            <h1 className="text-3xl font-bold text-gray-900">Livraisons</h1>
+            <p className="text-gray-500 mt-2">Historique des livraisons</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -191,6 +197,8 @@ export default function LivraisonPage() {
           onDeliveryTypeFilterChange={setDeliveryTypeFilter}
           transportModeFilter={transportModeFilter}
           onTransportModeFilterChange={setTransportModeFilter}
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
           itemsPerPage={itemsPerPage}
           onItemsPerPageChange={setItemsPerPage}
           totalItems={totalItems}

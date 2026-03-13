@@ -47,8 +47,15 @@ export const OrdersManager = ({
   const { orders, loading, error, fetchOrders, getOrdersByTab, getStats } =
     useOrderStore();
 
-  const { acceptOrder, rejectOrder, endOrder, validatePrice } =
-    useOrderActions();
+  const {
+    acceptOrder,
+    rejectOrder,
+    endOrder,
+    validatePrice,
+    cancelOrder,
+    cancelOrderByCourier,
+    cancelOrderByClient,
+  } = useOrderActions();
 
   // NOUVEAUX HOOKS
   const {
@@ -83,6 +90,12 @@ export const OrdersManager = ({
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [selectedCommandForReview, setSelectedCommandForReview] =
     useState<FormattedDeliveryCard | null>(null);
+
+  const [cancelModalOrder, setCancelModalOrder] = useState<any>(null);
+  const [cancelReason, setCancelReason] = useState("");
+  const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+  const [showCourierCancelModal, setShowCourierCancelModal] = useState(false);
+  const [showHideConfirmation, setShowHideConfirmation] = useState(false);
 
   // React Hook Form
   const {
@@ -216,6 +229,86 @@ export const OrdersManager = ({
     },
     [endOrder],
   );
+
+  const handleCancelClick = useCallback(
+    (command: any) => {
+      setCancelModalOrder(command);
+      if (
+        userRole === GrantedRole.Livreur ||
+        userRole === GrantedRole.Client
+      ) {
+        setShowCourierCancelModal(true);
+      } else {
+        setShowCancelConfirmation(true);
+      }
+    },
+    [userRole],
+  );
+ 
+  const handleHideClick = useCallback((command: any) => {
+    setCancelModalOrder(command);
+    setShowHideConfirmation(true);
+  }, []);
+
+  const executeHide = useCallback(async () => {
+    if (!cancelModalOrder) return;
+
+    try {
+      setProcessingAction(`hide-${cancelModalOrder.id}`);
+      await cancelOrder(cancelModalOrder.originalData.id);
+      setShowHideConfirmation(false);
+      setCancelModalOrder(null);
+      toast.success("Commande masquée avec succès !");
+    } catch (err: any) {
+      console.log("Error hiding order:", err);
+      toast.error(err.response?.data?.message || "Erreur lors de l'opération");
+    } finally {
+      setProcessingAction(null);
+    }
+  }, [cancelModalOrder, cancelOrder]);
+
+  const executeCancel = useCallback(async () => {
+    if (!cancelModalOrder) return;
+
+    try {
+      setProcessingAction(`cancel-${cancelModalOrder.id}`);
+      if (userRole === GrantedRole.Livreur) {
+        if (!cancelReason.trim()) {
+          toast.error("La raison est obligatoire");
+          return;
+        }
+        await cancelOrderByCourier(
+          cancelModalOrder.originalData.id,
+          cancelReason,
+        );
+        setShowCourierCancelModal(false);
+      } else if (userRole === GrantedRole.Client) {
+        await cancelOrderByClient(
+          cancelModalOrder.originalData.id,
+          cancelReason,
+        );
+        setShowCourierCancelModal(false);
+      } else {
+        await cancelOrder(cancelModalOrder.originalData.id);
+        setShowCancelConfirmation(false);
+      }
+      toast.success("Commande annulée avec succès !");
+      setCancelReason("");
+      setCancelModalOrder(null);
+    } catch (err: any) {
+      console.log("Error canceling order:", err);
+      toast.error(err.response?.data?.message || "Erreur lors de l'annulation");
+    } finally {
+      setProcessingAction(null);
+    }
+  }, [
+    cancelModalOrder,
+    cancelReason,
+    userRole,
+    cancelOrder,
+    cancelOrderByCourier,
+    cancelOrderByClient,
+  ]);
 
   const handleViewDetails = useCallback((command: any) => {
     setSelectedCommand(command.originalData);
@@ -419,8 +512,20 @@ export const OrdersManager = ({
                         // Version client - DeliveryCard simple
                         <CardComponent
                           item={command}
+                          activeTab={activeTab}
                           onViewDetails={() => handleViewDetails(command)}
                           onReview={() => handleReview(command as any)}
+                          onCancel={() => handleCancelClick(command)}
+                          onHide={() => handleHideClick(command)}
+                          isProcessingCancel={isCommandProcessing(
+                            command.id,
+                            "cancel",
+                          )}
+                          isProcessingHide={isCommandProcessing(
+                            command.id,
+                            "hide",
+                          )}
+                          userRole={userRole}
                         />
                       ) : (
                         // Version admin/livreur - CommandCard avec actions
@@ -431,6 +536,7 @@ export const OrdersManager = ({
                           onAccept={() => handleAccept(command)}
                           onReject={() => handleReject(command)}
                           onEnd={() => handleEnd(command)}
+                          onCancel={() => handleCancelClick(command)}
                           onAssign={
                             userRole === GrantedRole.Admin ||
                             userRole === GrantedRole.Operateur
@@ -453,6 +559,10 @@ export const OrdersManager = ({
                           isProcessingAssign={isCommandProcessing(
                             command.id,
                             "assign",
+                          )}
+                          isProcessingCancel={isCommandProcessing(
+                            command.id,
+                            "cancel",
                           )}
                         />
                       )}
@@ -927,6 +1037,104 @@ export const OrdersManager = ({
               if (user) fetchOrders(user._id, userRole);
             }}
           />
+        )}
+
+        {/* Modal de Confirmation d'Annulation (Client/Admin) */}
+        {showCancelConfirmation && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md mx-4 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                Confirmer l'annulation
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Êtes-vous sûr de vouloir annuler cette commande ? Cette action
+                est irréversible.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowCancelConfirmation(false)}
+                  className="flex-1 px-4 py-3 text-gray-700 font-medium bg-gray-100 rounded-xl hover:bg-gray-200"
+                >
+                  Non, garder
+                </button>
+                <button
+                  onClick={executeCancel}
+                  className="flex-1 px-4 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all"
+                >
+                  Oui, annuler
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal de Raison d'Annulation (Livreur) */}
+        {showCourierCancelModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                Motif de l'annulation
+              </h3>
+              <p className="text-sm text-gray-500 mb-4">
+                Veuillez indiquer la raison de l'annulation. Cette action est
+                irréversible.{" "}
+                {userRole === GrantedRole.Client && "(Facultatif)"}
+              </p>
+              <textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#FD481A] outline-none transition-all mb-6 min-h-[100px]"
+                placeholder="Raison de l'annulation..."
+              />
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setShowCourierCancelModal(false);
+                    setCancelReason("");
+                  }}
+                  className="flex-1 px-4 py-3 text-gray-700 font-medium bg-gray-100 rounded-xl hover:bg-gray-200"
+                >
+                  Retour
+                </button>
+                <button
+                  onClick={executeCancel}
+                  disabled={!cancelReason.trim()}
+                  className="flex-1 px-4 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all disabled:opacity-50"
+                >
+                  Confirmer l'annulation
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Modal de Confirmation pour Masquer (Hide) */}
+        {showHideConfirmation && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md mx-4 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                Masquer la commande
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Êtes-vous sûr de vouloir masquer cette commande ? Cette action
+                est irréversible et la commande ne sera plus visible dans votre
+                historique.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowHideConfirmation(false)}
+                  className="flex-1 px-4 py-3 text-gray-700 font-medium bg-gray-100 rounded-xl hover:bg-gray-200"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={executeHide}
+                  className="flex-1 px-4 py-3 bg-gray-900 text-white font-semibold rounded-xl hover:bg-black transition-all"
+                >
+                  Masquer
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </>

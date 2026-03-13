@@ -1,6 +1,6 @@
 // types/promo.type.ts
-export type PromoType = "PERCENT" | "FIXED";
-export type PromoChannel = "PUBLIC" | "PARTNER" | "VIP";
+export enum PromoType { PERCENT = "PERCENT", FIXED = "FIXED" };
+export enum PromoChannel { PUBLIC = "PUBLIC", PARTNER = "PARTNER", VIP = "VIP" };
 
 export interface PromoConstraints {
   maxDiscount?: number;
@@ -8,6 +8,13 @@ export interface PromoConstraints {
   firstTimeOnly?: boolean;
   applicableServices?: string[];
   applicableZones?: string[];
+}
+
+export interface AssignedUser {
+  userId: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
 }
 
 export interface PromoCode {
@@ -29,6 +36,12 @@ export interface PromoCode {
   channel: PromoChannel;
   createdAt: string;
   updatedAt: string;
+  eligibilityMode: "USERS" | "ALL" | string;
+  eligibleRole: string | null;
+  maxUsers: number | null;
+  hasAssignedUsers: boolean;
+  assignedUsersCount: number;
+  assignedUsers?: AssignedUser[];
 }
 
 export interface CreatePromoDto {
@@ -44,6 +57,9 @@ export interface CreatePromoDto {
   constraints?: PromoConstraints | null;
   channel: PromoChannel;
   isActive: boolean;
+  eligibilityMode?: "USERS" | "ALL" | string;
+  eligibleRole?: string | null;
+  maxUsers?: number | null;
 }
 
 export interface UpdatePromoDto {
@@ -59,6 +75,9 @@ export interface UpdatePromoDto {
   constraints?: PromoConstraints | null;
   channel?: PromoChannel;
   isActive?: boolean;
+  eligibilityMode?: "USERS" | "ALL" | string;
+  eligibleRole?: string | null;
+  maxUsers?: number | null;
 }
 
 export interface Partner {
@@ -140,7 +159,44 @@ export interface PromoExportData {
   minOrderAmount: string;
   maxDiscount: string;
   constraints: string;
+  eligibilityMode: string;
+  eligibleRole: string;
+  maxUsers: string;
+  hasAssignedUsers: string;
+  assignedUsersCount: string;
+  assignedUsers: string;
 }
+
+export interface ClientPromoItem {
+  promoId: string;
+  promoType: PromoType;
+  promoValue: number;
+  code: string;
+  valid: boolean;
+  reason: string | null;
+  usedByUser: number;
+  totalUsed: number;
+  remainingUser: number;
+  remainingGlobal: number | null;
+  discount?: number;
+  finalAmount?: number;
+  minOrderAmount: number;
+  constraints: PromoConstraints | null;
+  eligibilityMode: string;
+  eligibleRole: string | null;
+  isWhitelisted: boolean;
+  userRole: string;
+}
+
+export interface PromoUsageSchema {
+  used: ClientPromoItem[];
+  available: ClientPromoItem[];
+  unavailable: ClientPromoItem[];
+  total: number;
+}
+
+export type PromoUsageResponse = PromoUsageSchema;
+
 export interface PromoUserEligibilityDto {
   code: string;
   userIds: string[];

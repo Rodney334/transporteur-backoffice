@@ -20,6 +20,9 @@ export enum OrderStatus {
   EN_LIVRAISON = "en_livraison",
   LIVREE = "livree",
   ECHEC = "echec",
+  CONFLIT = "conflit",
+  ANNULEE_PAR_LIVREUR = "annulee_par_livreur",
+  ANNULEE_PAR_CLIENT = "annulee_par_client",
 }
 
 export const STATUS_FLOW: OrderStatus[] = [

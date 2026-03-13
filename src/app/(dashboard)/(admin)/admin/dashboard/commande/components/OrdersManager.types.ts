@@ -53,10 +53,12 @@ export interface CommandCardProps {
   onReject?: (item: any) => void;
   onEnd?: (item: any) => void;
   onAssign?: (item: any) => void;
+  onCancel?: (item: any) => void;
   isProcessingAccept?: boolean;
   isProcessingReject?: boolean;
   isProcessingEnd?: boolean;
   isProcessingAssign?: boolean;
+  isProcessingCancel?: boolean;
   activeTab: string;
   userRole?: GrantedRole;
 }
@@ -65,6 +67,12 @@ export interface DeliveryCardProps {
   item: FormattedDeliveryCard;
   onViewDetails: (item: FormattedDeliveryCard) => void;
   onReview?: (item: FormattedDeliveryCard) => void;
+  onCancel?: (item: FormattedDeliveryCard) => void;
+  onHide?: (item: FormattedDeliveryCard) => void;
+  isProcessingCancel?: boolean;
+  isProcessingHide?: boolean;
+  activeTab: string;
+  userRole?: GrantedRole;
 }
 
 export interface OrdersManagerProps {

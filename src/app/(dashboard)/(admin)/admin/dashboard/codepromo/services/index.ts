@@ -57,6 +57,12 @@ export const promoService = {
       "User ID assigné",
       "Montant min. commande",
       "Remise max",
+      "Mode éligibilité",
+      "Rôle éligible",
+      "Max utilisateurs",
+      "Utilisateurs assignés",
+      "Nb utilisateurs assignés",
+      "Liste utilisateurs",
       "Contraintes",
     ];
 
@@ -82,6 +88,16 @@ export const promoService = {
       promo.assignedUserId || "-",
       promo.minOrderAmount?.toString() || "-",
       promo.maxDiscount?.toString() || "-",
+      promo.eligibilityMode || "-",
+      promo.eligibleRole || "-",
+      promo.maxUsers?.toString() || "-",
+      promo.hasAssignedUsers ? "Oui" : "Non",
+      promo.assignedUsersCount?.toString() || "0",
+      promo.assignedUsers
+        ? promo.assignedUsers
+            .map((u) => `${u.name} (${u.email || u.phoneNumber})`)
+            .join(" | ")
+        : "-",
       promo.constraints ? JSON.stringify(promo.constraints) : "-",
     ]);
 

@@ -1,5 +1,5 @@
-// app/(dashboard)/livraison/components/DeliverySearchFilters.tsx
-import { Search, Filter, PackageCheck } from "lucide-react";
+import { Search, Filter, PackageCheck, Truck } from "lucide-react";
+import { OrderStatus } from "@/type/enum";
 
 interface DeliverySearchFiltersProps {
   searchTerm: string;
@@ -8,6 +8,8 @@ interface DeliverySearchFiltersProps {
   onDeliveryTypeFilterChange: (value: string) => void;
   transportModeFilter: string;
   onTransportModeFilterChange: (value: string) => void;
+  statusFilter: string;
+  onStatusFilterChange: (value: string) => void;
   itemsPerPage: number;
   onItemsPerPageChange: (value: number) => void;
   totalItems: number;
@@ -18,6 +20,16 @@ interface DeliverySearchFiltersProps {
 
 const itemsPerPageOptions = [10, 25, 50, 100];
 
+const statusLabels: Record<string, string> = {
+  [OrderStatus.EN_ATTENTE]: "En attente",
+  [OrderStatus.ASSIGNEE]: "Assignée",
+  [OrderStatus.EN_DISCUSSION]: "En discussion",
+  [OrderStatus.PRIX_VALIDE]: "Prix validé",
+  [OrderStatus.EN_LIVRAISON]: "En livraison",
+  [OrderStatus.LIVREE]: "Livrée",
+  [OrderStatus.ECHEC]: "Échec",
+};
+
 export default function DeliverySearchFilters({
   searchTerm,
   onSearchChange,
@@ -25,6 +37,8 @@ export default function DeliverySearchFilters({
   onDeliveryTypeFilterChange,
   transportModeFilter,
   onTransportModeFilterChange,
+  statusFilter,
+  onStatusFilterChange,
   itemsPerPage,
   onItemsPerPageChange,
   totalItems,
@@ -48,7 +62,7 @@ export default function DeliverySearchFilters({
 
       {/* Filtres avancés */}
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Filtre par type de livraison */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -83,6 +97,26 @@ export default function DeliverySearchFilters({
               {transportModes.map((mode) => (
                 <option key={mode} value={mode}>
                   {mode}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Filtre par statut */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              <Truck className="w-4 h-4 inline mr-1" />
+              Statut
+            </label>
+            <select
+              value={statusFilter}
+              onChange={(e) => onStatusFilterChange(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FD481A]"
+            >
+              <option value="all">Tous les statuts</option>
+              {Object.entries(statusLabels).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
                 </option>
               ))}
             </select>

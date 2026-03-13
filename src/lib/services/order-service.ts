@@ -96,4 +96,23 @@ export const orderService = {
     const response = await api.post(`/order/${orderId}/review`, data);
     return response.data;
   },
+
+  async deleteOrder(orderId: string) {
+    const response = await api.delete(`/order/${orderId}`);
+    return response.data;
+  },
+
+  async cancelOrderByCourier(orderId: string, reason: string) {
+    const response = await api.patch(`/order/${orderId}/cancel-by-courier`, {
+      reason,
+    });
+    return response.data;
+  },
+
+  async cancelOrderByClient(orderId: string, reason: string) {
+    const response = await api.patch(`/order/${orderId}/cancel-by-client`, {
+      reason,
+    });
+    return response.data;
+  },
 };

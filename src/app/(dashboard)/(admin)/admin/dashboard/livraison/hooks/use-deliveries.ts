@@ -68,11 +68,12 @@ export const useDeliveries = () => {
 
   // Filtrer les commandes terminées et charger les infos des livreurs
   useEffect(() => {
-    const completedDeliveries = orders.filter(
-      (order) =>
-        order.status === OrderStatus.LIVREE ||
-        order.status === OrderStatus.ECHEC
-    );
+    const completedDeliveries = orders;
+    // .filter(
+    //   (order) =>
+    //     order.status === OrderStatus.LIVREE ||
+    //     order.status === OrderStatus.ECHEC
+    // );
     setFilteredDeliveries(completedDeliveries);
 
     // Charger les infos des livreurs

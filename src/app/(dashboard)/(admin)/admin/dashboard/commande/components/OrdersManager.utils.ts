@@ -13,6 +13,23 @@ import {
 } from "./OrdersManager.types";
 import { orderService } from "@/lib/services/order-service";
 
+// Fonction pour obtenir la couleur du badge de statut
+export const getStatusColorClass = (status: OrderStatus): string => {
+  const colorMap: Record<OrderStatus, string> = {
+    [OrderStatus.EN_ATTENTE]: "bg-orange-100 text-orange-700",
+    [OrderStatus.ASSIGNEE]: "bg-blue-100 text-blue-700",
+    [OrderStatus.EN_DISCUSSION]: "bg-blue-100 text-blue-700",
+    [OrderStatus.PRIX_VALIDE]: "bg-blue-100 text-blue-700",
+    [OrderStatus.EN_LIVRAISON]: "bg-blue-100 text-blue-700",
+    [OrderStatus.LIVREE]: "bg-green-100 text-green-700",
+    [OrderStatus.ECHEC]: "bg-red-100 text-red-700",
+    [OrderStatus.CONFLIT]: "bg-purple-100 text-purple-700",
+    [OrderStatus.ANNULEE_PAR_CLIENT]: "bg-red-100 text-red-700",
+    [OrderStatus.ANNULEE_PAR_LIVREUR]: "bg-red-100 text-red-700",
+  };
+  return colorMap[status] || "bg-gray-100 text-gray-700";
+};
+
 // Fonction pour obtenir le texte d'affichage du statut
 export const getStatusDisplayText = (status: OrderStatus): string => {
   const statusMap: Record<OrderStatus, string> = {
@@ -22,7 +39,10 @@ export const getStatusDisplayText = (status: OrderStatus): string => {
     [OrderStatus.PRIX_VALIDE]: "Prix validé",
     [OrderStatus.EN_LIVRAISON]: "En livraison",
     [OrderStatus.LIVREE]: "Livrée",
-    [OrderStatus.ECHEC]: "Annulée",
+    [OrderStatus.ECHEC]: "Échouée",
+    [OrderStatus.CONFLIT]: "En conflit",
+    [OrderStatus.ANNULEE_PAR_CLIENT]: "Annulée par le client",
+    [OrderStatus.ANNULEE_PAR_LIVREUR]: "Annulée par le livreur",
   };
   return statusMap[status] || status;
 };
@@ -173,6 +193,14 @@ export const getAdminConfig = () => ({
 
     if (activeTab === "Terminées" && isLivreur) {
       return "Aucune commande terminée vous étant assignée";
+    }
+
+    if (activeTab === "Échouées" && isLivreur) {
+      return "Aucune commande échouée vous étant assignée";
+    }
+
+    if (activeTab === "En conflit" && isLivreur) {
+      return "Aucune commande en conflit vous étant assignée";
     }
 
     return `Aucune commande ${activeTab.toLowerCase()}`;

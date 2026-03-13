@@ -7,6 +7,7 @@ import { Payment } from "@/type/order.type";
 import { paymentService } from "@/lib/services/payment-service";
 import { useOrderStore } from "@/lib/stores/order-store";
 import { OrderStatusStepper } from "@/components/OrderStatusStepper";
+import { getStatusDisplayText, getStatusColorClass } from "./OrdersManager.utils";
 
 export const CommandCard = memo(function CommandCard({
   activeTab,
@@ -15,11 +16,13 @@ export const CommandCard = memo(function CommandCard({
   onAccept,
   onEnd,
   onAssign,
+  onCancel,
   onViewDetails,
   isProcessingAccept = false,
   // isProcessingReject = false,
   isProcessingEnd = false,
   isProcessingAssign = false,
+  isProcessingCancel = false,
   userRole,
 }: CommandCardProps) {
   const { fetchOrders } = useOrderStore();
@@ -38,6 +41,12 @@ export const CommandCard = memo(function CommandCard({
     item.originalData.scheduledAt &&
     new Date(item.originalData.scheduledAt) > new Date()
   );
+
+  const canCancel =
+    ((userRole === GrantedRole.Client || userRole === GrantedRole.Admin) &&
+      !item.originalData.assignedTo) ||
+    (userRole === GrantedRole.Livreur &&
+      item.originalData.status !== OrderStatus.LIVREE);
 
   const [paidLoading, setPaidLoading] = useState(false);
   const handlePaid = async (data?: Payment) => {
@@ -88,17 +97,11 @@ export const CommandCard = memo(function CommandCard({
               {item.date}
             </span>
             <span
-              className={`capitalize px-2 py-1 rounded-md ${
-                item.originalData.status === OrderStatus.LIVREE
-                  ? "bg-green-100 text-green-700"
-                  : item.originalData.status === OrderStatus.EN_ATTENTE
-                    ? "bg-orange-100 text-orange-700"
-                    : item.originalData.status === OrderStatus.ECHEC
-                      ? "bg-red-100 text-red-700"
-                      : "bg-blue-100 text-blue-700"
-              }`}
+              className={`capitalize px-2 py-1 rounded-md ${getStatusColorClass(
+                item.originalData.status as OrderStatus,
+              )}`}
             >
-              {item.originalData.status}
+              {getStatusDisplayText(item.originalData.status as OrderStatus)}
             </span>
           </div>
         </div>
@@ -166,7 +169,8 @@ export const CommandCard = memo(function CommandCard({
       <OrderStatusStepper currentStatus={item.originalData.status} />
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      {activeTab !== "Échouées" && activeTab !== "En conflit" && (
+        <div className="flex flex-col sm:flex-row gap-3">
         {activeTab === "Nouvelles" && onAccept && (
           <button
             onClick={() => onAccept(item)}
@@ -218,7 +222,22 @@ export const CommandCard = memo(function CommandCard({
                 : "Assigner à un livreur"}
           </button>
         )}
-      </div>
+
+        {canCancel && onCancel && (
+          <button
+            onClick={() => onCancel(item)}
+            disabled={isProcessingCancel}
+            className={`flex-1 py-3.5 px-6 bg-red-50 text-red-600 text-sm font-black uppercase tracking-widest rounded-xl transition-all shadow-md border border-red-100 ${
+              isProcessingCancel
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-red-600 hover:text-white hover:shadow-lg active:scale-[0.98]"
+            }`}
+          >
+            {isProcessingCancel ? "Traitement..." : "Annuler la course"}
+          </button>
+        )}
+        </div>
+      )}
     </div>
   );
 });

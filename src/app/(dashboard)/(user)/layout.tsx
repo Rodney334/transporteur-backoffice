@@ -11,6 +11,7 @@ import {
   Bell,
   FlipVertical,
   BookOpen,
+  Tag,
   ShieldUser,
   MessageSquareMore,
   Menu,
@@ -45,6 +46,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       href: "/user/dashboard/history",
       icon: BookOpen,
       current: pathname === "/user/dashboard/history",
+    },
+    {
+      name: "Code promo",
+      href: "/user/dashboard/codepromo",
+      icon: Tag,
+      current: pathname === "/user/dashboard/codepromo",
     },
     {
       name: "Rapports",
