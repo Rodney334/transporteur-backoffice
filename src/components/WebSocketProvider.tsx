@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect } from "react";
-// import { useWebSocketConnection } from "@/lib/stores/order-store";
+import { useWebSocketConnection } from "@/lib/stores/order-store";
 import { useAuth } from "@/hooks/use-auth";
 
 export const WebSocketProvider = ({
@@ -11,9 +11,9 @@ export const WebSocketProvider = ({
   children: React.ReactNode;
 }) => {
   const { user, accessToken } = useAuth();
-  // const { useAutoConnect } = useWebSocketConnection();
+  const { useAutoConnect } = useWebSocketConnection();
 
-  // useAutoConnect(accessToken || "");
+  useAutoConnect(accessToken || "");
 
   useEffect(() => {
     if (accessToken) {
