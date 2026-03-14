@@ -52,16 +52,17 @@ export const useAuth = () => {
       try {
         const fcmToken = await getFCMToken();
         if (fcmToken) {
-          const FCM_STORAGE_KEY = "lastSentFcmToken";
-          const lastSentToken = localStorage.getItem(FCM_STORAGE_KEY);
+          await authService.sendFCMToken(fcmToken);
+          // const FCM_STORAGE_KEY = "lastSentFcmToken";
+          // const lastSentToken = localStorage.getItem(FCM_STORAGE_KEY);
 
-          if (fcmToken !== lastSentToken) {
-            await authService.sendFCMToken(fcmToken);
-            localStorage.setItem(FCM_STORAGE_KEY, fcmToken);
-            console.log("FCM token sent successfully (new token)");
-          } else {
-            console.log("FCM token unchanged — skipping re-send");
-          }
+          // if (fcmToken !== lastSentToken) {
+          //   await authService.sendFCMToken(fcmToken);
+          //   localStorage.setItem(FCM_STORAGE_KEY, fcmToken);
+          //   console.log("FCM token sent successfully (new token)");
+          // } else {
+          //   console.log("FCM token unchanged — skipping re-send");
+          // }
         }
       } catch (fcmError) {
         // Ne pas bloquer le login si l'envoi du FCM token échoue
