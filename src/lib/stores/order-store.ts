@@ -32,8 +32,8 @@ interface OrderStore {
   fetchUserOrders: (userId: string) => Promise<void>;
 
   // WebSocket
-  connectWebSocket: (token: string) => void;
-  disconnectWebSocket: () => void;
+  // connectWebSocket: (token: string) => void;
+  // disconnectWebSocket: () => void;
   handleWebSocketMessage: (event: MessageEvent) => void;
 
   handleOrderCreated: (payloard: Order) => void;
@@ -129,78 +129,78 @@ export const useOrderStore = create<OrderStore>()(
     },
 
     // Connexion WebSocket
-    connectWebSocket: (token: string) => {
-      const { socket, isConnected } = get();
+    // connectWebSocket: (token: string) => {
+    //   const { socket, isConnected } = get();
 
-      // Si déjà connecté, ne rien faire
-      if (isConnected && socket) {
-        console.log("WebSocket déjà connecté");
-        return;
-      }
+    //   // Si déjà connecté, ne rien faire
+    //   if (isConnected && socket) {
+    //     console.log("WebSocket déjà connecté");
+    //     return;
+    //   }
 
-      // Fermer l'ancienne connexion si elle existe
-      if (socket) {
-        socket.close();
-      }
+    //   // Fermer l'ancienne connexion si elle existe
+    //   if (socket) {
+    //     socket.close();
+    //   }
 
-      const wsUrl = `${WS_BASE_URL}?token=${token}`;
-      const newSocket = new WebSocket(wsUrl);
+    //   const wsUrl = `${WS_BASE_URL}?token=${token}`;
+    //   const newSocket = new WebSocket(wsUrl);
 
-      newSocket.onopen = () => {
-        console.log("WebSocket connecté");
-        set({ isConnected: true });
-        toast.success("Connecté en temps réel", {
-          position: "top-right",
-          autoClose: 1500,
-        });
-      };
+    //   newSocket.onopen = () => {
+    //     console.log("WebSocket connecté");
+    //     set({ isConnected: true });
+    //     toast.success("Connecté en temps réel", {
+    //       position: "top-right",
+    //       autoClose: 1500,
+    //     });
+    //   };
 
-      newSocket.onclose = (event) => {
-        console.log("WebSocket déconnecté", event.code, event.reason);
-        set({ isConnected: false, socket: null });
+    //   newSocket.onclose = (event) => {
+    //     console.log("WebSocket déconnecté", event.code, event.reason);
+    //     set({ isConnected: false, socket: null });
 
-        // if (event.code !== 1000) {
-        //   // 1000 = fermeture normale
-        //   toast.warning("Déconnexion WebSocket. Reconnexion...", {
-        //     position: "top-right",
-        //     autoClose: 3000,
-        //   });
+    //     // if (event.code !== 1000) {
+    //     //   // 1000 = fermeture normale
+    //     //   toast.warning("Déconnexion WebSocket. Reconnexion...", {
+    //     //     position: "top-right",
+    //     //     autoClose: 3000,
+    //     //   });
 
-        //   // Tentative de reconnexion après 5 secondes
-        //   setTimeout(() => {
-        //     const { isConnected: currentConnected } = get();
-        //     if (!currentConnected) {
-        //       get().connectWebSocket(token);
-        //     }
-        //   }, 5000);
-        // }
-      };
+    //     //   // Tentative de reconnexion après 5 secondes
+    //     //   setTimeout(() => {
+    //     //     const { isConnected: currentConnected } = get();
+    //     //     if (!currentConnected) {
+    //     //       get().connectWebSocket(token);
+    //     //     }
+    //     //   }, 5000);
+    //     // }
+    //   };
 
-      newSocket.onerror = (error) => {
-        console.log("WebSocket error:", error);
-        set({ isConnected: false });
-        // toast.error("Erreur de connexion WebSocket", {
-        //   position: "top-right",
-        //   autoClose: 5000,
-        // });
-      };
+    //   newSocket.onerror = (error) => {
+    //     console.log("WebSocket error:", error);
+    //     set({ isConnected: false });
+    //     // toast.error("Erreur de connexion WebSocket", {
+    //     //   position: "top-right",
+    //     //   autoClose: 5000,
+    //     // });
+    //   };
 
-      newSocket.onmessage = (event) => {
-        // console.log({ websocket: event });
-        get().handleWebSocketMessage(event);
-      };
+    //   newSocket.onmessage = (event) => {
+    //     // console.log({ websocket: event });
+    //     get().handleWebSocketMessage(event);
+    //   };
 
-      set({ socket: newSocket });
-    },
+    //   set({ socket: newSocket });
+    // },
 
-    // Déconnexion WebSocket
-    disconnectWebSocket: () => {
-      const { socket } = get();
-      if (socket) {
-        socket.close(1000, "Déconnexion utilisateur");
-        set({ socket: null, isConnected: false });
-      }
-    },
+    // // Déconnexion WebSocket
+    // disconnectWebSocket: () => {
+    //   const { socket } = get();
+    //   if (socket) {
+    //     socket.close(1000, "Déconnexion utilisateur");
+    //     set({ socket: null, isConnected: false });
+    //   }
+    // },
 
     // Gestion des messages WebSocket
     handleWebSocketMessage: async (event: MessageEvent) => {
@@ -622,8 +622,8 @@ export const useOrderActions = () => {
     },
 
     // Actions WebSocket
-    connectWebSocket: (token: string) => store.connectWebSocket(token),
-    disconnectWebSocket: () => store.disconnectWebSocket(),
+    // connectWebSocket: (token: string) => store.connectWebSocket(token),
+    // disconnectWebSocket: () => store.disconnectWebSocket(),
     sendWebSocketMessage: (message: any) => {
       const { socket, isConnected } = store;
       if (isConnected && socket) {
@@ -636,36 +636,36 @@ export const useOrderActions = () => {
 };
 
 // Hook pour gérer la connexion WebSocket avec l'authentification
-export const useWebSocketConnection = () => {
-  const { connectWebSocket, disconnectWebSocket } = useOrderActions();
+// export const useWebSocketConnection = () => {
+//   const { connectWebSocket, disconnectWebSocket } = useOrderActions();
 
-  // Fonction pour établir la connexion
-  const connect = (token: string) => {
-    connectWebSocket(token);
-  };
+//   // Fonction pour établir la connexion
+//   const connect = (token: string) => {
+//     connectWebSocket(token);
+//   };
 
-  // Fonction pour déconnecter
-  const disconnect = () => {
-    disconnectWebSocket();
-  };
+//   // Fonction pour déconnecter
+//   const disconnect = () => {
+//     disconnectWebSocket();
+//   };
 
-  // Hook pour gérer la connexion/déconnexion automatique
-  const useAutoConnect = (token?: string) => {
-    useEffect(() => {
-      if (token) {
-        connect(token);
+//   // Hook pour gérer la connexion/déconnexion automatique
+//   const useAutoConnect = (token?: string) => {
+//     useEffect(() => {
+//       if (token) {
+//         connect(token);
 
-        // Nettoyage à la déconnexion
-        return () => {
-          disconnect();
-        };
-      }
-    }, [token]);
-  };
+//         // Nettoyage à la déconnexion
+//         return () => {
+//           disconnect();
+//         };
+//       }
+//     }, [token]);
+//   };
 
-  return {
-    connect,
-    disconnect,
-    useAutoConnect,
-  };
-};
+//   return {
+//     connect,
+//     disconnect,
+//     useAutoConnect,
+//   };
+// };

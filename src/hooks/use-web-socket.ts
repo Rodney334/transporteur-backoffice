@@ -5,8 +5,8 @@ export const useWebSocket = () => {
   const {
     socket,
     isConnected,
-    connectWebSocket,
-    disconnectWebSocket,
+    // connectWebSocket,
+    // disconnectWebSocket,
     handleWebSocketMessage,
   } = useOrderStore();
 
@@ -44,8 +44,8 @@ export const useWebSocket = () => {
 
   return {
     isConnected,
-    connect: connectWebSocket,
-    disconnect: disconnectWebSocket,
+    // connect: connectWebSocket,
+    // disconnect: disconnectWebSocket,
     sendMessage,
     subscribe,
   };
