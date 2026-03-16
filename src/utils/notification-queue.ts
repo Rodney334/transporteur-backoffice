@@ -93,7 +93,7 @@ class NotificationQueue {
       try {
         const notif = new Notification(title, {
           body,
-          icon: "/favicon.ico",
+          icon: "/icon.png",
         });
         setTimeout(() => notif.close(), 6000);
         notif.onclick = () => {

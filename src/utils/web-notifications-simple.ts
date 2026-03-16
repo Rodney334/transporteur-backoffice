@@ -40,7 +40,7 @@ export const showSimpleNotification = async (
   try {
     const notification = new Notification(title, {
       body: message,
-      icon: "/favicon.ico",
+      icon: "/icon.png",
       silent: false,
     });
 

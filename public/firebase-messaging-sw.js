@@ -20,10 +20,18 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Received background message:', payload);
 
-    const notificationTitle = payload.notification?.title || 'Nouvelle notification';
+    // If the payload already contains a notification property, 
+    // FCM will display it automatically in the background.
+    // We only display a manual notification if it's a "data-only" message.
+    if (payload.notification) {
+        console.log('[firebase-messaging-sw.js] Payload has a notification, skipping manual display to avoid duplication.');
+        return;
+    }
+
+    const notificationTitle = payload.data?.title || 'Nouvelle notification';
     const notificationOptions = {
-        body: payload.notification?.body || 'Vous avez une nouvelle notification',
-        icon: '/icon-192x192.png', // Update with your app icon path
+        body: payload.data?.body || 'Vous avez une nouvelle notification',
+        icon: '/icon.png',
         badge: '/badge-72x72.png', // Update with your badge icon path
         data: payload.data,
     };
