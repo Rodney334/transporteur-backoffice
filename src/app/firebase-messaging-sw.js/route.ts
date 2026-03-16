@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
-
+// if (payload.notification) {
+//         console.log('[firebase-messaging-sw.js] Payload has a notification, skipping manual display to avoid duplication.');
+//         return;
+//     }
 export async function GET() {
   const swCode = `// Firebase Cloud Messaging Service Worker (Dynamic)
 importScripts('https://www.gstatic.com/firebasejs/11.1.0/firebase-app-compat.js');
@@ -22,11 +25,6 @@ const messaging = firebase.messaging();
 // Handle background messages
 messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Received background message:', payload);
-
-    if (payload.notification) {
-        console.log('[firebase-messaging-sw.js] Payload has a notification, skipping manual display to avoid duplication.');
-        return;
-    }
 
     const notificationTitle = payload.data?.title || 'Nouvelle notification';
     const notificationOptions = {
