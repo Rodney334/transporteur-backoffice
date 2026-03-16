@@ -233,10 +233,7 @@ export const OrdersManager = ({
   const handleCancelClick = useCallback(
     (command: any) => {
       setCancelModalOrder(command);
-      if (
-        userRole === GrantedRole.Livreur ||
-        userRole === GrantedRole.Client
-      ) {
+      if (userRole === GrantedRole.Livreur || userRole === GrantedRole.Client) {
         setShowCourierCancelModal(true);
       } else {
         setShowCancelConfirmation(true);
@@ -244,7 +241,7 @@ export const OrdersManager = ({
     },
     [userRole],
   );
- 
+
   const handleHideClick = useCallback((command: any) => {
     setCancelModalOrder(command);
     setShowHideConfirmation(true);
@@ -474,27 +471,29 @@ export const OrdersManager = ({
 
             {/* Tabs */}
             <div className="flex items-center justify-between mb-6">
-              <div className="flex gap-6 border-b border-gray-200">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`cursor-pointer pb-3 text-sm font-medium transition-colors relative ${
-                      activeTab === tab
-                        ? "text-gray-900"
-                        : "text-gray-500 hover:text-gray-700"
-                    }`}
-                  >
-                    {`${tab} ${
-                      activeTab === tab
-                        ? `(${filteredAndFormattedOrders.length})`
-                        : ""
-                    }`}
-                    {activeTab === tab && (
-                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900"></div>
-                    )}
-                  </button>
-                ))}
+              <div className="flex gap-6 border-b border-gray-200 w-full overflow-x-auto scrollbar-hide">
+                <div className="flex gap-6 flex-nowrap min-w-max pb-3">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`cursor-pointer text-sm font-medium transition-colors relative whitespace-nowrap ${
+                        activeTab === tab
+                          ? "text-gray-900"
+                          : "text-gray-500 hover:text-gray-700"
+                      }`}
+                    >
+                      {`${tab} ${
+                        activeTab === tab
+                          ? `(${filteredAndFormattedOrders.length})`
+                          : ""
+                      }`}
+                      {activeTab === tab && (
+                        <div className="absolute -bottom-px left-0 right-0 h-0.5 bg-gray-900 z-10"></div>
+                      )}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -1032,7 +1031,7 @@ export const OrdersManager = ({
               setSelectedCommandForReview(null);
             }}
             orderId={selectedCommandForReview.originalData.id}
-            orderReference={selectedCommandForReview.id}
+            orderReference={selectedCommandForReview.originalData.orderNumber}
             onSuccess={() => {
               if (user) fetchOrders(user._id, userRole);
             }}

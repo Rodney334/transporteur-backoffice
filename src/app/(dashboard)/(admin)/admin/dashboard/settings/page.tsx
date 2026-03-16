@@ -528,6 +528,10 @@ export default function SettingsPage() {
                               ? "border-red-300"
                               : "border-gray-300"
                           }`}
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            target.value = target.value.replace(/[^\d\s\-()]/g, "");
+                          }}
                         />
                       </div>
                       {profileErrors.phoneNumber && (

@@ -75,7 +75,7 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
             <div className="mt-2 lg:mt-3">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Téléphone (indicatif + numéro : +229 0197979797){" "}
+                  Téléphone (indicatif + numéro : (229) 0197979797){" "}
                   <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
@@ -98,6 +98,10 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
                         message: "Ce champ est requis",
                       });
                     }
+                  }}
+                  onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    target.value = target.value.replace(/[^\d\s\-()]/g, "");
                   }}
                 />
                 {errors.pickupPhone && (
@@ -277,7 +281,7 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
             <div className="mt-2 lg:mt-3">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Téléphone (indicatif + numéro : +229 0197979797){" "}
+                  Téléphone (indicatif + numéro : (229) 0197979797){" "}
                   <strong className={`text-red-600`}>*</strong>
                 </label>
                 <input
@@ -300,6 +304,10 @@ export const GeneralData = ({ form, errors }: GeneralDataProps) => {
                         message: "Ce champ est requis",
                       });
                     }
+                  }}
+                  onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    target.value = target.value.replace(/[^\d\s\-()]/g, "");
                   }}
                 />
                 {errors.deliveryPhone && (

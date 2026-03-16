@@ -117,9 +117,11 @@ export default function OrderReviewModal({
             <div className="p-6 space-y-8 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
               {/* Rating Section */}
               <div className="space-y-4 text-center">
-                <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
-                  Note sur 10
-                </label>
+                <div>
+                  <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Note sur 10
+                  </label>
+                </div>
 
                 <div className="flex flex-col items-center gap-4">
                   <div

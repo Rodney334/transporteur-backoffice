@@ -223,6 +223,10 @@ function RegisterContent() {
                   message: "Le numéro doit contenir au moins 8 chiffres",
                 },
               })}
+              onInput={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.value = target.value.replace(/[^\d\s\-()]/g, "");
+              }}
             />
           </div>
           {errors.phoneNumber && (
