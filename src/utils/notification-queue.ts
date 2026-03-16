@@ -2,6 +2,7 @@
 // Module singleton : file d'attente de toasts et notifications avec délai 2s entre chaque
 
 import { toast, ToastOptions } from "react-toastify";
+import { useAuthStore } from "@/lib/stores/auth-store";
 
 const TOAST_DELAY_MS = 2000;
 
@@ -99,6 +100,14 @@ class NotificationQueue {
         notif.onclick = () => {
           window.focus();
           notif.close();
+
+          // Redirection basée sur le rôle
+          const { isClient, isLivreur } = useAuthStore.getState();
+          if (isClient) {
+            window.location.href = "/user/dashboard/history";
+          } else if (isLivreur) {
+            window.location.href = "/admin/dashboard/commande";
+          }
         };
       } catch (e) {
         console.warn("Notification native impossible:", e);
