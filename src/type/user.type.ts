@@ -14,4 +14,13 @@ export interface User {
   refreshToken: string | null;
   resetPasswordCode?: string | null;
   resetPasswordExpires?: string | null;
+  isEmailVerified?: boolean;
+  profileImageUrl?: string | null;
+  profileImagePublicId?: string | null;
+  signupIntent?: "client" | "livreur";
+  livreurRequestStatus?: "pending" | "approved" | "rejected";
+  livreurRequestedAt?: string | null;
+  livreurReviewedAt?: string | null;
+  livreurReviewedBy?: string | null;
+  livreurRejectionReason?: string | null;
 }
