@@ -76,10 +76,13 @@ export const onMessageListener = (
   return onMessage(messaging as Messaging, (payload) => {
     console.log("Message received in foreground:", payload);
 
-    // Clé de déduplication basée sur messageId Firebase
+    // Clé de déduplication cohérente avec order-store.ts
+    const orderId = payload.data?.orderId || payload.data?.id || "";
+    const type = payload.data?.type || "fcm";
+    const tsRounded = Math.floor(Date.now() / 3000);
     const dedupKey = payload.messageId
       ? `fcm_${payload.messageId}`
-      : `fcm_${Math.floor(Date.now() / 2000)}`;
+      : orderId ? `order_event_${orderId}_${tsRounded}` : `generic_event_${type}_${tsRounded}`;
 
     const title =
       payload.notification?.title ||

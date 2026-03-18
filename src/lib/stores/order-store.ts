@@ -149,7 +149,7 @@ export const useOrderStore = create<OrderStore>()(
       newSocket.onopen = () => {
         console.log("WebSocket connecté");
         set({ isConnected: true });
-        toast.success("Connecté en temps réel", {
+        toast.success("Temps réel activé", {
           position: "top-right",
           autoClose: 1500,
         });
@@ -211,29 +211,29 @@ export const useOrderStore = create<OrderStore>()(
         const { type, payload } = data;
 
         // ── Déduplication ──────────────────────────────────────────────────
-        // Clé composite : type + orderId (si présent) + timestamp arrondi à 2s
+        // Clé format event_orderId_tsRounded (cohérent entre WS et FCM)
         const orderId = payload?.orderId || payload?.id || "";
-        const tsRounded = Math.floor(Date.now() / 2000); // fenêtre de 2s
-        const dedupKey = `${type}_${orderId}_${tsRounded}`;
+        const tsRounded = Math.floor(Date.now() / 3000); // fenêtre de 3s
+        const dedupKey = orderId ? `order_event_${orderId}_${tsRounded}` : `generic_event_${type}_${tsRounded}`;
 
         const { _processedWsKeys } = get();
         if (_processedWsKeys.has(dedupKey)) {
           console.log("WebSocket message dupliqué ignoré:", dedupKey);
           return;
         }
-        // Ajouter la clé et l'expirer après 4s
+        // Ajouter la clé et l'expirer après 5s
         _processedWsKeys.add(dedupKey);
-        setTimeout(() => _processedWsKeys.delete(dedupKey), 4000);
+        setTimeout(() => _processedWsKeys.delete(dedupKey), 5000);
         // ──────────────────────────────────────────────────────────────────
 
-        // Afficher le toast via la queue (délai 2s entre chaque)
+        // Afficher le toast via la queue
         const toastMessage = payload?.message || "Nouvelle notification";
         notificationQueue.enqueueToast(toastMessage, {
           position: "top-right",
           autoClose: 5000,
         }, dedupKey);
 
-        // Rafraîchir les commandes et notifications
+        // Rafraîchir les données
         const authStore = useAuthStore.getState();
         const { user } = authStore;
 
@@ -258,10 +258,10 @@ export const useOrderStore = create<OrderStore>()(
         orders: [order, ...state.orders],
       }));
 
-      toast.info("Nouvelle commande créée", {
+      notificationQueue.enqueueToast("Nouvelle commande créée", {
         position: "top-right",
         autoClose: 3000,
-      });
+      }, `manual_created_${order.id}`);
     },
 
     handleOrderUpdated: (updatedOrder: Order) => {
@@ -271,10 +271,10 @@ export const useOrderStore = create<OrderStore>()(
         ),
       }));
 
-      toast.info("Commande mise à jour", {
+      notificationQueue.enqueueToast("Commande mise à jour", {
         position: "top-right",
         autoClose: 2000,
-      });
+      }, `manual_updated_${updatedOrder.id}`);
     },
 
     handleOrderStatusChanged: ({ orderId, status, timestamp }: any) => {
@@ -303,12 +303,13 @@ export const useOrderStore = create<OrderStore>()(
         [OrderStatus.ANNULEE_PAR_LIVREUR]: "Annulée par le livreur",
       };
 
-      toast.info(
+      notificationQueue.enqueueToast(
         `Statut changé: ${statusLabels[status as OrderStatus] || status}`,
         {
           position: "top-right",
           autoClose: 3000,
         },
+        `manual_status_${orderId}_${status}`
       );
     },
 
