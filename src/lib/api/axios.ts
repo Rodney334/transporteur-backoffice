@@ -71,11 +71,11 @@ api.interceptors.response.use(
 
       try {
         // Appel au endpoint de refresh
-        const { accessToken: newAccessToken } =
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
           await authService.refreshTokens();
 
         // Mettre à jour le store avec les nouveaux tokens
-        useAuthStore.getState().setTokens(newAccessToken);
+        useAuthStore.getState().setTokens(newAccessToken, newRefreshToken);
 
         // Traiter la file d'attente avec le nouveau token
         processQueue(null, newAccessToken);

@@ -20,6 +20,7 @@ export interface RegisterData {
 
 interface LoginResponse {
   accessToken: string;
+  refreshToken: string;
   user: User;
 }
 
@@ -43,6 +44,7 @@ interface RegisterResponse {
 // NOUVEAU : Interface pour la réponse du refresh
 interface RefreshTokenResponse {
   accessToken: string;
+  refreshToken: string;
 }
 
 export interface VerifyEmailData {
@@ -104,18 +106,23 @@ export const authService = {
     return response.data;
   },
 
-  async logout(): Promise<void> {
-    await api.post("/auth/logout");
+  async logout(fcmToken: string): Promise<void> {
+    await api.post("/auth/logout", { fcmToken });
   },
 
   // NOUVEAU : Rafraîchissement des tokens
   async refreshTokens(): Promise<RefreshTokenResponse> {
-    console.log("call refresh token");
+    const { useAuthStore } = await import("@/lib/stores/auth-store");
+    const refreshToken = useAuthStore.getState().refreshToken;
+
+    if (!refreshToken) {
+      throw new Error("No refresh token available");
+    }
+
     const response = await axios.post<RefreshTokenResponse>(
       "https://letransporteur-production.up.railway.app/api/v1/auth/refresh",
-      {},
+      { refreshToken },
     );
-    console.log(response.data);
     return response.data;
   },
 

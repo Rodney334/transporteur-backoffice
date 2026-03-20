@@ -17,10 +17,11 @@ export interface User {
 
 interface AuthState {
   accessToken: string | null;
+  refreshToken: string | null;
   user: User | null;
   isLoading: boolean;
   error: string | null;
-  setTokens: (accessToken: string) => void;
+  setTokens: (accessToken: string, refreshToken?: string) => void;
   setUser: (user: User) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
@@ -73,14 +74,15 @@ export const useAuthStore = create<AuthState>()(
       isLivreur: false,
       isOperateur: false,
 
-      setTokens: (accessToken: string) => {
+      setTokens: (accessToken: string, refreshToken?: string) => {
         // Mettre à jour les cookies
         cookieHelper.setToken("auth-token", accessToken, 86400);
 
         set({
           accessToken,
+          ...(refreshToken !== undefined && { refreshToken }),
           error: null,
-          isLoading: false, // ← CHANGEMENT ICI : passer à false après auth
+          isLoading: false,
           isAdmin: get().user?.role === GrantedRole.Admin,
           isClient: get().user?.role === GrantedRole.Client,
           isLivreur: get().user?.role === GrantedRole.Livreur,
@@ -95,7 +97,7 @@ export const useAuthStore = create<AuthState>()(
         set({
           user,
           error: null,
-          isLoading: false, // ← CHANGEMENT ICI : passer à false
+          isLoading: false,
           isAdmin: user.role === GrantedRole.Admin,
           isClient: user.role === GrantedRole.Client,
           isLivreur: user.role === GrantedRole.Livreur,
@@ -112,9 +114,10 @@ export const useAuthStore = create<AuthState>()(
 
         set({
           accessToken: null,
+          refreshToken: null,
           user: null,
           error: null,
-          isLoading: false, // ← CHANGEMENT ICI : false après logout
+          isLoading: false,
           isAdmin: false,
           isClient: false,
           isLivreur: false,
@@ -132,6 +135,7 @@ export const useAuthStore = create<AuthState>()(
       name: "auth-storage",
       partialize: (state) => ({
         accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
         user: state.user,
       }),
       // Optionnel : recréer l'état de loading après rehydratation

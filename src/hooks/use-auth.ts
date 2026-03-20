@@ -42,9 +42,9 @@ export const useAuth = () => {
     setLoading(true);
     clearError();
     try {
-      const { accessToken: newAccessToken, user: newUser } =
+      const { accessToken: newAccessToken, refreshToken: newRefreshToken, user: newUser } =
         await authService.login({ email, password });
-      setTokens(newAccessToken);
+      setTokens(newAccessToken, newRefreshToken);
       setUser(newUser);
 
       // Envoyer le FCM token après un login réussi
@@ -53,16 +53,8 @@ export const useAuth = () => {
         const fcmToken = await getFCMToken();
         if (fcmToken) {
           await authService.sendFCMToken(fcmToken);
-          // const FCM_STORAGE_KEY = "lastSentFcmToken";
-          // const lastSentToken = localStorage.getItem(FCM_STORAGE_KEY);
-
-          // if (fcmToken !== lastSentToken) {
-          //   await authService.sendFCMToken(fcmToken);
-          //   localStorage.setItem(FCM_STORAGE_KEY, fcmToken);
-          //   console.log("FCM token sent successfully (new token)");
-          // } else {
-          //   console.log("FCM token unchanged — skipping re-send");
-          // }
+          const FCM_STORAGE_KEY = "lastSentFcmToken";
+          localStorage.setItem(FCM_STORAGE_KEY, fcmToken);
         }
       } catch (fcmError) {
         // Ne pas bloquer le login si l'envoi du FCM token échoue
@@ -146,19 +138,12 @@ export const useAuth = () => {
 
   // NOUVEAU : Fonction pour rafraîchir manuellement les tokens
   const refreshAuth = async (): Promise<boolean> => {
-    // if (!refreshToken) {
-    //   logout();
-    //   return false;
-    // }
-
-    // console.log({ refreshToken });
-
     setLoading(true);
     try {
-      const { accessToken: newAccessToken } = await authService.refreshTokens();
+      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+        await authService.refreshTokens();
 
-      console.log({ newAccessToken });
-      setTokens(newAccessToken);
+      setTokens(newAccessToken, newRefreshToken);
       return true;
     } catch (error: any) {
       const errorMessage = handleAuthError(error);
@@ -181,9 +166,16 @@ export const useAuth = () => {
     // Actions
     login,
     register,
-    logout: () => {
-      authService.logout().catch(console.log);
-      logout();
+    logout: async () => {
+      try {
+        const fcmToken = localStorage.getItem("lastSentFcmToken") || "";
+        await authService.logout(fcmToken);
+      } catch (error) {
+        console.error("Logout API error:", error);
+      } finally {
+        // Nettoyage APRÈS la requête, qu'elle réussisse ou échoue
+        logout();
+      }
     },
     checkAuth,
     refreshAuth, // NOUVEAU
