@@ -98,3 +98,9 @@ export enum SummaryPeriod {
   WEEK = 'week',
   MONTH = 'month',
 }
+
+export enum FormType {
+  NetworkJoin = 'network_join', // Faites partie de notre réseau
+  Contact = 'contact',          // Contactez-nous
+  Partnership = 'partnership',  // Booster votre productivité
+}

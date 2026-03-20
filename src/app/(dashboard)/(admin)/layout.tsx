@@ -20,6 +20,7 @@ import {
   Package,
   ClipboardPlus,
   BadgeDollarSign,
+  Mail,
 } from "lucide-react";
 import { logoLight, logoDark, userIcone } from "@/files";
 import Image from "next/image";
@@ -110,6 +111,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: MessageSquareMore,
       roles: [GrantedRole.Admin, GrantedRole.Operateur],
       current: pathname === "/admin/dashboard/codepromo",
+    },
+    {
+      name: "Demandes Web",
+      href: "/admin/dashboard/submissions",
+      icon: Mail,
+      roles: [GrantedRole.Admin, GrantedRole.Operateur],
+      current: pathname === "/admin/dashboard/submissions",
     },
     {
       name: "Paramètres",
