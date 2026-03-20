@@ -1,12 +1,12 @@
-// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Récupérer le token depuis les cookies
+  // Récupérer le token et le rôle depuis les cookies
   const token = request.cookies.get("auth-token")?.value;
+  const role = request.cookies.get("user-role")?.value;
 
   // Routes protégées (nécessitent une authentification)
   const protectedRoutes = ["/dashboard", "/admin", "/user"];
@@ -31,6 +31,15 @@ export function proxy(request: NextRequest) {
 
   // 🔄 Redirection si déjà connecté et tentative d'accès à login/register
   if (isAuthRoute && token) {
+    if (role === "client" || role === "user") {
+      return NextResponse.redirect(new URL("/user/dashboard", request.url));
+    } else if (role === "livreur") {
+      return NextResponse.redirect(new URL("/admin/dashboard/commande", request.url));
+    } else if (role === "admin" || role === "operateur") {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
+
+    // Fallback si pas de rôle connu
     return NextResponse.redirect(new URL("/user/dashboard", request.url));
   }
 

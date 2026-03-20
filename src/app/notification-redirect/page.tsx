@@ -6,20 +6,20 @@ import { useAuthStore } from "@/lib/stores/auth-store";
 
 export default function NotificationRedirectPage() {
   const router = useRouter();
-  const { isClient, isLivreur, isLoading } = useAuthStore();
+  const { isClient, isLivreur, isAdmin, isOperateur, isLoading } = useAuthStore();
 
   useEffect(() => {
     if (isLoading) return;
 
     if (isClient) {
       router.replace("/user/dashboard/history");
-    } else if (isLivreur) {
+    } else if (isLivreur || isAdmin || isOperateur) {
       router.replace("/admin/dashboard/commande");
     } else {
       // Fallback to home/login if role is not recognized or user not logged in
       router.replace("/");
     }
-  }, [isClient, isLivreur, isLoading, router]);
+  }, [isClient, isLivreur, isAdmin, isOperateur, isLoading, router]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">

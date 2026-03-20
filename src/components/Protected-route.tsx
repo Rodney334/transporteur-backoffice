@@ -61,8 +61,12 @@ function ProtectedRouteContent({
 
       // Redirection basée sur l'espace (admin/user)
       if (isAdminSpaceUser && isUserPath) {
-        // Utilisateur admin dans espace user → rediriger vers admin
-        router.push("/admin/dashboard");
+        // Utilisateur admin/livreur/operateur dans espace user
+        if (user.role === GrantedRole.Livreur) {
+          router.push("/admin/dashboard/commande");
+        } else {
+          router.push("/admin/dashboard");
+        }
         return;
       }
 
@@ -77,7 +81,9 @@ function ProtectedRouteContent({
         const userRole = user.role as GrantedRole;
         if (!allowedRoles.includes(userRole)) {
           // Accès non autorisé → rediriger vers l'espace approprié
-          if (isAdminSpaceUser) {
+          if (userRole === GrantedRole.Livreur) {
+            router.push("/admin/dashboard/commande");
+          } else if (isAdminSpaceUser) {
             router.push("/admin/dashboard");
           } else if (isUserSpaceUser) {
             router.push("/user/dashboard");
@@ -99,7 +105,9 @@ function ProtectedRouteContent({
           !requiredRolesArray.includes(user.role as GrantedRole)
         ) {
           // Rôle requis non satisfait
-          if (isAdminSpaceUser) {
+          if (user.role === GrantedRole.Livreur) {
+            router.push("/admin/dashboard/commande");
+          } else if (isAdminSpaceUser) {
             router.push("/admin/dashboard");
           } else if (isUserSpaceUser) {
             router.push("/user/dashboard");
@@ -112,8 +120,11 @@ function ProtectedRouteContent({
 
       // Redirection par défaut pour les admins/opérateurs/livreurs
       if (isAdminSpaceUser && currentPath === "/admin") {
-        // Rediriger vers le dashboard admin par défaut
-        router.push("/admin/dashboard");
+        if (user.role === GrantedRole.Livreur) {
+          router.push("/admin/dashboard/commande");
+        } else {
+          router.push("/admin/dashboard");
+        }
         return;
       }
 
@@ -140,7 +151,12 @@ function ProtectedRouteContent({
   }
 
   if (!isAuthenticated) {
-    return null;
+    return <>{fallback}</>;
+  }
+
+  // Si authentifié mais user pas encore chargé (réhydratation), afficher le loader
+  if (!user) {
+    return <>{fallback}</>;
   }
 
   // Vérification finale des permissions
@@ -177,7 +193,9 @@ function ProtectedRouteContent({
             </p>
             <button
               onClick={() => {
-                if (isAdminSpaceUser) {
+                if (user.role === GrantedRole.Livreur) {
+                  router.push("/admin/dashboard/commande");
+                } else if (isAdminSpaceUser) {
                   router.push("/admin/dashboard");
                 } else if (isUserSpaceUser) {
                   router.push("/user/dashboard");
@@ -253,11 +271,11 @@ function ProtectedRouteContent({
     const isUserPath = currentPath.startsWith("/user");
 
     if (isAdminPath && !isAdminSpaceUser) {
-      return null; // Déjà géré par useEffect
+      return <>{fallback}</>; // Sera redirigé par useEffect
     }
 
     if (isUserPath && !isUserSpaceUser) {
-      return null; // Déjà géré par useEffect
+      return <>{fallback}</>; // Sera redirigé par useEffect
     }
   }
 
@@ -271,93 +289,3 @@ export default function ProtectedRoute(props: ProtectedRouteProps) {
     </Suspense>
   );
 }
-
-// // Protected-route.tsx
-// "use client";
-// import { useAuth } from "@/hooks/use-auth";
-// import { usePermissions } from "@/hooks/use-permissions";
-// import { useRouter, useSearchParams } from "next/navigation";
-// import { Suspense, useEffect } from "react";
-// import { LoadingFullPage, LoadingSpinner, LoadingDots } from "./Loading";
-
-// interface ProtectedRouteProps {
-//   children: React.ReactNode;
-//   fallback?: React.ReactNode;
-//   requiredRole?: "user" | "admin"; // Optionnel : restriction spécifique
-// }
-
-// function ProtectedRouteContent({
-//   children,
-//   fallback = <LoadingDots />,
-//   requiredRole,
-// }: ProtectedRouteProps) {
-//   const { isAuthenticated, isLoading, user } = useAuth();
-//   const { currentRole } = usePermissions();
-//   const router = useRouter();
-//   const searchParams = useSearchParams();
-//   const redirect = searchParams.get("redirect");
-
-//   useEffect(() => {
-//     if (!isLoading && !isAuthenticated) {
-//       // Redirection vers login si non authentifié
-//       const loginUrl = redirect
-//         ? `/login?redirect=${encodeURIComponent(redirect)}`
-//         : "/login";
-//       router.push(loginUrl);
-//       return;
-//     }
-
-//     if (!isLoading && isAuthenticated && user) {
-//       // Déterminer la redirection basée sur le rôle
-//       const isUserRole = user.role === "user" || user.role === "client";
-//       const isAdminRole = ["admin", "livreur", "operateur"].includes(user.role);
-
-//       const currentPath = window.location.pathname;
-
-//       // Redirection si l'utilisateur n'est pas dans le bon espace
-//       if (isUserRole && currentPath.startsWith("/admin")) {
-//         router.push("/user/dashboard");
-//       } else if (isAdminRole && currentPath.startsWith("/user")) {
-//         router.push("/admin/dashboard");
-//       }
-
-//       // Vérification du rôle requis spécifique
-//       if (requiredRole === "admin" && isUserRole) {
-//         router.push("/user/dashboard");
-//       } else if (requiredRole === "user" && isAdminRole) {
-//         router.push("/admin/dashboard");
-//       }
-//     }
-//   }, [isAuthenticated, isLoading, user, router, redirect, requiredRole]);
-
-//   if (isLoading) {
-//     return <>{fallback}</>;
-//   }
-
-//   if (!isAuthenticated) {
-//     return null;
-//   }
-
-//   // Vérification optionnelle du rôle spécifique
-//   if (requiredRole && user) {
-//     const isUserRole = user.role === "user" || user.role === "client";
-//     const isAdminRole = ["admin", "livreur", "operateur"].includes(user.role);
-
-//     if (requiredRole === "admin" && !isAdminRole) {
-//       return null;
-//     }
-//     if (requiredRole === "user" && !isUserRole) {
-//       return null;
-//     }
-//   }
-
-//   return <>{children}</>;
-// }
-
-// export default function ProtectedRoute(props: ProtectedRouteProps) {
-//   return (
-//     <Suspense fallback={props.fallback || <LoadingDots />}>
-//       <ProtectedRouteContent {...props} />
-//     </Suspense>
-//   );
-// }

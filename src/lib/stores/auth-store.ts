@@ -94,6 +94,9 @@ export const useAuthStore = create<AuthState>()(
         const currentState = get();
         const hasTokens = currentState.accessToken;
 
+        // Cookie de rôle pour le proxy (middleware)
+        cookieHelper.setToken("user-role", user.role, 86400);
+
         set({
           user,
           error: null,
@@ -111,6 +114,7 @@ export const useAuthStore = create<AuthState>()(
 
       logout: () => {
         cookieHelper.removeToken("auth-token");
+        cookieHelper.removeToken("user-role");
 
         set({
           accessToken: null,
