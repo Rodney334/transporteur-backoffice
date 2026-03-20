@@ -36,7 +36,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const navigation = [
     {
-      name: "Accueil",
+      name: "Nouvelle commande",
       href: "/user/dashboard", //"/admin/dashboard",
       icon: LayoutGrid,
       current: pathname === "/user/dashboard",

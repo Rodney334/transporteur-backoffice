@@ -41,4 +41,14 @@ export const userService = {
     const response = await api.patch<User>(`/user/${userId}/promote`, { role });
     return response.data;
   },
+
+  async approveLivreur(userId: string): Promise<User> {
+    const response = await api.patch<User>(`/user/${userId}/livreur/approve`);
+    return response.data;
+  },
+
+  async rejectLivreur(userId: string): Promise<User> {
+    const response = await api.patch<User>(`/user/${userId}/livreur/reject`);
+    return response.data;
+  },
 };

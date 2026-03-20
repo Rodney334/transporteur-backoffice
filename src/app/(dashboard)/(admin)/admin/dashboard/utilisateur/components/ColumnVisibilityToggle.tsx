@@ -10,6 +10,7 @@ export interface DefaultVisibleColumnsInterface {
   role: boolean;
   isArchived: boolean;
   createdAt: boolean;
+  livreurRequestStatus: boolean;
   actions: boolean;
 }
 
@@ -30,6 +31,7 @@ const columnLabels: Record<ColumnKey, string> = {
   role: "Rôle",
   isArchived: "Statut archivé",
   createdAt: "Date d'inscription",
+  livreurRequestStatus: "Statut Demande",
   actions: "Actions",
 };
 
@@ -48,6 +50,7 @@ export default function ColumnVisibilityToggle({
     "role",
     "isArchived",
     "createdAt",
+    "livreurRequestStatus",
     "actions",
   ];
 

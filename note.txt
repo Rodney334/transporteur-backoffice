@@ -11,11 +11,10 @@ code promo management (partie 2) code promo spécifique aux utilisateurs
 
 Laisser un avis et une note sur les commandes TERMINES
 
+refresh token
+
 ************************
 EN COURS
 ************************
-
-refresh token
-
 
 Deux fcm token envoyé (à revoir)

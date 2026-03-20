@@ -239,7 +239,7 @@ export const useUsersManagement = () => {
     [loadLivreurProfile],
   );
 
-  // NOUVEAU : Rejeter le profil
+  // NOUVEAU : Rejeter le profil (ancien endpoint - POST)
   const rejectLivreurProfile = useCallback(
     async (userId: string, note: string): Promise<{ message: string }> => {
       const toastId = toast.loading("Rejet du profil en cours...", {
@@ -279,6 +279,71 @@ export const useUsersManagement = () => {
       }
     },
     [loadLivreurProfile],
+  );
+
+  // NOUVELLES ACTIONS D'APPROBATION/REJET (PATCH)
+  const approveLivreur = useCallback(
+    async (userId: string) => {
+      const toastId = toast.loading("Approbation en cours...", {
+        position: "top-left",
+      });
+
+      try {
+        await userService.approveLivreur(userId);
+        await loadUsers();
+
+        toast.update(toastId, {
+          render: "Demande approuvée avec succès !",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+          closeButton: true,
+        });
+      } catch (error: any) {
+        console.log("Erreur approbation livreur:", error);
+        const errorMessage = getFriendlyErrorMessage(error);
+        toast.update(toastId, {
+          render: errorMessage,
+          type: "error",
+          isLoading: false,
+          autoClose: 7000,
+          closeButton: true,
+        });
+      }
+    },
+    [loadUsers],
+  );
+
+  const rejectLivreur = useCallback(
+    async (userId: string) => {
+      const toastId = toast.loading("Rejet en cours...", {
+        position: "top-left",
+      });
+
+      try {
+        await userService.rejectLivreur(userId);
+        await loadUsers();
+
+        toast.update(toastId, {
+          render: "Demande rejetée avec succès !",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+          closeButton: true,
+        });
+      } catch (error: any) {
+        console.log("Erreur rejet livreur:", error);
+        const errorMessage = getFriendlyErrorMessage(error);
+        toast.update(toastId, {
+          render: errorMessage,
+          type: "error",
+          isLoading: false,
+          autoClose: 7000,
+          closeButton: true,
+        });
+      }
+    },
+    [loadUsers],
   );
 
   // Vérifier si l'utilisateur courant est admin ou opérateur
@@ -368,6 +433,8 @@ export const useUsersManagement = () => {
     updateLivreurProfile,
     approveLivreurProfile,
     rejectLivreurProfile,
+    approveLivreur,
+    rejectLivreur,
   };
 };
 

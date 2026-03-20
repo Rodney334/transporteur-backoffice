@@ -12,7 +12,9 @@ import {
   Calendar,
   ChevronDown,
   ChevronUp,
-  Motorbike, // IMPORT NOUVEAU
+  Motorbike,
+  CheckCircle2, // NOUVEAU
+  XCircle, // NOUVEAU
 } from "lucide-react";
 import { User } from "@/type/user.type";
 import { GrantedRole } from "@/type/enum";
@@ -24,7 +26,8 @@ interface UserTableProps {
   isLoading: boolean;
   visibleColumns: Record<ColumnKey, boolean>;
   isAdmin: boolean;
-  canManageLivreur: boolean; // PROP NOUVELLE
+  canManageLivreur: boolean;
+  isLivreurView?: boolean; // NOUVEAU
   getRoleLabel: (role: GrantedRole) => string;
   getGenderLabel: (gender: string) => string;
   formatDate: (dateString: string) => string;
@@ -35,12 +38,18 @@ export default function UserTable({
   isLoading,
   visibleColumns,
   isAdmin,
-  canManageLivreur, // PROP NOUVELLE
+  canManageLivreur,
+  isLivreurView, // NOUVEAU
   getRoleLabel,
   getGenderLabel,
   formatDate,
 }: UserTableProps) {
-  const { openPromotionModal, openLivreurProfileModal } = useUsersManagement(); // MODIF
+  const {
+    openPromotionModal,
+    openLivreurProfileModal,
+    approveLivreur,
+    rejectLivreur,
+  } = useUsersManagement();
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
   const toggleCard = (userId: string) => {
@@ -140,6 +149,11 @@ export default function UserTable({
                   </div>
                 </th>
               )}
+              {visibleColumns.livreurRequestStatus && (
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Statut Demande
+                </th>
+              )}
               {visibleColumns.actions && isAdmin && (
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Actions
@@ -236,34 +250,83 @@ export default function UserTable({
                     {formatDate(user.createdAt)}
                   </td>
                 )}
+                {visibleColumns.livreurRequestStatus && (
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-3 py-1 text-xs font-medium rounded-full ${
+                        user.livreurRequestStatus === "pending"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : user.livreurRequestStatus === "approved"
+                            ? "bg-green-100 text-green-800"
+                            : user.livreurRequestStatus === "rejected"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      {user.livreurRequestStatus || "Aucun"}
+                    </span>
+                  </td>
+                )}
 
                 {visibleColumns.actions && (isAdmin || canManageLivreur) && (
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex gap-2">
-                      {/* Bouton Modifier rôle (seulement admin et si pas admin) */}
-                      {isAdmin && user.role !== GrantedRole.Admin && (
-                        <button
-                          onClick={() => openPromotionModal(user)}
-                          className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
-                          title="Changer le rôle"
-                        >
-                          <Shield className="w-4 h-4" />
-                          Modifier rôle
-                        </button>
-                      )}
-
-                      {/* Bouton Update (seulement pour les livreurs et si admin/opérateur) */}
-                      {canManageLivreur &&
-                        user.role === GrantedRole.Livreur && (
+                      {/* Actions spécifiques pour les demandes livreur (View Livreur) */}
+                      {isLivreurView ? (
+                        <>
+                          <button
+                            onClick={() => approveLivreur(user._id)}
+                            className="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors shadow-sm"
+                            title="Approuver la demande"
+                          >
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            Approuver
+                          </button>
+                          <button
+                            onClick={() => rejectLivreur(user._id)}
+                            className="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors shadow-sm"
+                            title="Rejeter la demande"
+                          >
+                            <XCircle className="w-3.5 h-3.5" />
+                            Rejeter
+                          </button>
                           <button
                             onClick={() => openLivreurProfileModal(user)}
-                            className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
-                            title="Mettre à jour le profil livreur"
+                            className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                            title="Voir le dossier"
                           >
-                            <Motorbike className="w-4 h-4" />
-                            Update
+                            <Motorbike className="w-3.5 h-3.5" />
+                            Dossier
                           </button>
-                        )}
+                        </>
+                      ) : (
+                        <>
+                          {/* Bouton Modifier rôle (seulement admin et si pas admin) */}
+                          {isAdmin && user.role !== GrantedRole.Admin && (
+                            <button
+                              onClick={() => openPromotionModal(user)}
+                              className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                              title="Changer le rôle"
+                            >
+                              <Shield className="w-4 h-4" />
+                              Modifier rôle
+                            </button>
+                          )}
+
+                          {/* Bouton Update (seulement pour les livreurs et si admin/opérateur) */}
+                          {canManageLivreur &&
+                            user.role === GrantedRole.Livreur && (
+                              <button
+                                onClick={() => openLivreurProfileModal(user)}
+                                className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                                title="Mettre à jour le profil livreur"
+                              >
+                                <Motorbike className="w-4 h-4" />
+                                Update
+                              </button>
+                            )}
+                        </>
+                      )}
                     </div>
                   </td>
                 )}
@@ -310,6 +373,22 @@ export default function UserTable({
                       >
                         {getRoleLabel(user.role)}
                       </span>
+                      {user.livreurRequestStatus &&
+                        user.livreurRequestStatus !== "none" && (
+                          <span
+                            className={`px-2 py-1 text-xs font-medium rounded-full ${
+                              user.livreurRequestStatus === "pending"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : user.livreurRequestStatus === "approved"
+                                  ? "bg-green-100 text-green-800"
+                                  : user.livreurRequestStatus === "rejected"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
+                            {user.livreurRequestStatus}
+                          </span>
+                        )}
                       {user.isArchived && (
                         <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800 border border-gray-300">
                           <Archive className="w-3 h-3 inline mr-1" />
@@ -396,80 +475,63 @@ export default function UserTable({
                   </div>
                 </div>
 
-                {/* Bouton d'action */}
-                {visibleColumns.actions &&
-                  isAdmin &&
-                  user.role !== GrantedRole.Admin && (
-                    <div className="pt-4 border-t border-gray-200">
-                      <button
-                        onClick={() => openPromotionModal(user)}
-                        className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
-                      >
-                        <Shield className="w-4 h-4" />
-                        Modifier le rôle de cet utilisateur
-                      </button>
-                    </div>
-                  )}
+                {/* Boutons d'action dans le contenu dépliable */}
+                {visibleColumns.actions && (isAdmin || canManageLivreur) && (
+                  <div className="pt-4 border-t border-gray-200 space-y-2">
+                    {isLivreurView ? (
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          onClick={() => approveLivreur(user._id)}
+                          className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors shadow-sm"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Approuver
+                        </button>
+                        <button
+                          onClick={() => rejectLivreur(user._id)}
+                          className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors shadow-sm"
+                        >
+                          <XCircle className="w-4 h-4" />
+                          Rejeter
+                        </button>
+                        <button
+                          onClick={() => openLivreurProfileModal(user)}
+                          className="cursor-pointer col-span-2 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                        >
+                          <Motorbike className="w-4 h-4" />
+                          Voir le dossier complet
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Bouton Modifier rôle (seulement admin et si pas admin) */}
+                        {isAdmin && user.role !== GrantedRole.Admin && (
+                          <button
+                            onClick={() => openPromotionModal(user)}
+                            className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                          >
+                            <Shield className="w-4 h-4" />
+                            Modifier le rôle de cet utilisateur
+                          </button>
+                        )}
+
+                        {/* Bouton Update (seulement pour les livreurs et si admin/opérateur) */}
+                        {canManageLivreur &&
+                          user.role === GrantedRole.Livreur && (
+                            <button
+                              onClick={() => openLivreurProfileModal(user)}
+                              className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                            >
+                              <Motorbike className="w-4 h-4" />
+                              Mettre à jour le profil livreur
+                            </button>
+                          )}
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             )}
-
-            {/* Boutons d'action visibles même quand la carte n'est pas dépliée */}
-            {!expandedCard &&
-              visibleColumns.actions &&
-              (isAdmin || canManageLivreur) && (
-                <div className="border-t border-gray-200 p-4 space-y-2">
-                  {/* Bouton Modifier rôle (seulement admin et si pas admin) */}
-                  {isAdmin && user.role !== GrantedRole.Admin && (
-                    <button
-                      onClick={() => openPromotionModal(user)}
-                      className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
-                    >
-                      <Shield className="w-4 h-4" />
-                      Modifier rôle
-                    </button>
-                  )}
-
-                  {/* Bouton Update (seulement pour les livreurs et si admin/opérateur) */}
-                  {canManageLivreur && user.role === GrantedRole.Livreur && (
-                    <button
-                      onClick={() => openLivreurProfileModal(user)}
-                      className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
-                    >
-                      <Motorbike className="w-4 h-4" />
-                      Mettre à jour le profil livreur
-                    </button>
-                  )}
-                </div>
-              )}
-
-            {/* Dans le contenu dépliable, ajouter également les boutons */}
-            {expandedCard === user._id &&
-              visibleColumns.actions &&
-              (isAdmin || canManageLivreur) && (
-                <div className="pt-4 border-t border-gray-200 space-y-2">
-                  {/* Bouton Modifier rôle (seulement admin et si pas admin) */}
-                  {isAdmin && user.role !== GrantedRole.Admin && (
-                    <button
-                      onClick={() => openPromotionModal(user)}
-                      className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-[#FD481A] bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
-                    >
-                      <Shield className="w-4 h-4" />
-                      Modifier le rôle de cet utilisateur
-                    </button>
-                  )}
-
-                  {/* Bouton Update (seulement pour les livreurs et si admin/opérateur) */}
-                  {canManageLivreur && user.role === GrantedRole.Livreur && (
-                    <button
-                      onClick={() => openLivreurProfileModal(user)}
-                      className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
-                    >
-                      <Motorbike className="w-4 h-4" />
-                      Mettre à jour le profil livreur
-                    </button>
-                  )}
-                </div>
-              )}
           </div>
         ))}
       </div>

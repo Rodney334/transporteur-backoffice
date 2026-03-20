@@ -18,7 +18,7 @@ export interface User {
   profileImageUrl?: string | null;
   profileImagePublicId?: string | null;
   signupIntent?: "client" | "livreur";
-  livreurRequestStatus?: "pending" | "approved" | "rejected";
+  livreurRequestStatus?: "none" | "pending" | "approved" | "rejected";
   livreurRequestedAt?: string | null;
   livreurReviewedAt?: string | null;
   livreurReviewedBy?: string | null;

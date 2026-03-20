@@ -24,6 +24,7 @@ const defaultVisibleColumns = {
   role: true,
   isArchived: false,
   createdAt: false,
+  livreurRequestStatus: false,
   actions: true,
 };
 
@@ -79,8 +80,11 @@ export default function UtilisateurPage() {
     // Filtre par vue (signupIntent)
     const matchesView =
       view === "all"
-        ? user.signupIntent !== "livreur" // Standard users
-        : user.signupIntent === "livreur"; // Livreur requests
+        ? user.signupIntent !== "livreur" ||
+          user.livreurRequestStatus === "approved"
+        : user.signupIntent === "livreur" &&
+          (user.livreurRequestStatus === "pending" ||
+            user.livreurRequestStatus === "rejected");
 
     return matchesSearch && matchesRole && matchesArchived && matchesView;
   });
@@ -222,9 +226,14 @@ export default function UtilisateurPage() {
           <UserTable
             users={paginatedUsers}
             isLoading={isLoadingUsers}
-            visibleColumns={visibleColumns}
+            visibleColumns={
+              view === "livreur_requests"
+                ? { ...visibleColumns, livreurRequestStatus: true }
+                : visibleColumns
+            }
             isAdmin={isAdmin}
-            canManageLivreur={canManageLivreur} // PROP NOUVELLE
+            canManageLivreur={canManageLivreur}
+            isLivreurView={view === "livreur_requests"}
             getRoleLabel={getRoleLabel}
             getGenderLabel={getGenderLabel}
             formatDate={formatDate}
