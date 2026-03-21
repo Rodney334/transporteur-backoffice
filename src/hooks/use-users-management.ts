@@ -289,11 +289,17 @@ export const useUsersManagement = () => {
       });
 
       try {
+        // 1. Approuver la demande livreur (statut)
         await userService.approveLivreur(userId);
+        
+        // 2. Changer le rôle de l'utilisateur en LIVREUR
+        await userService.promoteUser(userId, GrantedRole.Livreur);
+        
+        // 3. Recharger la liste
         await loadUsers();
 
         toast.update(toastId, {
-          render: "Demande approuvée avec succès !",
+          render: "Demande approuvée et rôle mis à jour !",
           type: "success",
           isLoading: false,
           autoClose: 5000,
