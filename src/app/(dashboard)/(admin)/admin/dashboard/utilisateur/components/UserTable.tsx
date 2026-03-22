@@ -15,6 +15,7 @@ import {
   Motorbike,
   CheckCircle2, // NOUVEAU
   XCircle, // NOUVEAU
+  Star, // NOUVEAU
 } from "lucide-react";
 import { User } from "@/type/user.type";
 import { GrantedRole } from "@/type/enum";
@@ -49,6 +50,7 @@ export default function UserTable({
     openLivreurProfileModal,
     approveLivreur,
     rejectLivreur,
+    openReviewsModal, // NOUVEAU
   } = useUsersManagement();
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
@@ -298,6 +300,14 @@ export default function UserTable({
                             <Motorbike className="w-3.5 h-3.5" />
                             Dossier
                           </button>
+                          <button
+                            onClick={() => openReviewsModal(user)}
+                            className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors border border-amber-200 shadow-sm"
+                            title="Voir les avis"
+                          >
+                            <Star className="w-3.5 h-3.5 fill-amber-500" />
+                            Avis
+                          </button>
                         </>
                       ) : (
                         <>
@@ -325,6 +335,17 @@ export default function UserTable({
                                 Update
                               </button>
                             )}
+
+                          {user.role === GrantedRole.Livreur && (
+                            <button
+                              onClick={() => openReviewsModal(user)}
+                              className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors border border-amber-200"
+                              title="Voir les avis"
+                            >
+                              <Star className="w-4 h-4 fill-amber-500" />
+                              Avis
+                            </button>
+                          )}
                         </>
                       )}
                     </div>
@@ -501,6 +522,13 @@ export default function UserTable({
                           <Motorbike className="w-4 h-4" />
                           Voir le dossier complet
                         </button>
+                        <button
+                          onClick={() => openReviewsModal(user)}
+                          className="cursor-pointer col-span-2 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors border border-amber-200"
+                        >
+                          <Star className="w-4 h-4 fill-amber-500" />
+                          Consulter les avis
+                        </button>
                       </div>
                     ) : (
                       <>
@@ -526,6 +554,16 @@ export default function UserTable({
                               Mettre à jour le profil livreur
                             </button>
                           )}
+
+                        {user.role === GrantedRole.Livreur && (
+                          <button
+                            onClick={() => openReviewsModal(user)}
+                            className="cursor-pointer w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors border border-amber-200"
+                          >
+                            <Star className="w-4 h-4 fill-amber-500" />
+                            Consulter les avis
+                          </button>
+                        )}
                       </>
                     )}
                   </div>
@@ -538,5 +576,3 @@ export default function UserTable({
     </>
   );
 }
-
-

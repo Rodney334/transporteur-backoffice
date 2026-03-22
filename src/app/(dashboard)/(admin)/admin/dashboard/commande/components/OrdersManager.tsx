@@ -28,6 +28,7 @@ import { useOrderAssignment } from "@/hooks/use-order-assignment";
 import { AssignOrderModal } from "./AssignOrderModal";
 import { InfoLivreurSection } from "@/components/InfoLivreurSection";
 import OrderReviewModal from "@/app/(dashboard)/components/OrdersManager/OrderReviewModal";
+import { Review } from "@/type/review.type";
 
 export const OrdersManager = ({
   userRole,
@@ -90,6 +91,8 @@ export const OrdersManager = ({
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [selectedCommandForReview, setSelectedCommandForReview] =
     useState<FormattedDeliveryCard | null>(null);
+  const [existingReviewForModal, setExistingReviewForModal] =
+    useState<Review | null>(null);
 
   const [cancelModalOrder, setCancelModalOrder] = useState<any>(null);
   const [cancelReason, setCancelReason] = useState("");
@@ -318,10 +321,14 @@ export const OrdersManager = ({
     reset();
   }, [reset]);
 
-  const handleReview = useCallback((command: FormattedDeliveryCard) => {
-    setSelectedCommandForReview(command);
-    setIsReviewModalOpen(true);
-  }, []);
+  const handleReview = useCallback(
+    (command: FormattedDeliveryCard, existingReview?: Review) => {
+      setSelectedCommandForReview(command);
+      setExistingReviewForModal(existingReview || null);
+      setIsReviewModalOpen(true);
+    },
+    [],
+  );
 
   const handlePriceValidation = (data: PriceFormData) => {
     setConfirmationPrice(data.price);
@@ -513,7 +520,7 @@ export const OrdersManager = ({
                           item={command}
                           activeTab={activeTab}
                           onViewDetails={() => handleViewDetails(command)}
-                          onReview={() => handleReview(command as any)}
+                          onReview={(item: any, review: any) => handleReview(command as any, review)}
                           onCancel={() => handleCancelClick(command)}
                           onHide={() => handleHideClick(command)}
                           isProcessingCancel={isCommandProcessing(
@@ -1027,15 +1034,14 @@ export const OrdersManager = ({
           <OrderReviewModal
             isOpen={isReviewModalOpen}
             onClose={() => {
-              setIsReviewModalOpen(false);
-              setSelectedCommandForReview(null);
-            }}
-            orderId={selectedCommandForReview.originalData.id}
-            orderReference={selectedCommandForReview.originalData.orderNumber}
-            onSuccess={() => {
-              if (user) fetchOrders(user._id, userRole);
-            }}
-          />
+          setIsReviewModalOpen(false);
+          setExistingReviewForModal(null);
+        }}
+        orderId={selectedCommandForReview?.originalData.id || ""}
+        orderReference={selectedCommandForReview?.orderNumber || ""}
+        existingReview={existingReviewForModal}
+        onSuccess={handleRetry}
+      />
         )}
 
         {/* Modal de Confirmation d'Annulation (Client/Admin) */}

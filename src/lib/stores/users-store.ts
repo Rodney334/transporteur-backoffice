@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { User } from "@/type/user.type";
 import { GrantedRole } from "@/type/enum";
 import { LivreurProfile } from "@/type/livreur.type"; // IMPORT NOUVEAU
+import { Review, ReviewStat } from "@/type/review.type";
 
 interface UsersState {
   users: User[];
@@ -14,6 +15,11 @@ interface UsersState {
   selectedLivreur: User | null;
   livreurProfile: LivreurProfile | null;
   isLivreurModalOpen: boolean;
+  
+  // NOUVEAU : État pour les avis livreur
+  livreurReviews: Review[];
+  livreurReviewStat: ReviewStat | null;
+  isReviewsModalOpen: boolean;
 
   // Actions existantes
   setUsers: (users: User[]) => void;
@@ -31,6 +37,12 @@ interface UsersState {
   setLivreurProfile: (profile: LivreurProfile | null) => void;
   openLivreurModal: (user: User) => void;
   closeLivreurModal: () => void;
+
+  // NOUVEAU : Actions pour les avis livreur
+  setLivreurReviews: (reviews: Review[]) => void;
+  setLivreurReviewStat: (stat: ReviewStat | null) => void;
+  openReviewsModal: (user: User) => void;
+  closeReviewsModal: () => void;
 }
 
 export const useUsersStore = create<UsersState>((set) => ({
@@ -43,6 +55,11 @@ export const useUsersStore = create<UsersState>((set) => ({
   selectedLivreur: null,
   livreurProfile: null,
   isLivreurModalOpen: false,
+
+  // NOUVEAU : État pour les avis livreur
+  livreurReviews: [],
+  livreurReviewStat: null,
+  isReviewsModalOpen: false,
 
   // Actions existantes
   setUsers: (users) => set({ users }),
@@ -81,6 +98,22 @@ export const useUsersStore = create<UsersState>((set) => ({
       selectedLivreur: null,
       livreurProfile: null,
       isLivreurModalOpen: false,
+    }),
+
+  // NOUVEAU : Actions pour les avis livreur
+  setLivreurReviews: (reviews) => set({ livreurReviews: reviews }),
+  setLivreurReviewStat: (stat) => set({ livreurReviewStat: stat }),
+  openReviewsModal: (user) =>
+    set({
+      selectedLivreur: user,
+      isReviewsModalOpen: true,
+    }),
+  closeReviewsModal: () =>
+    set({
+      selectedLivreur: null,
+      livreurReviews: [],
+      livreurReviewStat: null,
+      isReviewsModalOpen: false,
     }),
 }));
 

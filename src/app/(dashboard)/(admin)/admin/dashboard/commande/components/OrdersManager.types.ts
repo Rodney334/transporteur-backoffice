@@ -66,7 +66,7 @@ export interface CommandCardProps {
 export interface DeliveryCardProps {
   item: FormattedDeliveryCard;
   onViewDetails: (item: FormattedDeliveryCard) => void;
-  onReview?: (item: FormattedDeliveryCard) => void;
+  onReview?: (item: FormattedDeliveryCard, existingReview?: any) => void;
   onCancel?: (item: FormattedDeliveryCard) => void;
   onHide?: (item: FormattedDeliveryCard) => void;
   isProcessingCancel?: boolean;

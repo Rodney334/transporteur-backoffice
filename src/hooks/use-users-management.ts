@@ -5,6 +5,7 @@ import { getFriendlyErrorMessage } from "@/utils/error-handler";
 import { useUsersStore } from "@/lib/stores/users-store";
 import { userService } from "@/lib/services/user-service";
 import { livreurService } from "@/lib/services/livreur-service"; // IMPORT NOUVEAU
+import { reviewService } from "@/lib/services/review-service"; // IMPORT NOUVEAU
 import { GrantedRole, LivreurVerificationStatus } from "@/type/enum";
 import { useAuth } from "@/hooks/use-auth";
 import { User } from "@/type/user.type";
@@ -34,10 +35,20 @@ export const useUsersManagement = () => {
     setLivreurProfile,
     openLivreurModal,
     closeLivreurModal,
+
+    // NOUVEAU : Avis livreur
+    livreurReviews,
+    livreurReviewStat,
+    isReviewsModalOpen,
+    setLivreurReviews,
+    setLivreurReviewStat,
+    openReviewsModal: openReviewsModalAction,
+    closeReviewsModal: closeReviewsModalAction,
   } = useUsersStore();
 
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [isLoadingLivreurProfile, setIsLoadingLivreurProfile] = useState(false);
+  const [isLoadingReviews, setIsLoadingReviews] = useState(false);
 
   // Charger les utilisateurs
   const loadUsers = useCallback(async () => {
@@ -110,6 +121,41 @@ export const useUsersManagement = () => {
   const closeLivreurProfileModal = useCallback(() => {
     closeLivreurModal();
   }, [closeLivreurModal]);
+
+  // NOUVEAU : Charger les avis d'un livreur
+  const loadLivreurReviews = useCallback(
+    async (courierId: string) => {
+      setIsLoadingReviews(true);
+      try {
+        const data = await reviewService.getCourierReviews(courierId);
+        setLivreurReviews(data.reviews);
+        setLivreurReviewStat(data.stats);
+        return data;
+      } catch (error: any) {
+        console.log("Erreur chargement avis livreur:", error);
+        const errorMessage = getFriendlyErrorMessage(error);
+        toast.error(errorMessage, { position: "top-left" });
+        throw error;
+      } finally {
+        setIsLoadingReviews(false);
+      }
+    },
+    [setLivreurReviews, setLivreurReviewStat],
+  );
+
+  // NOUVEAU : Ouvrir le modal des avis
+  const openReviewsModal = useCallback(
+    async (user: User) => {
+      openReviewsModalAction(user);
+      await loadLivreurReviews(user._id);
+    },
+    [openReviewsModalAction, loadLivreurReviews],
+  );
+
+  // NOUVEAU : Fermer le modal des avis
+  const closeReviewsModal = useCallback(() => {
+    closeReviewsModalAction();
+  }, [closeReviewsModalAction]);
 
   // Promouvoir un utilisateur
   const promoteUser = useCallback(
@@ -441,6 +487,15 @@ export const useUsersManagement = () => {
     rejectLivreurProfile,
     approveLivreur,
     rejectLivreur,
+
+    // NOUVEAU : Avis livreur
+    livreurReviews,
+    livreurReviewStat,
+    isReviewsModalOpen,
+    isLoadingReviews,
+    openReviewsModal,
+    closeReviewsModal,
+    loadLivreurReviews,
   };
 };
 

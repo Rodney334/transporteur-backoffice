@@ -4,12 +4,15 @@ import { useState } from "react";
 import { X, Star, MessageSquare, Send, CheckCircle2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { orderService } from "@/lib/services/order-service";
+import { Review } from "@/type/review.type";
+import { useEffect } from "react";
 
 interface OrderReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   orderId: string;
   orderReference: string;
+  existingReview?: Review | null;
   onSuccess?: () => void;
 }
 
@@ -32,12 +35,25 @@ export default function OrderReviewModal({
   onClose,
   orderId,
   orderReference,
+  existingReview,
   onSuccess,
 }: OrderReviewModalProps) {
   const [rating, setRating] = useState(10);
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const isReadOnly = !!existingReview;
+
+  useEffect(() => {
+    if (existingReview) {
+      setRating(existingReview.rating);
+      setComment(existingReview.comment);
+    } else {
+      setRating(10);
+      setComment("");
+    }
+  }, [existingReview, isOpen]);
 
   if (!isOpen) return null;
 
@@ -83,7 +99,9 @@ export default function OrderReviewModal({
         {/* Header */}
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50 shrink-0">
           <div>
-            <h3 className="text-xl font-bold text-gray-900">Votre avis</h3>
+            <h3 className="text-xl font-bold text-gray-900">
+              {isReadOnly ? "Votre avis laissé" : "Votre avis"}
+            </h3>
             <p className="text-sm text-gray-500 mt-1">
               Commande:{" "}
               <span className="font-mono font-medium text-gray-700">
@@ -139,8 +157,9 @@ export default function OrderReviewModal({
                     max="10"
                     step="1"
                     value={rating}
-                    onChange={(e) => setRating(parseInt(e.target.value))}
-                    className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#FD481A]"
+                    onChange={(e) => !isReadOnly && setRating(parseInt(e.target.value))}
+                    disabled={isReadOnly}
+                    className={`w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#FD481A] ${isReadOnly ? "opacity-50 cursor-default" : ""}`}
                   />
 
                   <div className="flex justify-between w-full px-2 text-[10px] font-bold text-gray-400 uppercase">
@@ -164,11 +183,12 @@ export default function OrderReviewModal({
                   <textarea
                     id="comment"
                     value={comment}
-                    onChange={(e) => setComment(e.target.value)}
+                    onChange={(e) => !isReadOnly && setComment(e.target.value)}
                     maxLength={500}
-                    placeholder="Qu'avez-vous pensé de notre service ?"
+                    placeholder={isReadOnly ? "" : "Qu'avez-vous pensé de notre service ?"}
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all bg-gray-50 focus:bg-white resize-none text-gray-700"
+                    readOnly={isReadOnly}
+                    className={`w-full px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#FD481A] focus:border-transparent transition-all bg-gray-50 focus:bg-white resize-none text-gray-700 ${isReadOnly ? "cursor-default" : ""}`}
                   />
                   <div className="absolute bottom-3 right-3 text-[10px] font-medium text-gray-400">
                     {comment.length} / 500
@@ -181,11 +201,18 @@ export default function OrderReviewModal({
             <div className="p-6 border-t border-gray-100 bg-gray-50/50 shrink-0">
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full py-4 bg-[#FD481A] text-white font-bold rounded-2xl hover:bg-[#E63F15] transition-all shadow-lg shadow-orange-100 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group"
+                disabled={isSubmitting || isReadOnly}
+                className={`w-full py-4 font-bold rounded-2xl transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group ${
+                  isReadOnly ? "bg-green-600 text-white shadow-green-100" : "bg-[#FD481A] text-white hover:bg-[#E63F15] shadow-orange-100"
+                }`}
               >
                 {isSubmitting ? (
                   <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/30 border-t-white"></div>
+                ) : isReadOnly ? (
+                  <>
+                    <CheckCircle2 className="w-5 h-5" />
+                    Avis déjà enregistré
+                  </>
                 ) : (
                   <>
                     <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />

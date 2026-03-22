@@ -10,6 +10,7 @@ import UserTable from "./components/UserTable";
 import UsersPagination from "./components/UsersPagination";
 import RoleChangeModal from "./components/RoleChangeModal";
 import LivreurProfileModal from "./components/LivreurProfileModal"; // IMPORT NOUVEAU
+import LivreurReviewsModal from "./components/LivreurReviewsModal"; // IMPORT NOUVEAU
 import ColumnVisibilityToggle from "./components/ColumnVisibilityToggle";
 import { GrantedRole } from "@/type/enum";
 import ProtectedRoute from "@/components/Protected-route";
@@ -259,6 +260,9 @@ export default function UtilisateurPage() {
 
         {/* NOUVEAU : Modal de profil livreur */}
         <LivreurProfileModal />
+
+        {/* NOUVEAU : Modal des avis livreur */}
+        <LivreurReviewsModal />
       </div>
     </ProtectedRoute>
   );

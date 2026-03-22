@@ -7,6 +7,9 @@ import {
   getStatusDisplayText,
   getStatusColorClass,
 } from "../../(admin)/admin/dashboard/commande/components/OrdersManager.utils";
+import { reviewService } from "@/lib/services/review-service";
+import { useEffect, useState } from "react";
+import { Review } from "@/type/review.type";
 
 export const DeliveryCard = ({
   item,
@@ -19,12 +22,34 @@ export const DeliveryCard = ({
   activeTab,
   userRole,
 }: DeliveryCardProps) => {
+  const [canReview, setCanReview] = useState(false);
+  const [alreadyRated, setAlreadyRated] = useState(false);
+  const [reviewData, setReviewData] = useState<Review | null>(null);
   const isCourier = userRole === GrantedRole.Livreur;
   const isClient = userRole === GrantedRole.Client;
 
   const canCancel =
     (isClient && !item.originalData.assignedTo) ||
     (isCourier && item.originalData.status !== OrderStatus.LIVREE);
+
+  const getReview = async () => {
+    if (isClient && item.originalData.status === OrderStatus.LIVREE) {
+      try {
+        const response = await reviewService.getOrderReview(
+          item.originalData.id,
+        );
+        setCanReview(response.canRate);
+        setAlreadyRated(response.alreadyRated);
+        setReviewData(response.review);
+      } catch (error) {
+        console.error("Error fetching order review:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getReview();
+  }, []);
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -67,7 +92,9 @@ export const DeliveryCard = ({
             <div className="w-2 h-2 bg-white rounded-full"></div>
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] text-gray-400 uppercase font-bold leading-none mb-1">Départ</span>
+            <span className="text-[10px] text-gray-400 uppercase font-bold leading-none mb-1">
+              Départ
+            </span>
             <span className="text-sm font-medium text-gray-900 leading-none">
               {item.from}
             </span>
@@ -83,7 +110,9 @@ export const DeliveryCard = ({
             <div className="w-2 h-2 bg-white rounded-full"></div>
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] text-gray-400 uppercase font-bold leading-none mb-1">Arrivée</span>
+            <span className="text-[10px] text-gray-400 uppercase font-bold leading-none mb-1">
+              Arrivée
+            </span>
             <span className="text-sm font-medium text-gray-900 leading-none">
               {item.to}
             </span>
@@ -103,12 +132,18 @@ export const DeliveryCard = ({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onReview(item);
+                    onReview(item, reviewData);
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-orange-50 text-[#FD481A] text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#FD481A] hover:text-white transition-all duration-300 border border-orange-100 shadow-md shadow-orange-50"
+                  className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-6 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-300 border shadow-md ${
+                    alreadyRated
+                      ? "bg-amber-50 text-amber-600 border-amber-100 shadow-amber-50 hover:bg-amber-100"
+                      : "bg-orange-50 text-[#FD481A] border-orange-100 shadow-orange-50 hover:bg-[#FD481A] hover:text-white"
+                  }`}
                 >
-                  <Star className="w-4 h-4 fill-current" />
-                  Laisser un avis
+                  <Star
+                    className={`w-4 h-4 ${alreadyRated ? "fill-amber-500" : "fill-current"}`}
+                  />
+                  {alreadyRated ? "Consulter mon avis" : "Laisser un avis"}
                 </button>
               )}
 
