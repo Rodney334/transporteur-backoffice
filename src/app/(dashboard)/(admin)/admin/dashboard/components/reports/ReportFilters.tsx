@@ -1,6 +1,9 @@
 
-import { Calendar as CalendarIcon, Filter } from "lucide-react";
+import { Calendar as CalendarIcon, Filter, Download, FileText } from "lucide-react";
 import { ReportPeriod, SummaryPeriod } from "@/type/report.type";
+import { useState } from "react";
+import { reportService } from "@/lib/services/report-service";
+import { toast } from "react-toastify";
 
 interface ReportFiltersProps {
     period: ReportPeriod;
@@ -19,6 +22,29 @@ export const ReportFilters = ({
     onRefresh,
     isLoading,
 }: ReportFiltersProps) => {
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownloadPDF = async () => {
+        try {
+            setIsDownloading(true);
+            const blob = await reportService.downloadPDF(period, date);
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `rapport-livreurs-${period}-${date}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+            toast.success("Rapport PDF téléchargé avec succès");
+        } catch (error) {
+            console.error("Erreur lors du téléchargement PDF:", error);
+            toast.error("Échec du téléchargement du rapport PDF");
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
     const periodOptions: { value: ReportPeriod; label: string }[] = [
         { value: SummaryPeriod.DAY, label: "Jour" },
         { value: SummaryPeriod.WEEK, label: "Semaine" },
@@ -58,14 +84,29 @@ export const ReportFilters = ({
                 </div>
             </div>
 
-            <button
-                onClick={onRefresh}
-                disabled={isLoading}
-                className="px-4 py-2 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors disabled:opacity-70 text-sm flex items-center gap-2"
-            >
-                <Filter className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
-                Actualiser
-            </button>
+            <div className="flex items-center gap-3 w-full md:w-auto">
+                <button
+                    onClick={handleDownloadPDF}
+                    disabled={isLoading || isDownloading}
+                    className="flex-1 md:flex-none px-4 py-2 bg-white border border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 text-sm flex items-center justify-center gap-2"
+                >
+                    {isDownloading ? (
+                        <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                    ) : (
+                        <FileText className="w-4 h-4 text-red-500" />
+                    )}
+                    PDF
+                </button>
+
+                <button
+                    onClick={onRefresh}
+                    disabled={isLoading}
+                    className="flex-1 md:flex-none px-4 py-2 bg-[#FD481A] text-white font-medium rounded-xl hover:bg-[#E63F15] transition-colors disabled:opacity-70 text-sm flex items-center justify-center gap-2"
+                >
+                    <Filter className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
+                    Actualiser
+                </button>
+            </div>
         </div>
     );
 };

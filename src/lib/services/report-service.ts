@@ -68,4 +68,12 @@ export const reportService = {
     });
     return response.data;
   },
+
+  async downloadPDF(period: string, date: string) {
+    const response = await api.get("/report/couriers/summary/pdf", {
+      params: { period, date },
+      responseType: "blob",
+    });
+    return response.data;
+  },
 };
