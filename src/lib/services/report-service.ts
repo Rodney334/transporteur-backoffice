@@ -1,5 +1,5 @@
 import { api } from "../api/axios";
-import { KPIResponse, AlertsResponse, CoursesResponse, ReportPeriod, SummaryPeriod, CoursesFilters, CoursesPagination, KPISchema, AlertsSchema, CoursesSchema, CourierSummaryResponse } from "@/type/report.type";
+import { KPISchema, AlertsSchema, CoursesSchema, CourierSummaryResponse } from "@/type/report.type";
 
 export interface Options {
   courierId?: string | null;

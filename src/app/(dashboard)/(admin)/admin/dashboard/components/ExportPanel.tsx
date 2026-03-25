@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { exportDashboardToPDF } from "../dashboard-pdf-export";
 import { exportDashboardToCSV } from "../dashboard-csv-export";
 import { DashboardStats, DashboardFilters } from "../types";
+import { reportService } from "@/lib/services/report-service";
 interface ExportPanelProps {
   stats: DashboardStats;
   filters: DashboardFilters;
@@ -60,6 +61,41 @@ export const ExportPanel = ({
         isLoading: false,
         autoClose: 5000,
       });
+    } finally {
+      setIsExporting(null);
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    try {
+      setIsExporting("pdf");
+
+      const period = "month";
+      const date = new Date().toISOString().split("T")[0];
+
+      const blob = await reportService.downloadPDF(period, date);
+
+      const url = window.URL.createObjectURL(
+        blob instanceof Blob
+          ? blob
+          : new Blob([blob], { type: "application/pdf" }),
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `rapport-livreurs-${period}-${date}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 1000);
+
+      toast.success("Rapport PDF téléchargé avec succès");
+    } catch (error) {
+      console.error("Erreur lors du téléchargement PDF:", error);
+      toast.error("Échec du téléchargement du rapport PDF");
     } finally {
       setIsExporting(null);
     }
@@ -154,7 +190,7 @@ export const ExportPanel = ({
           <h4 className="font-medium text-gray-700 mb-3">Format d'export</h4>
 
           <button
-            onClick={() => handleExport("pdf")}
+            onClick={() => handleDownloadPDF()}
             disabled={isExporting !== null}
             className="cursor-pointer w-full flex items-center justify-center gap-3 px-4 py-3 bg-linear-to-r from-[#FD481A] to-[#E63F15] text-white font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
