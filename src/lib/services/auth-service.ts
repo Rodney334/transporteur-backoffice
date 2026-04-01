@@ -120,7 +120,7 @@ export const authService = {
     }
 
     const response = await axios.post<RefreshTokenResponse>(
-      "backend.letrans-porteur.com",
+      "backend.letrans-porteur.com/api/v1",
       { refreshToken },
     );
     return response.data;
