@@ -4,7 +4,7 @@ import { authService } from "@/lib/services/auth-service";
 
 // Configuration de base
 export const api = axios.create({
-  baseURL: "https://letransporteur-production.up.railway.app/api/v1",
+  baseURL: "backend.letrans-porteur.com", //"https://letransporteur-production.up.railway.app/api/v1",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -43,7 +43,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // NOUVEAU : Intercepteur de réponse avancé avec gestion du refresh
@@ -108,5 +108,5 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
