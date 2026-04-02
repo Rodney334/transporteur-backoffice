@@ -65,7 +65,7 @@ interface OrderStore {
 // Constantes pour le cache (5 minutes)
 const CACHE_DURATION = 5 * 60 * 1000;
 // URL de base WebSocket
-const WS_BASE_URL = "wss://letransporteur-production.up.railway.app/";
+const WS_BASE_URL = "https://backend.letrans-porteur.com/"; // "wss://letransporteur-production.up.railway.app/";
 
 export const useOrderStore = create<OrderStore>()(
   // persist(
@@ -87,7 +87,6 @@ export const useOrderStore = create<OrderStore>()(
 
     // Charger les commandes (sans cache — état temps réel)
     fetchOrders: async (userId?: string, userRole?: string) => {
-
       try {
         set({ loading: true, error: null });
 
@@ -214,7 +213,9 @@ export const useOrderStore = create<OrderStore>()(
         // Clé format event_orderId_tsRounded (cohérent entre WS et FCM)
         const orderId = payload?.orderId || payload?.id || "";
         const tsRounded = Math.floor(Date.now() / 3000); // fenêtre de 3s
-        const dedupKey = orderId ? `order_event_${orderId}_${tsRounded}` : `generic_event_${type}_${tsRounded}`;
+        const dedupKey = orderId
+          ? `order_event_${orderId}_${tsRounded}`
+          : `generic_event_${type}_${tsRounded}`;
 
         const { _processedWsKeys } = get();
         if (_processedWsKeys.has(dedupKey)) {
@@ -228,10 +229,14 @@ export const useOrderStore = create<OrderStore>()(
 
         // Afficher le toast via la queue
         const toastMessage = payload?.message || "Nouvelle notification";
-        notificationQueue.enqueueToast(toastMessage, {
-          position: "top-right",
-          autoClose: 5000,
-        }, dedupKey);
+        notificationQueue.enqueueToast(
+          toastMessage,
+          {
+            position: "top-right",
+            autoClose: 5000,
+          },
+          dedupKey,
+        );
 
         // Rafraîchir les données
         const authStore = useAuthStore.getState();
@@ -258,10 +263,14 @@ export const useOrderStore = create<OrderStore>()(
         orders: [order, ...state.orders],
       }));
 
-      notificationQueue.enqueueToast("Nouvelle commande créée", {
-        position: "top-right",
-        autoClose: 3000,
-      }, `manual_created_${order.id}`);
+      notificationQueue.enqueueToast(
+        "Nouvelle commande créée",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        },
+        `manual_created_${order.id}`,
+      );
     },
 
     handleOrderUpdated: (updatedOrder: Order) => {
@@ -271,10 +280,14 @@ export const useOrderStore = create<OrderStore>()(
         ),
       }));
 
-      notificationQueue.enqueueToast("Commande mise à jour", {
-        position: "top-right",
-        autoClose: 2000,
-      }, `manual_updated_${updatedOrder.id}`);
+      notificationQueue.enqueueToast(
+        "Commande mise à jour",
+        {
+          position: "top-right",
+          autoClose: 2000,
+        },
+        `manual_updated_${updatedOrder.id}`,
+      );
     },
 
     handleOrderStatusChanged: ({ orderId, status, timestamp }: any) => {
@@ -309,7 +322,7 @@ export const useOrderStore = create<OrderStore>()(
           position: "top-right",
           autoClose: 3000,
         },
-        `manual_status_${orderId}_${status}`
+        `manual_status_${orderId}_${status}`,
       );
     },
 
