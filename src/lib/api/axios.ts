@@ -4,7 +4,7 @@ import { authService } from "@/lib/services/auth-service";
 
 // Configuration de base
 export const api = axios.create({
-  baseURL: "https://backend.letrans-porteur.com/api/v1", //"https://letransporteur-production.up.railway.app/api/v1", "https://backend.letrans-porteur.com/api/v1",
+  baseURL: "https://letransporteur-production.up.railway.app/api/v1", //"https://letransporteur-production.up.railway.app/api/v1", "https://backend.letrans-porteur.com/api/v1",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
