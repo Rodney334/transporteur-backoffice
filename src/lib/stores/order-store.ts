@@ -65,7 +65,8 @@ interface OrderStore {
 // Constantes pour le cache (5 minutes)
 const CACHE_DURATION = 5 * 60 * 1000;
 // URL de base WebSocket
-const WS_BASE_URL = "https://backend.letrans-porteur.com/"; // "wss://letransporteur-production.up.railway.app/";
+const WS_BASE_URL = "wss://letransporteur-production.up.railway.app/"; //"wss://backend.letrans-porteur.com/"; // "wss://letransporteur-production.up.railway.app/";
+// const WS_BASE_URL = "wss://backend.letrans-porteur.com/"; // "wss://letransporteur-production.up.railway.app/";
 
 export const useOrderStore = create<OrderStore>()(
   // persist(
